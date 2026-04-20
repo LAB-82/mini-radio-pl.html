@@ -20,19 +20,20 @@
 .header h1 { font-size: 28px; margin-bottom: 8px; }
 .header p { color: #999; font-size: 14px; }
 .status {
-        background: #1a;
+        background: #FFD200;
+        color: #000;
         padding: 15px 2.5cm;
         border-radius: 12px;
         margin-bottom: 20px;
         font-size: 14px;
-        border: 1px solid #2a2a2a;
+        border: 2px solid #FFC107;
         display: flex;
         justify-content: space-between;
         align-items: center;
         min-height: 52px;
+        font-weight: 600;
     }
-.status.playing { background: #1db954; color: #000; font-weight: 600; border-color: #1db954; }
-.status.error { background: #e22134; border-color: #e22134; }
+.status.error { background: #e22134; color: #fff; border-color: #e22134; }
 .status-text { flex: 1; }
 .clock {
         font-variant-numeric: tabular-nums;
@@ -43,7 +44,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 15px;
-        margin-bottom: 100px;
+        margin-bottom: 120px;
     }
 .tile {
         background: #1a1a1a;
@@ -62,7 +63,7 @@
     }
 .tile:hover { background: #2a2a2a; border-color: #3a3a; }
 .tile:active { transform: scale(0.96); }
-.tile.active { background: #1db954; border-color: #1db954; color: #000; }
+.tile.active { background: #FFD200; border-color: #FFD200; color: #000; }
 .tile.icon {
         width: 80px;
         height: 80px;
@@ -81,8 +82,8 @@
         bottom: 20px;
         left: 20px;
         right: 20px;
-        background: #FFEB3B; /* żółte tło */
-        padding: 70px 16px 16px 16px; /* miejsce na logo nad przyciskami */
+        background: #FFD200;
+        padding: 70px 16px 16px 16px;
         border-radius: 16px;
         display: flex;
         gap: 12px;
@@ -92,18 +93,18 @@
         z-index: 9999;
     }
 .controls::before {
-    content: "";
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 50px;
-    background-image: url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-/* Przyciski */
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 50px;
+        background-image: url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 .ctrl-btn {
         background: transparent;
         border: none;
@@ -118,30 +119,25 @@
         transition: all 0.2s;
         color: #000;
     }
-.ctrl-btn:hover { background: #ddd; }
+.ctrl-btn:hover { background: rgba(0,0,0,0.1); }
 .ctrl-btn:active { transform: scale(0.9); }
-.ctrl-btn:disabled { color: #666; cursor: not-allowed; }
+.ctrl-btn:disabled { color: #999; cursor: not-allowed; }
 .ctrl-btn.play {
-        background: #fff;
+        background: #000;
+        color: #FFD200;
         width: 42px;
         height: 42px;
         font-size: 20px;
     }
-.ctrl-btn.play:hover { background: #e6e6e6; }
+.ctrl-btn.play:hover { background: #333; }
+.ctrl-btn.play.active { background: #1db954; }
 .ctrl-btn.mute { font-size: 20px; }
-input[type="range"] {
+    input[type="range"] {
         flex: 1;
         height: 4px;
         cursor: pointer;
         min-width: 60px;
-        accent-color: #1db954;
-    }
-.time {
-        font-size: 13px;
-        color: #999;
-        min-width: 45px;
-        text-align: right;
-        font-variant-numeric: tabular-nums;
+        accent-color: #000;
     }
 </style>
 </head>
@@ -158,18 +154,13 @@ input[type="range"] {
 
     <div class="grid" id="grid"></div>
 
-    <!-- Górny pasek z logo RMF-FM -->
     <div class="controls" id="playerControls">
-        <!-- Logo RMF-FM na górze -->
-        <div style="position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:150px; height:50px; background-image:url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg'); background-size:contain; background-repeat:no-repeat;"></div>
-        <!-- Przyciski -->
-        <button class="ctrl-btn play" id="playBtn">▶</button>
-        <button class="ctrl-btn" id="stopBtn">■</button>
-        <button class="ctrl-btn" id="prevBtn">⏮</button>
-        <button class="ctrl-btn" id="nextBtn">⏭</button>
+        <button class="ctrl-btn play" id="playBtn" disabled>▶</button>
+        <button class="ctrl-btn" id="stopBtn" disabled>■</button>
+        <button class="ctrl-btn" id="prevBtn" disabled>⏮</button>
+        <button class="ctrl-btn" id="nextBtn" disabled>⏭</button>
         <input type="range" id="volume" min="0" max="100" value="80" />
         <button class="ctrl-btn mute" id="muteBtn">🔊</button>
-        <span class="time" id="timeText">0:00</span>
     </div>
 
     <audio id="player" crossorigin="anonymous"></audio>
@@ -210,7 +201,6 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volume = document.getElementById('volume');
 const muteBtn = document.getElementById('muteBtn');
-const timeText = document.getElementById('timeText');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
@@ -250,18 +240,21 @@ function playStation(index) {
     updateTileActive();
 
     statusText.textContent = 'Ładowanie: ' + st.name;
-    status.className = 'status';
+    status.classList.remove('error');
 
     player.src = st.url;
     player.play().then(() => {
         statusText.textContent = 'Gra: ' + st.name;
-        status.className = 'status playing';
-        playBtn.textContent = '⏸';
+        playBtn.classList.add('active');
+        [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
     }).catch(err => {
         statusText.textContent = 'Błąd: ' + st.name;
-        status.className = 'status error';
+        status.classList.add('error');
         currentIndex = -1;
         updateTileActive();
+        [playBtn, stopBtn].forEach(b => b.disabled = true);
+        playBtn.classList.remove('active');
+        console.error(err);
     });
 }
 
@@ -269,23 +262,21 @@ playBtn.onclick = () => {
     if (currentIndex === -1) return;
     if (player.paused) {
         player.play();
-        playBtn.textContent = '⏸';
+        playBtn.classList.add('active');
         statusText.textContent = 'Gra: ' + STATIONS[currentIndex].name;
-        status.className = 'status playing';
+        status.classList.remove('error');
     } else {
         player.pause();
-        playBtn.textContent = '▶';
+        playBtn.classList.remove('active');
         statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
-        status.className = 'status';
     }
 };
 
 stopBtn.onclick = () => {
     player.pause();
     player.currentTime = 0;
-    playBtn.textContent = '▶';
+    playBtn.classList.remove('active');
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
-    status.className = 'status';
 };
 
 prevBtn.onclick = () => {
@@ -316,18 +307,13 @@ muteBtn.onclick = () => {
     }
 };
 
-player.ontimeupdate = () => {
-    const s = Math.floor(player.currentTime);
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    timeText.textContent = `${m}:${sec.toString().padStart(2, '0')}`;
-};
-
 player.onerror = () => {
     statusText.textContent = 'Błąd streamu';
-    status.className = 'status error';
+    status.classList.add('error');
     currentIndex = -1;
     updateTileActive();
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
+    playBtn.classList.remove('active');
 };
 </script>
 </body>
