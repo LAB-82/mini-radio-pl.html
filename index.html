@@ -23,8 +23,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-/* Twoje istniejące style ... */
-
 .header {
   text-align: center;
   margin-bottom: 15px;
@@ -151,31 +149,15 @@ body {
   text-decoration: line-through;
   opacity: 0.6;
 }
-/* Styl dla przycisków sterowania w kształcie kółka */
-.control-buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 20px;
-}
-.control-button {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #f0f0f0;
-  border: 2px solid #000;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#muteBtn {
+  font-size: 20px;
+  padding: 8px 12px;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  transition: all 0.3s;
-}
-.control-button:hover {
-  background-color: #e0e0e0;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  border: 2px solid #000;
+  border-radius: 8px;
+  background: transparent;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -193,74 +175,171 @@ body {
 <div class="grid" id="grid"></div>
 
 <div class="controls" id="playerControls">
-  <button class="btn" id="playBtn" disabled>▶️</button>
-  <button class="btn" id="stopBtn" disabled>⏹️</button>
-  <button class="btn" id="prevBtn" disabled>⏮️</button>
-  <button class="btn" id="nextBtn" disabled>⏭️</button>
+  <button class="btn" id="playBtn" disabled>PLAY</button>
+  <button class="btn" id="stopBtn" disabled>STOP</button>
+  <button class="btn" id="prevBtn" disabled>PREV</button>
+  <button class="btn" id="nextBtn" disabled>NEXT</button>
   <button class="btn" id="muteBtn">🔊</button>
   <input type="range" id="volume" min="0" max="100" value="80" />
-</div>
-
-<!-- Nowe przyciski sterowania w kształcie kółka -->
-<div class="control-buttons">
-  <button id="btnPrev" class="control-button" title="Poprzednia">⏮️</button>
-  <button id="btnStop" class="control-button" title="Stop">⏹️</button>
-  <button id="btnPlayPause" class="control-button" title="Play/Pauza">▶️</button>
-  <button id="btnNext" class="control-button" title="Następna">⏭️</button>
-  <button id="btnMute" class="control-button" title="Wycisz">🔇</button>
 </div>
 
 <audio id="player" crossorigin="anonymous"></audio>
 
 <script>
-// Twój skrypt pozostaje bez zmian, ale dodam obsługę dla tych nowych przycisków
+// Lista stacji
+const STATIONS = [
+  { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+  { name: 'RMF MAXX', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+  { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+  { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+  { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+  { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+  { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+  { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+  { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+  { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+  { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+  { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+  { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+  { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+];
+
 const player = document.getElementById('player');
+const grid = document.getElementById('grid');
+const status = document.getElementById('status');
+const statusText = document.getElementById('statusText');
+const clock = document.getElementById('clock');
 const playBtn = document.getElementById('playBtn');
 const stopBtn = document.getElementById('stopBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
-const muteBtn = document.getElementById('muteBtn');
 const volume = document.getElementById('volume');
-
-const btnPrev = document.getElementById('btnPrev');
-const btnStop = document.getElementById('btnStop');
-const btnPlayPause = document.getElementById('btnPlayPause');
-const btnNext = document.getElementById('btnNext');
-const btnMute = document.getElementById('btnMute');
+const muteBtn = document.getElementById('muteBtn');
 
 let currentIndex = -1;
+let lastVolume = 0.8;
 let isPlaying = false;
 let isMuted = false;
-let lastVolume = 0.8;
 
 player.volume = 0.8;
 
-// Podłącz obsługę przycisków w kształcie kółka
-btnPrev.onclick = () => {
-  if (currentIndex > 0) {
-    playStation(currentIndex - 1);
-  }
-};
-btnStop.onclick = () => {
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const s = now.getSeconds().toString().padStart(2, '0');
+  clock.textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+STATIONS.forEach((st, i) => {
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.innerHTML = `<div class="name">${st.name}</div>`;
+  // dodaj ikonę głośnika
+  const icon = document.createElement('div');
+  icon.className = 'głośnik';
+  icon.innerHTML = '🔊';
+  tile.appendChild(icon);
+  tile.onclick = () => playStation(i);
+  grid.appendChild(tile);
+});
+
+function updateTileActive() {
+  document.querySelectorAll('.tile').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIndex);
+    const głośnik = t.querySelector('.głośnik');
+    if (głośnik) {
+      // widoczny tylko, gdy radio gra i to jest aktualna stacja
+      głośnik.style.display = (i === currentIndex && isPlaying) ? 'block' : 'none';
+      głośnik.classList.toggle('przekreslony', !(i === currentIndex && isPlaying));
+    }
+  });
+}
+
+function playStation(index) {
+  const st = STATIONS[index];
   player.pause();
-  player.currentTime = 0;
+  currentIndex = index;
+  updateTileActive();
+  statusText.textContent = 'Ładowanie: ' + st.name;
+  status.classList.remove('error');
   isPlaying = false;
-  updatePlayPauseButton();
-};
-btnPlayPause.onclick = () => {
+  player.src = st.url;
+  player.play().then(() => {
+    statusText.textContent = 'Gra: ' + st.name;
+    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+    isPlaying = true;
+    updateTileActive();
+  }).catch(err => {
+    statusText.textContent = 'Błąd: ' + st.name;
+    status.classList.add('error');
+    currentIndex = -1;
+    isPlaying = false;
+    updateTileActive();
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
+    playBtn.classList.remove('active');
+  });
+}
+
+// przycisk PLAY / PAUSE
+playBtn.onclick = () => {
   if (currentIndex === -1) return;
   if (player.paused) {
     player.play();
+    playBtn.classList.add('active');
+    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
   } else {
     player.pause();
+    playBtn.classList.remove('active');
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
 };
-btnNext.onclick = () => {
-  if (currentIndex < STATIONS.length - 1) {
-    playStation(currentIndex + 1);
+
+// STOP
+stopBtn.onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  playBtn.classList.remove('active');
+  if (currentIndex !== -1) {
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
 };
-btnMute.onclick = () => {
+
+// PREV / NEXT
+prevBtn.onclick = () => {
+  if (currentIndex > 0) playStation(currentIndex - 1);
+};
+nextBtn.onclick = () => {
+  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
+
+// Głośność
+volume.oninput = (e) => {
+  const vol = e.target.value / 100;
+  player.volume = vol;
+  if (vol === 0) {
+    isMuted = true;
+  } else {
+    isMuted = false;
+  }
+  updateMuteIcon();
+};
+
+function updateMuteIcon() {
+  if (isMuted || player.volume === 0) {
+    // ikonka wyciszenia
+    muteBtn.innerHTML = '🔇';
+  } else {
+    muteBtn.innerHTML = '🔊';
+  }
+}
+
+// obsługa kliknięcia MUTE
+muteBtn.onclick = () => {
   if (!isMuted && player.volume > 0) {
     lastVolume = player.volume;
     player.volume = 0;
@@ -271,18 +350,36 @@ btnMute.onclick = () => {
   }
   volume.value = player.volume * 100;
   updateMuteIcon();
+  updateTileActive();
 };
 
-// Funkcje pomocnicze do aktualizacji ikon przycisków
-function updatePlayPauseButton() {
-  btnPlayPause.textContent = player.paused ? '▶️' : '⏸️';
-}
-function updateMuteIcon() {
-  btnMute.textContent = (isMuted || player.volume === 0) ? '🔇' : '🔊';
-}
+// obsługa błędów
+player.onerror = () => {
+  statusText.textContent = 'Błąd streamu';
+  status.classList.add('error');
+  currentIndex = -1;
+  isPlaying = false;
+  updateTileActive();
+  [playBtn, stopBtn].forEach(b => b.disabled = true);
+  playBtn.classList.remove('active');
+};
 
-// Pozostała logika odtwarzania, obsługa stacji, itp. zostaje bez zmian
-// (np. funkcja playStation, obsługa błędów, itp.)
+// stan odtwarzania
+player.addEventListener('play', () => {
+  isPlaying = true;
+  updateTileActive();
+});
+player.addEventListener('pause', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+player.addEventListener('ended', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+
+// Inicjalizacja
+updateTileActive();
 </script>
 </body>
 </html>
