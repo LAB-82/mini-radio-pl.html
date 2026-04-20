@@ -109,7 +109,7 @@ body {
   color: #000;
 }
 
-/* Neonowy napis "RMF-FM" w ramce na stylu neon, świecący na żółto */
+/* Neonowy napis "RMF-FM" w ramce na stylu neon, świecący na żółto, z tłem */
 .controls {
   position: relative;
   background: #FECB00;
@@ -122,9 +122,11 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   flex-shrink: 0;
   margin-bottom: 15px;
+  /* Tło takie samo jak neonowy napis */
+  background-color: #FECB00;
 }
 
-/* Neonowy tekst "RMF-FM" */
+/* Neonowy tekst "RMF-FM" z tłem */
 .controls::before {
   content: "RMF-FM";
   position: absolute;
@@ -140,7 +142,7 @@ body {
   /* Neon glow */
   text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
   border: 2px solid #fff700;
-  background: transparent;
+  background: #FECB00; /* to samo co tło */
   animation: neon-glow 1.5s infinite alternate;
 }
 @keyframes neon-glow {
@@ -150,6 +152,15 @@ body {
   to {
     text-shadow: 0 0 20px #fff700, 0 0 40px #fff700, 0 0 60px #fff700, 0 0 80px #fff700;
   }
+}
+
+/* Styl dla ikon głośnika */
+.głośnik {
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-size: 18px;
+  color: #000; /* domyślny kolor, można zmieniać */
 }
 
 /* Prawdziwe przyciski - stylowe i działające */
@@ -193,7 +204,7 @@ input[type=range] {
 <body>
 <div class="header">
   <h1>Mini Radio PL</h1>
-  <p>Mini radio RMF FM</p>
+  <p>RMF RMF • Tylko najlepsze stacje</p>
 </div>
 <div class="status" id="status">
   <span class="status-text" id="statusText"></span>
@@ -206,7 +217,7 @@ input[type=range] {
   <button class="btn" id="stopBtn" disabled>STOP</button>
   <button class="btn" id="prevBtn" disabled>PREV</button>
   <button class="btn" id="nextBtn" disabled>NEXT</button>
-  <button class="btn" id="muteBtn">MUTE</button>
+  <button class="btn" id="muteBtn">🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span></button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
 <audio id="player" crossorigin="anonymous"></audio>
@@ -241,6 +252,7 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volume = document.getElementById('volume');
 const muteBtn = document.getElementById('muteBtn');
+const speakerIcon = document.getElementById('speakerIcon');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
@@ -284,6 +296,8 @@ function playStation(index) {
     statusText.textContent = 'Gra: ' + st.name;
     playBtn.classList.add('active');
     [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+    // Jeśli to aktywna stacja, pokaż ikonę głośnika
+    speakerIcon.style.display = 'inline';
   }).catch(err => {
     statusText.textContent = 'Błąd: ' + st.name;
     status.classList.add('error');
@@ -291,6 +305,8 @@ function playStation(index) {
     updateTileActive();
     [playBtn, stopBtn].forEach(b => b.disabled = true);
     playBtn.classList.remove('active');
+    // Ukryj ikonę, jeśli nie można odtworzyć
+    speakerIcon.style.display = 'none';
     console.error(err);
   });
 }
@@ -338,10 +354,14 @@ muteBtn.onclick = () => {
     player.volume = 0;
     volume.value = 0;
     muteBtn.textContent = '🔈';
+    // pokaż ikonę głośnika
+    speakerIcon.style.display = 'inline';
   } else {
     player.volume = lastVolume;
     volume.value = lastVolume * 100;
     muteBtn.textContent = '🔇';
+    // ukryj ikonę głośnika
+    speakerIcon.style.display = 'none';
   }
 };
 
@@ -352,6 +372,8 @@ player.onerror = () => {
   updateTileActive();
   [playBtn, stopBtn].forEach(b => b.disabled = true);
   playBtn.classList.remove('active');
+  // ukryj ikonę
+  speakerIcon.style.display = 'none';
 };
 </script>
 </body>
