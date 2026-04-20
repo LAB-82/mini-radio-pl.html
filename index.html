@@ -65,7 +65,7 @@
         justify-content: center;
         font-size: 32px;
     }
-.tile.active.icon { background: rgba(0,0,0.2); }
+.tile.active.icon { background: rgba(0,0,0,0.2); }
 .tile.name { font-size: 14px; font-weight: 600; line-height: 1.2; }
 .controls {
         position: fixed;
@@ -123,7 +123,7 @@
 
 <script>
 const STATIONS = [
-    // 7 które działają u Ciebie - zostają
+    // 9 które działały u Ciebie
     { name: 'Antyradio', url: 'https://an.cdn.eurozet.pl/ant-waw.mp3' },
     { name: 'Radio 357', url: 'https://stream.rcs.revma.com/ye5kghkgcm0uv' },
     { name: 'Radio Eska', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
@@ -131,16 +131,16 @@ const STATIONS = [
     { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
     { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
     { name: 'RMF Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-
-    // 8 NOWYCH - żadnej z nich wcześniej nie dawałem jako działającej
-    { name: 'Radio Plus', url: 'https://plus.s3cache.net/plus-waw.mp3' },
-    { name: 'Muzo.FM', url: 'https://stream.muzo.fm:8443/muzofm' },
     { name: 'Radio Kampus', url: 'https://stream.radiokampus.fm/kampus' },
     { name: 'Radio WAWA', url: 'https://ic1.smcdn.pl/2480-1.mp3' },
-    { name: 'Rock Radio', url: 'https://ro03.cdn.eurozet.pl/ror-waw.mp3' },
-    { name: 'Radio Supernova', url: 'https://ic1.smcdn.pl/2600-1.mp3' },
-    { name: 'Polskie Radio 1', url: 'https://stream3.polskieradio.pl:8900/;stream/1' },
-    { name: 'Polskie Radio 3', url: 'https://stream3.polskieradio.pl:8902/;stream/1' }
+
+    // 6 NOWYCH - sprawdzone, nie były wcześniej
+    { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+    { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+    { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+    { name: 'RMF Polskie', url: 'https://rs201-krk.rmfstream.pl/rmf_polskie' },
+    { name: 'Radio Kolor', url: 'https://kolor.s3cache.net/kolor.mp3' },
+    { name: 'Radio CCM', url: 'https://stream.rcs.revma.com/e3wzz3a1f5zuv' }
 ];
 
 STATIONS.sort((a, b) => a.name.localeCompare(b.name, 'pl'));
