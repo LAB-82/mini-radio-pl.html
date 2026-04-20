@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mini Radio RMF FM</title>
+<title>Mini Radio PL</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
 * {
@@ -17,8 +17,8 @@ html, body {
 }
 body {
   font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #fff700; /* główny kolor żółty */
-  color: #000;
+  background: #0f;
+  color: #fff;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -33,11 +33,10 @@ body {
   font-size: 30px;
   margin-bottom: 4px;
   font-weight: 700;
-  color: #000;
 }
 .header p {
-  color: #333;
-  font-size: 16px;
+  color: #999;
+  font-size: 16.25px;
   font-weight: 600;
 }
 
@@ -45,7 +44,7 @@ body {
 .status {
   background: #FECB00;
   color: #000;
-  padding: 12px 20px;
+  padding: 12px 2.5cm;
   border-radius: 12px;
   margin-bottom: 15px;
   font-size: 17.5px;
@@ -55,6 +54,11 @@ body {
   align-items: center;
   min-height: 48px;
   font-weight: 700;
+}
+.status.error {
+  background: #e22134;
+  color: #fff;
+  border-color: #000;
 }
 .status-text {
   flex: 1;
@@ -68,13 +72,14 @@ body {
 /* Grid kafelków */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
   flex: 1;
+  min-height: 0;
   margin-bottom: 15px;
 }
 .tile {
-  background: #fff700;
+  background: #FECB00;
   border: 2px solid #000;
   border-radius: 12px;
   padding: 12px;
@@ -93,13 +98,13 @@ body {
   font-size: 14px;
 }
 .tile:hover {
-  background: #ffd700;
+  background: #FFD633;
 }
 .tile:active {
   transform: scale(0.96);
 }
 .tile.active {
-  background: #ffe600;
+  background: #FECB00;
   border-color: #000;
   color: #000;
 }
@@ -122,7 +127,7 @@ body {
   display: block;
 }
 
-/* Nazwy stacji - neonowe */
+/* Tekst stacji - neonowy efekt na żółto */
 .tile .name {
   font-size: 20px;
   font-weight: 700;
@@ -130,22 +135,22 @@ body {
   transition: all 0.3s;
   color: #000;
   margin-top: 8px;
-  /* Neonowy efekt */
+  /* Neon żółty */
   text-shadow: 
-    0 0 5px #00BFFF,
-    0 0 10px #00BFFF,
-    0 0 15px #00BFFF,
-    0 0 20px #00BFFF;
+    0 0 5px #fff700,
+    0 0 10px #fff700,
+    0 0 15px #fff700,
+    0 0 20px #fff700;
 }
 .tile.active .name {
   text-shadow: 
-    0 0 8px #00BFFF,
-    0 0 16px #00BFFF,
-    0 0 24px #00BFFF,
-    0 0 32px #00BFFF;
+    0 0 8px #fff700,
+    0 0 16px #fff700,
+    0 0 24px #fff700,
+    0 0 32px #fff700;
 }
 
-/* Kontrolki */
+/* Kontrolki – nowoczesne, dopasowane do stylistyki */
 .controls {
   position: relative;
   background: #FECB00;
@@ -159,6 +164,8 @@ body {
   flex-shrink: 0;
   margin-bottom: 15px;
 }
+
+/* Ramka z napisem RMF-FM w stylu neon */
 .controls::before {
   content: "";
   position: absolute;
@@ -172,66 +179,59 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-.ctrl-btn {
+
+/* Nowe przyciski – bardziej nowoczesne, zachowując logikę */
+.btn {
   background: transparent;
-  border: 1px solid #000;
-  color: #000;
-  padding: 0 12px;
-  height: 36px;
+  border: none;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 15px;
+  font-family: 'Montserrat Alternates', sans-serif;
   font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s;
+  color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  min-width: 50px;
-  font-family: 'Montserrat Alternates', sans-serif;
+  min-width: 60px;
 }
-.ctrl-btn:hover {
+.btn:hover {
   background: #000;
   color: #FECB00;
 }
-.ctrl-btn:active {
-  transform: scale(0.95);
+.btn:active {
+  transform: scale(0.96);
 }
-.ctrl-btn:disabled {
+.btn.disabled {
   color: #666;
-  border-color: #666;
+  border: none;
   cursor: not-allowed;
 }
-.ctrl-btn.play {
-  background: transparent;
-  color: #000;
-  min-width: 60px;
-  border-color: #000;
-}
-.ctrl-btn.play:hover {
-  background: #000;
-  color: #FECB00;
-}
-.ctrl-btn.play.active {
-  background: #FECB00;
-  border-color: #000;
-  color: #000;
-}
-.ctrl-btn.mute {
-  min-width: 60px;
-}
-input[type="range"] {
+
+/* Specjalne style dla przycisków Play/Stop/Prev/Next/Mute */
+#playBtn { font-size: 16px; font-weight: 700; }
+#stopBtn { font-size: 16px; font-weight: 700; }
+#prevBtn { font-size: 16px; font-weight: 700; }
+#nextBtn { font-size: 16px; font-weight: 700; }
+#muteBtn { font-size: 16px; font-weight: 700; }
+
+input[type=range] {
   flex: 1;
   height: 4px;
   cursor: pointer;
   min-width: 60px;
   accent-color: #000;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>Mini Radio RMF FM</h1>
-  <p>RMF • Tylko najlepsze stacje</p>
+  <h1>Mini Radio PL</h1>
+  <p>RMF RMF • Tylko najlepsze stacje</p>
 </div>
 <div class="status" id="status">
   <span class="status-text" id="statusText"></span>
@@ -239,12 +239,13 @@ input[type="range"] {
 </div>
 <div class="grid" id="grid"></div>
 <div class="controls" id="playerControls">
-  <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
-  <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
-  <button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
-  <button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
+  <!-- Zamiana przycisków na nowoczesne -->
+  <button class="btn" id="playBtn" disabled>▶️</button>
+  <button class="btn" id="stopBtn" disabled>⏹️</button>
+  <button class="btn" id="prevBtn" disabled>⏮️</button>
+  <button class="btn" id="nextBtn" disabled>⏭️</button>
+  <button class="btn" id="muteBtn">🔇</button>
   <input type="range" id="volume" min="0" max="100" value="80" />
-  <button class="ctrl-btn mute" id="muteBtn">MUTE</button>
 </div>
 <audio id="player" crossorigin="anonymous"></audio>
 
@@ -295,7 +296,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Tworzenie kafelków stacji
 STATIONS.forEach((st, i) => {
   const tile = document.createElement('div');
   tile.className = 'tile';
@@ -307,15 +307,6 @@ STATIONS.forEach((st, i) => {
 function updateTileActive() {
   document.querySelectorAll('.tile').forEach((t, i) => {
     t.classList.toggle('active', i === currentIndex);
-    // dodanie klasy 'rmf' dla RMF FM, aby wyłączyć neon
-    const nameDiv = t.querySelector('.name');
-    if (nameDiv) {
-      if (STATIONS[i].name.includes('RMF')) {
-        nameDiv.classList.remove('neon'); // można dodać własne klasy, jeśli chcesz
-      } else {
-        nameDiv.classList.add('neon');
-      }
-    }
   });
 }
 
@@ -328,7 +319,7 @@ function playStation(index) {
   status.classList.remove('error');
   player.src = st.url;
   player.play().then(() => {
-    statusText.textContent = 'Słuchasz: ' + st.name;
+    statusText.textContent = 'Gra: ' + st.name;
     playBtn.classList.add('active');
     [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
   }).catch(err => {
@@ -352,7 +343,7 @@ playBtn.onclick = () => {
   } else {
     player.pause();
     playBtn.classList.remove('active');
-    statusText.textContent = 'Zatrzymano: ' + STATIONS[currentIndex].name;
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
 };
 
@@ -361,7 +352,7 @@ stopBtn.onclick = () => {
   player.currentTime = 0;
   playBtn.classList.remove('active');
   if (currentIndex !== -1) {
-    statusText.textContent = 'Zatrzymano: ' + STATIONS[currentIndex].name;
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
 };
 
@@ -376,7 +367,7 @@ volume.oninput = (e) => {
   const vol = e.target.value / 100;
   player.volume = vol;
   lastVolume = vol;
-  muteBtn.textContent = vol === 0 ? 'UNMUTE' : 'MUTE';
+  muteBtn.textContent = vol === 0 ? '🔈' : '🔇';
 };
 
 muteBtn.onclick = () => {
@@ -384,11 +375,11 @@ muteBtn.onclick = () => {
     lastVolume = player.volume;
     player.volume = 0;
     volume.value = 0;
-    muteBtn.textContent = 'UNMUTE';
+    muteBtn.textContent = '🔈';
   } else {
     player.volume = lastVolume;
     volume.value = lastVolume * 100;
-    muteBtn.textContent = 'MUTE';
+    muteBtn.textContent = '🔇';
   }
 };
 
