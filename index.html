@@ -160,10 +160,16 @@ body {
   opacity: 0;
 }
 
-/* Przycisk MUTE - bez ikony kwadracika, tylko odwrócona ikona głośnika */
-#muteIcon {
+/* Przycisk MUTE - bez żadnej ikony kwadracika, tylko zwykły przycisk z ikoną głośnika */
+#muteBtn {
   font-size: 20px;
-  transition: transform 0.2s;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background: transparent;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -187,9 +193,7 @@ body {
   <button class="btn" id="stopBtn" disabled>STOP</button>
   <button class="btn" id="prevBtn" disabled>PREV</button>
   <button class="btn" id="nextBtn" disabled>NEXT</button>
-  <button class="btn" id="muteBtn">
-    🔊
-  </button>
+  <button class="btn" id="muteBtn">🔊</button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
 
@@ -225,7 +229,6 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volume = document.getElementById('volume');
 const muteBtn = document.getElementById('muteBtn');
-const muteIcon = document.getElementById('muteIcon');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
@@ -256,10 +259,8 @@ function updateTileActive() {
   document.querySelectorAll('.tile').forEach((t, i) => {
     t.classList.toggle('active', i === currentIndex);
     const głośnik = t.querySelector('.głośnik');
-    if (i === currentIndex && isPlaying) {
-      głośnik.classList.remove('hidden');
-    } else {
-      głośnik.classList.add('hidden');
+    if (głośnik) {
+      głośnik.classList.toggle('hidden', !(i === currentIndex && isPlaying));
     }
   });
 }
@@ -334,9 +335,9 @@ volume.oninput = (e) => {
 
 function updateMuteIcon() {
   if (isMuted || player.volume === 0) {
-    muteIcon.textContent = '🔇'; // wyciszone
+    muteBtn.textContent = '🔇'; // wyciszone
   } else {
-    muteIcon.textContent = '🔊'; // odtwarzanie
+    muteBtn.textContent = '🔊'; // odtwarzanie
   }
 }
 
