@@ -90,7 +90,6 @@
         border: 2px solid #FFC107;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         z-index: 9999;
-        position: fixed;
     }
 .controls::before {
     content: "";
@@ -161,13 +160,13 @@ input[type="range"] {
 
     <!-- Górny pasek z logo RMF-FM -->
     <div class="controls" id="playerControls">
-        <!-- Logo na górze -->
+        <!-- Logo RMF-FM na górze -->
         <div style="position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:150px; height:50px; background-image:url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg'); background-size:contain; background-repeat:no-repeat;"></div>
         <!-- Przyciski -->
-        <button class="ctrl-btn play" id="playBtn" disabled>▶</button>
-        <button class="ctrl-btn" id="stopBtn" disabled>■</button>
-        <button class="ctrl-btn" id="prevBtn" disabled>⏮</button>
-        <button class="ctrl-btn" id="nextBtn" disabled>⏭</button>
+        <button class="ctrl-btn play" id="playBtn">▶</button>
+        <button class="ctrl-btn" id="stopBtn">■</button>
+        <button class="ctrl-btn" id="prevBtn">⏮</button>
+        <button class="ctrl-btn" id="nextBtn">⏭</button>
         <input type="range" id="volume" min="0" max="100" value="80" />
         <button class="ctrl-btn mute" id="muteBtn">🔊</button>
         <span class="time" id="timeText">0:00</span>
@@ -258,14 +257,11 @@ function playStation(index) {
         statusText.textContent = 'Gra: ' + st.name;
         status.className = 'status playing';
         playBtn.textContent = '⏸';
-        [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
     }).catch(err => {
         statusText.textContent = 'Błąd: ' + st.name;
         status.className = 'status error';
         currentIndex = -1;
         updateTileActive();
-        [playBtn, stopBtn].forEach(b => b.disabled = true);
-        console.error(err);
     });
 }
 
@@ -332,7 +328,6 @@ player.onerror = () => {
     status.className = 'status error';
     currentIndex = -1;
     updateTileActive();
-    [playBtn, stopBtn].forEach(b => b.disabled = true);
 };
 </script>
 </body>
