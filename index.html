@@ -260,8 +260,15 @@ const speakerIcon = document.getElementById('speakerIcon');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
+let isPlaying = false;
 
 player.volume = 0.8;
+
+function updateSpeakerIcon() {
+  // Ikona 🔊 pojawia się tylko gdy: stacja aktywna, odtwarzanie włączone, volume > 0
+  const shouldShow = currentIndex !== -1 && isPlaying && player.volume > 0;
+  speakerIcon.style.display = shouldShow ? 'inline' : 'none';
+}
 
 function updateClock() {
   const now = new Date();
@@ -295,22 +302,23 @@ function playStation(index) {
   updateTileActive();
   statusText.textContent = 'Ładowanie: ' + st.name;
   status.classList.remove('error');
+  isPlaying = false;
   player.src = st.url;
   player.play().then(() => {
     statusText.textContent = 'Gra: ' + st.name;
     playBtn.classList.add('active');
     [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
-    // pokaż ikonę głośnika
-    speakerIcon.style.display = 'inline';
+    isPlaying = true;
+    updateSpeakerIcon();
   }).catch(err => {
     statusText.textContent = 'Błąd: ' + st.name;
     status.classList.add('error');
     currentIndex = -1;
+    isPlaying = false;
     updateTileActive();
     [playBtn, stopBtn].forEach(b => b.disabled = true);
     playBtn.classList.remove('active');
-    // ukryj ikonę, gdy nie można odtworzyć
-    speakerIcon.style.display = 'none';
+    updateSpeakerIcon();
     console.error(err);
   });
 }
@@ -322,20 +330,25 @@ playBtn.onclick = () => {
     playBtn.classList.add('active');
     statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
     status.classList.remove('error');
+    isPlaying = true;
   } else {
     player.pause();
     playBtn.classList.remove('active');
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+    isPlaying = false;
   }
+  updateSpeakerIcon();
 };
 
 stopBtn.onclick = () => {
   player.pause();
   player.currentTime = 0;
   playBtn.classList.remove('active');
+  isPlaying = false;
   if (currentIndex !== -1) {
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateSpeakerIcon();
 };
 
 prevBtn.onclick = () => {
@@ -349,7 +362,8 @@ volume.oninput = (e) => {
   const vol = e.target.value / 100;
   player.volume = vol;
   lastVolume = vol;
-  muteBtn.textContent = vol === 0 ? '🔈' : '🔇';
+  muteBtn.innerHTML = vol === 0 ? '🔈 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>' : '🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>';
+  updateSpeakerIcon();
 };
 
 muteBtn.onclick = () => {
@@ -357,26 +371,41 @@ muteBtn.onclick = () => {
     lastVolume = player.volume;
     player.volume = 0;
     volume.value = 0;
-    // pokaż ikonę głośnika
-    speakerIcon.style.display = 'inline';
+    muteBtn.innerHTML = '🔈 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>';
   } else {
     player.volume = lastVolume;
     volume.value = lastVolume * 100;
-    // ukryj ikonę głośnika
-    speakerIcon.style.display = 'none';
+    muteBtn.innerHTML = '🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>';
   }
+  updateSpeakerIcon();
 };
 
 player.onerror = () => {
   statusText.textContent = 'Błąd streamu';
   status.classList.add('error');
   currentIndex = -1;
+  isPlaying = false;
   updateTileActive();
   [playBtn, stopBtn].forEach(b => b.disabled = true);
   playBtn.classList.remove('active');
-  // ukryj ikonę
-  speakerIcon.style.display = 'none';
+  updateSpeakerIcon();
 };
+
+// Monitorowanie zmian stanu odtwarzania
+player.addEventListener('play', () => {
+  isPlaying = true;
+  updateSpeakerIcon();
+});
+
+player.addEventListener('pause', () => {
+  isPlaying = false;
+  updateSpeakerIcon();
+});
+
+player.addEventListener('ended', () => {
+  isPlaying = false;
+  updateSpeakerIcon();
+});
 </script>
 </body>
 </html>
