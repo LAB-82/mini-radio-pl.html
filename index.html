@@ -82,7 +82,7 @@
         left: 20px;
         right: 20px;
         background: #FFEB3B; /* żółte tło */
-        padding: 70px 16px 16px 16px; /* większe padding, żeby zmieściło logo nad przyciskami */
+        padding: 70px 16px 16px 16px; /* miejsce na logo nad przyciskami */
         border-radius: 16px;
         display: flex;
         gap: 12px;
@@ -158,7 +158,13 @@ input[type="range"] {
     </div>
     <div class="grid" id="grid"></div>
 
+    <!-- Górny pasek z logo -->
     <div class="controls" id="playerControls">
+        <!-- Logo RMF-FM na górze -->
+        <!-- Przesunięte logo na górę, nad przyciskami -->
+        <div style="position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:150px; height:50px; background-image:url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg'); background-size:contain; background-repeat:no-repeat;"></div>
+
+        <!-- Przyciski -->
         <button class="ctrl-btn play" id="playBtn" disabled>▶</button>
         <button class="ctrl-btn" id="stopBtn" disabled>■</button>
         <button class="ctrl-btn" id="prevBtn" disabled>⏮</button>
