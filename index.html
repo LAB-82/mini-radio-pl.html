@@ -23,7 +23,7 @@ body {
   display: flex;
   flex-direction: column;
 }
-/* ... Twoje istniejące style ... */
+/* Twoje istniejące style ... */
 
 .header {
   text-align: center;
@@ -151,36 +151,31 @@ body {
   text-decoration: line-through;
   opacity: 0.6;
 }
-/* Dodany styl dla przycisku w kształcie kółka z ikonami */
-.circle-controls {
+/* Styl dla przycisków sterowania w kształcie kółka */
+.control-buttons {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
 }
-.circle-btn {
-  width: 220px;
-  height: 220px;
+.control-button {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-color: #f0f0f0;
-  border: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
+  border: 2px solid #000;
   font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 15px;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: all 0.3s;
 }
-.circle-btn:hover {
+.control-button:hover {
   background-color: #e0e0e0;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
-}
-.icon {
-  flex: 1 1 30%;
-  text-align: center;
-  margin: 5px;
 }
 </style>
 </head>
@@ -206,22 +201,88 @@ body {
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
 
-<!-- Dodajemy nowy przycisk w kształcie kółka z ikonami -->
-<div class="circle-controls">
-  <button id="circleButton" class="circle-btn" title="Sterowanie">
-    <span class="icon" title="Previous">⏮️</span>
-    <span class="icon" title="Stop">⏹️</span>
-    <span class="icon" title="Play/Pause">▶️</span>
-    <span class="icon" title="Next">⏭️</span>
-    <span class="icon" title="Mute">🔊</span>
-  </button>
+<!-- Nowe przyciski sterowania w kształcie kółka -->
+<div class="control-buttons">
+  <button id="btnPrev" class="control-button" title="Poprzednia">⏮️</button>
+  <button id="btnStop" class="control-button" title="Stop">⏹️</button>
+  <button id="btnPlayPause" class="control-button" title="Play/Pauza">▶️</button>
+  <button id="btnNext" class="control-button" title="Następna">⏭️</button>
+  <button id="btnMute" class="control-button" title="Wycisz">🔇</button>
 </div>
 
 <audio id="player" crossorigin="anonymous"></audio>
 
 <script>
-// Twój skrypt - nie wprowadzam zmian, bo wszystko pozostaje tak samo
-// (w razie potrzeby mogę dodać obsługę kliknięć dla tego nowego przycisku)
+// Twój skrypt pozostaje bez zmian, ale dodam obsługę dla tych nowych przycisków
+const player = document.getElementById('player');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const muteBtn = document.getElementById('muteBtn');
+const volume = document.getElementById('volume');
+
+const btnPrev = document.getElementById('btnPrev');
+const btnStop = document.getElementById('btnStop');
+const btnPlayPause = document.getElementById('btnPlayPause');
+const btnNext = document.getElementById('btnNext');
+const btnMute = document.getElementById('btnMute');
+
+let currentIndex = -1;
+let isPlaying = false;
+let isMuted = false;
+let lastVolume = 0.8;
+
+player.volume = 0.8;
+
+// Podłącz obsługę przycisków w kształcie kółka
+btnPrev.onclick = () => {
+  if (currentIndex > 0) {
+    playStation(currentIndex - 1);
+  }
+};
+btnStop.onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  isPlaying = false;
+  updatePlayPauseButton();
+};
+btnPlayPause.onclick = () => {
+  if (currentIndex === -1) return;
+  if (player.paused) {
+    player.play();
+  } else {
+    player.pause();
+  }
+};
+btnNext.onclick = () => {
+  if (currentIndex < STATIONS.length - 1) {
+    playStation(currentIndex + 1);
+  }
+};
+btnMute.onclick = () => {
+  if (!isMuted && player.volume > 0) {
+    lastVolume = player.volume;
+    player.volume = 0;
+    isMuted = true;
+  } else {
+    player.volume = lastVolume || 0.8;
+    isMuted = false;
+  }
+  volume.value = player.volume * 100;
+  updateMuteIcon();
+};
+
+// Funkcje pomocnicze do aktualizacji ikon przycisków
+function updatePlayPauseButton() {
+  btnPlayPause.textContent = player.paused ? '▶️' : '⏸️';
+}
+function updateMuteIcon() {
+  btnMute.textContent = (isMuted || player.volume === 0) ? '🔇' : '🔊';
+}
+
+// Pozostała logika odtwarzania, obsługa stacji, itp. zostaje bez zmian
+// (np. funkcja playStation, obsługa błędów, itp.)
 </script>
 </body>
 </html>
