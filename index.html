@@ -21,15 +21,15 @@ text-align: center;
 margin-bottom: 15px;
 flex-shrink: 0;
 }
-.header h1 { font-size: 24px; margin-bottom: 4px; font-weight: 700; }
-.header p { color: #999; font-size: 13px; font-weight: 600; }
+.header h1 { font-size: 30px; margin-bottom: 4px; font-weight: 700; }
+.header p { color: #999; font-size: 16.25px; font-weight: 600; }
 .status {
 background: #FECB00;
 color: #000;
 padding: 12px 2.5cm;
 border-radius: 12px;
 margin-bottom: 15px;
-font-size: 14px;
+font-size: 17.5px;
 border: 2px solid #000;
 display: flex;
 justify-content: space-between;
@@ -73,7 +73,7 @@ overflow: hidden;
 .tile:hover { background: #FFD633; }
 .tile:active { transform: scale(0.96); }
 .tile.active { background: #FECB00; border-color: #000; color: #000; }
-/* Znak fali w kafelku – zielone neonowe podświetlenie takie samo jak w dolnym pasku */
+/* Znak fali w kafelku – niebieski neon */
 .tile::before {
 content: "";
 position: absolute;
@@ -82,27 +82,27 @@ right: 10px;
 width: 24px;
 height: 24px;
 opacity: 0.25;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%230F0'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10z' stroke='%230F0' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%230F0' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 transition: all 0.2s;
-filter: drop-shadow(0 0 8px #0F0) drop-shadow(0 0 16px #0F0) drop-shadow(0 0 24px #0F0);
+filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0 0 24px #00BFFF);
 }
 .tile.active::before {
 opacity: 1;
 }
-/* Żółte neonowe podświetlenie nazw stacji w kafelkach */
+/* Niebieski neon dla nazw stacji w kafelkach */
 .tile.name {
-font-size: 21.875px;
+font-size: 27.34375px;
 font-weight: 700;
 line-height: 1.1;
 transition: all 0.2s;
 color: #000;
-text-shadow: 0 0 8px #fd0, 0 0 16px #fd0, 0 0 24px #fd0;
+text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
 }
-.tile.active .name {
+.tile.active.name {
 color: #000;
-text-shadow: 0 0 10px #FECB00, 0 0 20px #FECB00, 0 0 30px #FECB00, 0 0 40px #FECB00;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF;
 }
 .controls {
 position: relative;
@@ -116,7 +116,7 @@ border: 2px solid #000;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 flex-shrink: 0;
 }
-/* Dolny pasek: tylko napis RMF-FM, seledynowe neonowe podświetlenie, bez ikony fali */
+/* Dolny pasek: niebieski neon, obramowanie ramki żółte, czcionka Montserrat Alternates */
 .controls::before {
 content: "";
 position: absolute;
@@ -125,11 +125,11 @@ left: 50%;
 transform: translateX(-50%);
 width: 140px;
 height: 45px;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000' stroke='%230F0' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%230F0'%3ERMF-FM%3C/text%3E%3C/svg%3E");
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000' stroke='%23FECB00' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Montserrat Alternates' font-size='16.25' font-weight='700' text-anchor='middle' fill='%2300BFFF'%3ERMF-FM%3C/text%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 background-position: center;
-filter: drop-shadow(0 0 8px #0F0) drop-shadow(0 0 16px #0F0) drop-shadow(0 0 24px #0F0);
+filter: drop-shadow(0 0 10px #00BFFF) drop-shadow(0 0 20px #00BFFF) drop-shadow(0 0 30px #00BFFF);
 }
 .ctrl-btn {
 background: transparent;
@@ -138,7 +138,7 @@ color: #000;
 padding: 0 12px;
 height: 36px;
 border-radius: 8px;
-font-size: 12px;
+font-size: 15px;
 font-weight: 700;
 cursor: pointer;
 display: flex;
@@ -147,23 +147,23 @@ justify-content: center;
 transition: all 0.2s;
 min-width: 50px;
 font-family: 'Montserrat Alternates', sans-serif;
-text-shadow: 0 0 6px #A4C1FF, 0 0 12px #FECB00, 0 0 18px #FECB00;
+text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
 }
 .ctrl-btn:hover { background: #000; color: #FECB00; }
 .ctrl-btn:active { transform: scale(0.95); }
 .ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; text-shadow: none; }
 .ctrl-btn.play {
-background: #000;
-color: #A4C1FF;
+background: transparent;
+color: #000;
 min-width: 60px;
 border-color: #000;
-text-shadow: 0 0 10px #A4C1FF, 0 0 20px #FECB00, 0 0 30px #A4C1FF;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
 }
-.ctrl-btn.play:hover { background: #333; }
-.ctrl-btn.play.active { background: #A4C1FF; border-color: #000; color: #000; }
+.ctrl-btn.play:hover { background: #000; color: #FECB00; }
+.ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
 .ctrl-btn.mute {
 min-width: 60px;
-text-shadow: 0 0 10px #A4C1FF, 0 0 20px #FECB00, 0 0 30px #FECB00;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
 }
 input[type="range"] {
 flex: 1;
@@ -296,7 +296,7 @@ volume.oninput = (e) => {
 const vol = e.target.value / 100;
 player.volume = vol;
 lastVolume = vol;
-muteBtn.textContent = vol === 0 ? 'UNMUTE' : 'MUTE';
+muteBtn.textContent = vol === 0? 'UNMUTE' : 'MUTE';
 };
 muteBtn.onclick = () => {
 if (player.volume > 0) {
