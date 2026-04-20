@@ -3,38 +3,49 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mini Radio PL</title>
+<title>Mini Radio RMF FM</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; overflow: hidden; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 body {
   font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #0f;
-  color: #fff;
+  background: #fff700; /* główny kolor żółty */
+  color: #000;
   padding: 15px;
   display: flex;
   flex-direction: column;
 }
+
+/* Nagłówek */
 .header {
   text-align: center;
   margin-bottom: 15px;
-  flex-shrink: 0;
 }
-.header h1 { 
-  font-size: 30px; 
-  margin-bottom: 4px; 
-  font-weight: 700; 
+.header h1 {
+  font-size: 30px;
+  margin-bottom: 4px;
+  font-weight: 700;
+  color: #000;
 }
-.header p { 
-  color: #999; 
-  font-size: 16.25px; 
-  font-weight: 600; 
+.header p {
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
 }
+
+/* Status */
 .status {
   background: #FECB00;
   color: #000;
-  padding: 12px 2.5cm;
+  padding: 12px 20px;
   border-radius: 12px;
   margin-bottom: 15px;
   font-size: 17.5px;
@@ -44,30 +55,26 @@ body {
   align-items: center;
   min-height: 48px;
   font-weight: 700;
-  flex-shrink: 0;
 }
-.status.error { 
-  background: #e22134; 
-  color: #fff; 
-  border-color: #000; 
+.status-text {
+  flex: 1;
 }
-.status-text { flex: 1; }
 .clock {
   font-variant-numeric: tabular-nums;
   min-width: 60px;
   text-align: right;
 }
+
+/* Grid kafelków */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  grid-auto-rows: 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
   flex: 1;
-  min-height: 0;
   margin-bottom: 15px;
 }
 .tile {
-  background: #FECB00;
+  background: #fff700;
   border: 2px solid #000;
   border-radius: 12px;
   padding: 12px;
@@ -75,57 +82,70 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   user-select: none;
   color: #000;
   position: relative;
   overflow: hidden;
+  height: 100px; /* stała wysokość dla kafli */
+  font-size: 14px;
 }
-.tile:hover { background: #FFD633; }
-.tile:active { transform: scale(0.96); }
-.tile.active { 
-  background: #FECB00; 
-  border-color: #000; 
-  color: #000; 
+.tile:hover {
+  background: #ffd700;
+}
+.tile:active {
+  transform: scale(0.96);
+}
+.tile.active {
+  background: #ffe600;
+  border-color: #000;
+  color: #000;
 }
 
-/* ZMIANA 2: Ikona fal WiFi jak na zdjęciu */
+/* Ikona WiFi */
 .tile::before {
   content: "";
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 20px;
+  top: 6px;
+  right: 6px;
+  width: 24px;
   height: 16px;
   display: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16' fill='none' stroke='%2300BFFF' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 13l3-3 3 3'/%3E%3Cpath d='M8 9l3-3 3 3'/%3E%3Cpath d='M14 5l3-3 3 3'/%3E%3Ccircle cx='5' cy='13' r='1' fill='%2300BFFF'/%3E%3Ccircle cx='19' cy='13' r='1' fill='%2300BFFF'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16' fill='none' stroke='%2300BFFF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 13l2-2 2 2'/%3E%3Cpath d='M6 9l2-2 2 2'/%3E%3Cpath d='M10 5l2-2 2 2'/%3E%3Ccircle cx='4' cy='13' r='1' fill='%2300BFFF'/%3E%3Ccircle cx='20' cy='13' r='1' fill='%2300BFFF'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
-  transition: all 0.2s;
-  filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF);
+  filter: drop-shadow(0 0 4px #00BFFF) drop-shadow(0 0 8px #00BFFF);
 }
-.tile.active::before { display: block; }
+.tile.active::before {
+  display: block;
+}
 
-/* ZMIANA 1: Niebieski neon na napisach stacji */
+/* Nazwy stacji - neonowe */
 .tile .name {
-  font-size: 27.34375px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.1;
-  transition: all 0.2s;
+  transition: all 0.3s;
   color: #000;
+  margin-top: 8px;
+  /* Neonowy efekt */
   text-shadow: 
-    0 0 8px #00BFFF, 
-    0 0 16px #00BFFF, 
-    0 0 24px #00BFFF;
+    0 0 5px #00BFFF,
+    0 0 10px #00BFFF,
+    0 0 15px #00BFFF,
+    0 0 20px #00BFFF;
 }
 .tile.active .name {
   text-shadow: 
-    0 0 12px #00BFFF, 
-    0 0 24px #00BFFF, 
-    0 0 36px #00BFFF;
+    0 0 8px #00BFFF,
+    0 0 16px #00BFFF,
+    0 0 24px #00BFFF,
+    0 0 32px #00BFFF;
 }
 
+/* Kontrolki */
 .controls {
   position: relative;
   background: #FECB00;
@@ -137,9 +157,8 @@ body {
   border: 2px solid #000;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   flex-shrink: 0;
+  margin-bottom: 15px;
 }
-
-/* ZMIANA 3: Żółty neon na RMF-FM */
 .controls::before {
   content: "";
   position: absolute;
@@ -148,12 +167,11 @@ body {
   transform: translateX(-50%);
   width: 140px;
   height: 45px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Cdefs%3E%3Cfilter id='glow'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='2' flood-color='%23FECB00'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='4' flood-color='%23FECB00'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='6' flood-color='%23FECB00'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='140' height='45' rx='22' fill='%23000'/%3E%3Ctext x='70' y='29' font-family='Montserrat Alternates' font-size='16.25' font-weight='700' text-anchor='middle' fill='%23FECB00' filter='url(%23glow)'%3ERMF-FM%3C/text%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Cdefs%3E%3Cfilter id='yellowglow'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='1.5' flood-color='%23FECB00'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='3' flood-color='%23FECB00'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='5' flood-color='%23FECB00'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='140' height='45' rx='22' fill='none' stroke='%23000' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Montserrat Alternates, sans-serif' font-size='16' font-weight='700' text-anchor='middle' fill='%23FECB00' filter='url(%23yellowglow)'%3ERMF-FM%3C/text%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
-
 .ctrl-btn {
   background: transparent;
   border: 1px solid #000;
@@ -171,23 +189,37 @@ body {
   min-width: 50px;
   font-family: 'Montserrat Alternates', sans-serif;
 }
-.ctrl-btn:hover { background: #000; color: #FECB00; }
-.ctrl-btn:active { transform: scale(0.95); }
-.ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; }
+.ctrl-btn:hover {
+  background: #000;
+  color: #FECB00;
+}
+.ctrl-btn:active {
+  transform: scale(0.95);
+}
+.ctrl-btn:disabled {
+  color: #666;
+  border-color: #666;
+  cursor: not-allowed;
+}
 .ctrl-btn.play {
   background: transparent;
   color: #000;
   min-width: 60px;
   border-color: #000;
 }
-.ctrl-btn.play:hover { background: #000; color: #FECB00; }
-.ctrl-btn.play.active { 
-  background: #FECB00; 
-  border-color: #000; 
-  color: #000; 
+.ctrl-btn.play:hover {
+  background: #000;
+  color: #FECB00;
 }
-.ctrl-btn.mute { min-width: 60px; }
-input[type="range"] { 
+.ctrl-btn.play.active {
+  background: #FECB00;
+  border-color: #000;
+  color: #000;
+}
+.ctrl-btn.mute {
+  min-width: 60px;
+}
+input[type="range"] {
   flex: 1;
   height: 4px;
   cursor: pointer;
@@ -198,8 +230,8 @@ input[type="range"] {
 </head>
 <body>
 <div class="header">
-  <h1>Mini Radio PL</h1>
-  <p>RMF RMF • Tylko najlepsze stacje</p>
+  <h1>Mini Radio RMF FM</h1>
+  <p>RMF • Tylko najlepsze stacje</p>
 </div>
 <div class="status" id="status">
   <span class="status-text" id="statusText"></span>
@@ -215,23 +247,24 @@ input[type="range"] {
   <button class="ctrl-btn mute" id="muteBtn">MUTE</button>
 </div>
 <audio id="player" crossorigin="anonymous"></audio>
+
 <script>
-/* Twój oryginalny JavaScript bez zmian */
+// Lista stacji
 const STATIONS = [
-  { name: 'RMF FM<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-  { name: 'RMF FM<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-  { name: 'RMF FM<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
-  { name: 'RMF FM<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
-  { name: 'RMF FM<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
-  { name: 'RMF FM<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-  { name: 'RMF FM<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
-  { name: 'RMF FM<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
-  { name: 'RMF FM<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
-  { name: 'RMF FM<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
-  { name: 'RMF FM<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
-  { name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
-  { name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-  { name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+  { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+  { name: 'RMF MAXX', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+  { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+  { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+  { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+  { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+  { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+  { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+  { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+  { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+  { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+  { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+  { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+  { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
 ];
 
 const player = document.getElementById('player');
@@ -255,3 +288,118 @@ function updateClock() {
   const now = new Date();
   const h = now.getHours().toString().padStart(2, '0');
   const m = now.getMinutes().toString().padStart(2, '0');
+  const s = now.getSeconds().toString().padStart(2, '0');
+  clock.textContent = `${h}:${m}:${s}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+// Tworzenie kafelków stacji
+STATIONS.forEach((st, i) => {
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.innerHTML = `<div class="name">${st.name}</div>`;
+  tile.onclick = () => playStation(i);
+  grid.appendChild(tile);
+});
+
+function updateTileActive() {
+  document.querySelectorAll('.tile').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIndex);
+    // dodanie klasy 'rmf' dla RMF FM, aby wyłączyć neon
+    const nameDiv = t.querySelector('.name');
+    if (nameDiv) {
+      if (STATIONS[i].name.includes('RMF')) {
+        nameDiv.classList.remove('neon'); // można dodać własne klasy, jeśli chcesz
+      } else {
+        nameDiv.classList.add('neon');
+      }
+    }
+  });
+}
+
+function playStation(index) {
+  const st = STATIONS[index];
+  player.pause();
+  currentIndex = index;
+  updateTileActive();
+  statusText.textContent = 'Ładowanie: ' + st.name;
+  status.classList.remove('error');
+  player.src = st.url;
+  player.play().then(() => {
+    statusText.textContent = 'Słuchasz: ' + st.name;
+    playBtn.classList.add('active');
+    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+  }).catch(err => {
+    statusText.textContent = 'Błąd: ' + st.name;
+    status.classList.add('error');
+    currentIndex = -1;
+    updateTileActive();
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
+    playBtn.classList.remove('active');
+    console.error(err);
+  });
+}
+
+playBtn.onclick = () => {
+  if (currentIndex === -1) return;
+  if (player.paused) {
+    player.play();
+    playBtn.classList.add('active');
+    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
+    status.classList.remove('error');
+  } else {
+    player.pause();
+    playBtn.classList.remove('active');
+    statusText.textContent = 'Zatrzymano: ' + STATIONS[currentIndex].name;
+  }
+};
+
+stopBtn.onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  playBtn.classList.remove('active');
+  if (currentIndex !== -1) {
+    statusText.textContent = 'Zatrzymano: ' + STATIONS[currentIndex].name;
+  }
+};
+
+prevBtn.onclick = () => {
+  if (currentIndex > 0) playStation(currentIndex - 1);
+};
+nextBtn.onclick = () => {
+  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
+
+volume.oninput = (e) => {
+  const vol = e.target.value / 100;
+  player.volume = vol;
+  lastVolume = vol;
+  muteBtn.textContent = vol === 0 ? 'UNMUTE' : 'MUTE';
+};
+
+muteBtn.onclick = () => {
+  if (player.volume > 0) {
+    lastVolume = player.volume;
+    player.volume = 0;
+    volume.value = 0;
+    muteBtn.textContent = 'UNMUTE';
+  } else {
+    player.volume = lastVolume;
+    volume.value = lastVolume * 100;
+    muteBtn.textContent = 'MUTE';
+  }
+};
+
+player.onerror = () => {
+  statusText.textContent = 'Błąd streamu';
+  status.classList.add('error');
+  currentIndex = -1;
+  updateTileActive();
+  [playBtn, stopBtn].forEach(b => b.disabled = true);
+  playBtn.classList.remove('active');
+};
+</script>
+</body>
+</html>
