@@ -116,7 +116,7 @@ border: 2px solid #000;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 flex-shrink: 0;
 }
-/* Dolny pasek: tylko napis Radio RMF-FM, zielone neonowe podświetlenie, bez ikony fali */
+/* Dolny pasek: tylko napis RMF-FM, seledynowe neonowe podświetlenie, bez ikony fali */
 .controls::before {
 content: "";
 position: absolute;
@@ -125,7 +125,7 @@ left: 50%;
 transform: translateX(-50%);
 width: 140px;
 height: 45px;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000' stroke='%230F0' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%230F0'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000' stroke='%230F0' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%230F0'%3ERMF-FM%3C/text%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 background-position: center;
@@ -147,23 +147,23 @@ justify-content: center;
 transition: all 0.2s;
 min-width: 50px;
 font-family: 'Montserrat Alternates', sans-serif;
-text-shadow: 0 0 6px #FECB00, 0 0 12px #FECB00, 0 0 18px #FECB00;
+text-shadow: 0 0 6px #A4C1FF, 0 0 12px #FECB00, 0 0 18px #FECB00;
 }
 .ctrl-btn:hover { background: #000; color: #FECB00; }
 .ctrl-btn:active { transform: scale(0.95); }
 .ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; text-shadow: none; }
 .ctrl-btn.play {
 background: #000;
-color: #FECB00;
+color: #A4C1FF;
 min-width: 60px;
 border-color: #000;
-text-shadow: 0 0 10px #FECB00, 0 0 20px #FECB00, 0 0 30px #FECB00;
+text-shadow: 0 0 10px #A4C1FF, 0 0 20px #FECB00, 0 0 30px #A4C1FF;
 }
 .ctrl-btn.play:hover { background: #333; }
-.ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
+.ctrl-btn.play.active { background: #A4C1FF; border-color: #000; color: #000; }
 .ctrl-btn.mute {
 min-width: 60px;
-text-shadow: 0 0 10px #FECB00, 0 0 20px #FECB00, 0 0 30px #FECB00;
+text-shadow: 0 0 10px #A4C1FF, 0 0 20px #FECB00, 0 0 30px #FECB00;
 }
 input[type="range"] {
 flex: 1;
