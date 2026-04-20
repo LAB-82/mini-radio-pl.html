@@ -146,7 +146,7 @@
 <body>
     <div class="header">
         <h1>Mini Radio PL</h1>
-        <p>19 stacji • tylko sprawdzone</p>
+        <p>14 stacji RMF • tylko sprawdzone</p>
     </div>
 
     <div class="status" id="status">
@@ -169,25 +169,20 @@
 
 <script>
 const STATIONS = [
-    { name: 'Antyradio', url: 'https://an.cdn.eurozet.pl/ant-waw.mp3' },
-    { name: 'Radio 357', url: 'https://stream.rcs.revma.com/ye5kghkgcm0uv' },
-    { name: 'Radio Eska', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
-    { name: 'Radio ZET', url: 'https://zt.cdn.eurozet.pl/zet-tun.mp3' },
-    { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
     { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+    { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
     { name: 'RMF Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-    { name: 'Radio Kampus', url: 'https://stream.radiokampus.fm/kampus' },
     { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
     { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
     { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
-    { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
-    { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
     { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' },
     { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-    { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
     { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
     { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
-    { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' }
+    { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+    { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+    { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+    { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' }
 ];
 
 STATIONS.sort((a, b) => a.name.localeCompare(b.name, 'pl'));
