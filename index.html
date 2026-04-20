@@ -70,19 +70,11 @@
         position: relative;
         overflow: hidden;
         box-shadow: 
-            0 0 5px #FECB00,
-            0 0 10px #FECB00,
-            0 0 15px #FECB00,
-            0 0 20px #FECB00,
             inset 0 0 5px rgba(0,0,0,0.3);
     }
     .tile:hover { 
         background: #FFD633;
         box-shadow: 
-            0 0 10px #FECB00,
-            0 0 20px #FECB00,
-            0 0 30px #FECB00,
-            0 0 40px #FECB00,
             inset 0 0 10px rgba(0,0,0,0.4);
     }
     .tile:active { transform: scale(0.96); }
@@ -91,11 +83,6 @@
         border-color: #000; 
         color: #000;
         box-shadow: 
-            0 0 15px #FECB00,
-            0 0 30px #FECB00,
-            0 0 45px #FECB00,
-            0 0 60px #FECB00,
-            0 0 80px #FECB00,
             inset 0 0 15px rgba(0,0,0,0.5);
     }
     .tile::before {
@@ -117,24 +104,29 @@
         filter: drop-shadow(0 0 6px #FECB00) drop-shadow(0 0 12px #FECB00) drop-shadow(0 0 20px #FECB00);
     }
     .tile.name {
-        font-size: 17.5px;
+        font-size: 26.25px;
         font-weight: 700;
         line-height: 1.2;
         transition: all 0.2s;
         position: relative;
         z-index: 2;
-        text-shadow: 
-            0 0 5px rgba(0,0,0,0.5),
-            0 0 10px rgba(0,0,0,0.3);
+        text-shadow: none;
     }
-    .tile.active.name {
-        color: #000;
+    .tile:hover .name {
         text-shadow: 
             0 0 8px #FECB00, 
             0 0 16px #FECB00, 
             0 0 24px #FECB00, 
             0 0 32px #FECB00,
             0 0 40px #FECB00;
+    }
+    .tile.active .name {
+        text-shadow: 
+            0 0 12px #FECB00, 
+            0 0 24px #FECB00, 
+            0 0 36px #FECB00, 
+            0 0 48px #FECB00,
+            0 0 60px #FECB00;
     }
     .controls {
         position: relative;
@@ -159,11 +151,11 @@
         transform: translateX(-50%);
         width: 140px;
         height: 45px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23005DAA'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23FECB00' stroke='%23000' stroke-width='3'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23000'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
-        filter: drop-shadow(0 0 8px #FECB00) drop-shadow(0 0 16px #FECB00) drop-shadow(0 0 24px #FECB00);
+        filter: drop-shadow(0 0 8px #000);
     }
     .ctrl-btn {
         background: transparent;
