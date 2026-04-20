@@ -13,11 +13,11 @@
 }
 html, body {
   height: 100%;
+  background-color: #000; /* zmieniłem na czarne tło */
   overflow: hidden;
 }
 body {
   font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #0f;
   color: #fff;
   padding: 15px;
   display: flex;
@@ -93,8 +93,7 @@ body {
   color: #000;
   position: relative;
   overflow: hidden;
-  height: 100px; /* stała wysokość dla kafli */
-  font-size: 14px;
+  height: 100px;
 }
 .tile:hover {
   background: #FFD633;
@@ -151,53 +150,22 @@ body {
   }
 }
 
-/* Głośnik w kafelku */
+/* Ikona głośnika w kafelku */
 .głośnik {
   display: inline-block;
   margin-top: 8px;
   font-size: 20px;
   transition: opacity 0.3s;
+  opacity: 0; /* domyślnie ukryte */
+}
+.głośnik.show {
+  opacity: 1; /* widoczne tylko gdy gra aktywna */
 }
 
-/* Ukryte, bo będą wstawione dynamicznie */
-#speakerIcon {
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-/* Przyciski i slider */
-.btn {
-  background: transparent;
-  border: 2px solid #000;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-family: 'Montserrat Alternates', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-width: 60px;
-}
-.btn:hover {
-  background: #000;
-  color: #FECB00;
-}
-.btn:active {
-  transform: scale(0.96);
-}
-.btn.disabled {
-  color: #666;
-  border-color: #666;
-  cursor: not-allowed;
-}
-input[type=range] {
-  flex: 1;
-  height: 4px;
-  cursor: pointer;
-  min-width: 60px;
-  accent-color: #000;
-  margin-left: 8px;
-  margin-right: 8px;
+/* Przycisk MUTE - ikona zmienia się */
+#muteIcon {
+  font-size: 20px;
+  transition: transform 0.2s;
 }
 </style>
 </head>
@@ -222,7 +190,7 @@ input[type=range] {
   <button class="btn" id="prevBtn" disabled>PREV</button>
   <button class="btn" id="nextBtn" disabled>NEXT</button>
   <button class="btn" id="muteBtn">
-    🔇
+    <span id="muteIcon">🔇</span>
   </button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
@@ -259,6 +227,7 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volume = document.getElementById('volume');
 const muteBtn = document.getElementById('muteBtn');
+const muteIcon = document.getElementById('muteIcon');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
@@ -288,14 +257,11 @@ STATIONS.forEach((st, i) => {
 function updateTileActive() {
   document.querySelectorAll('.tile').forEach((t, i) => {
     t.classList.toggle('active', i === currentIndex);
-  });
-  // Aktualizacja ikony głośnika w kafelku
-  document.querySelectorAll('.tile').forEach((tile, i) => {
-    const głośnikEl = tile.querySelector('.głośnik');
+    const głośnik = t.querySelector('.głośnik');
     if (i === currentIndex && isPlaying) {
-      głośnikEl.style.opacity = '1';
+      głośnik.classList.add('show');
     } else {
-      głośnikEl.style.opacity = '0';
+      głośnik.classList.remove('show');
     }
   });
 }
@@ -322,8 +288,6 @@ function playStation(index) {
     updateTileActive();
     [playBtn, stopBtn].forEach(b => b.disabled = true);
     playBtn.classList.remove('active');
-    updateTileActive();
-    console.error(err);
   });
 }
 
@@ -334,14 +298,11 @@ playBtn.onclick = () => {
     playBtn.classList.add('active');
     statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
     status.classList.remove('error');
-    isPlaying = true;
   } else {
     player.pause();
     playBtn.classList.remove('active');
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
-    isPlaying = false;
   }
-  updateTileActive();
   updateTileActive();
 };
 
@@ -349,7 +310,6 @@ stopBtn.onclick = () => {
   player.pause();
   player.currentTime = 0;
   playBtn.classList.remove('active');
-  isPlaying = false;
   if (currentIndex !== -1) {
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
@@ -375,22 +335,19 @@ volume.oninput = (e) => {
 };
 
 function updateMuteIcon() {
-  // zmienia ikonę przycisku mute w zależności od stanu
   if (isMuted || player.volume === 0) {
-    muteBtn.textContent = '🔇'; // wyciszone
+    muteIcon.textContent = '🔇'; // wyciszone
   } else {
-    muteBtn.textContent = '🔊'; // odtwarzanie
+    muteIcon.textContent = '🔊'; // odtwarzanie
   }
 }
 
 muteBtn.onclick = () => {
   if (!isMuted && player.volume > 0) {
-    // wycisz
     lastVolume = player.volume;
     player.volume = 0;
     isMuted = true;
   } else {
-    // odtlum
     player.volume = lastVolume || 0.8;
     isMuted = false;
   }
@@ -399,6 +356,7 @@ muteBtn.onclick = () => {
   updateTileActive();
 };
 
+// Aktualizacja stanu odtwarzacza
 player.onerror = () => {
   statusText.textContent = 'Błąd streamu';
   status.classList.add('error');
@@ -407,10 +365,8 @@ player.onerror = () => {
   updateTileActive();
   [playBtn, stopBtn].forEach(b => b.disabled = true);
   playBtn.classList.remove('active');
-  updateTileActive();
 };
 
-// monitor zmian stanu odtwarzania
 player.addEventListener('play', () => {
   isPlaying = true;
   updateTileActive();
