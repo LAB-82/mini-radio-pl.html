@@ -58,7 +58,6 @@ body {
 .status.error {
   background: #e22134;
   color: #fff;
-  border-color: #000;
 }
 .status-text {
   flex: 1;
@@ -97,6 +96,7 @@ body {
   height: 100px; /* stała wysokość dla kafli */
   font-size: 14px;
 }
+/* Efekt hover i aktywne */
 .tile:hover {
   background: #FFD633;
 }
@@ -112,7 +112,7 @@ body {
 /* Neonowy napis "RMF-FM" w ramce na stylu neon, świecący na żółto, z tłem */
 .controls {
   position: relative;
-  background: #FECB00;
+  background: #FECB00; /* tło dla ramki stacji */
   padding: 65px 16px 12px 16px;
   border-radius: 16px;
   display: flex;
@@ -122,11 +122,9 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   flex-shrink: 0;
   margin-bottom: 15px;
-  /* Tło takie samo jak neonowy napis */
-  background-color: #FECB00;
 }
 
-/* Neonowy tekst "RMF-FM" z tłem */
+/* Dodanie tła i neonowego efektu napisu RMF-FM */
 .controls::before {
   content: "RMF-FM";
   position: absolute;
@@ -142,9 +140,12 @@ body {
   /* Neon glow */
   text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
   border: 2px solid #fff700;
-  background: #FECB00; /* to samo co tło */
+  background: #FECB00; /* tło */
   animation: neon-glow 1.5s infinite alternate;
+  z-index: 1;
 }
+
+/* Animacja neon glow */
 @keyframes neon-glow {
   from {
     text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
@@ -160,10 +161,10 @@ body {
   margin-left: 4px;
   vertical-align: middle;
   font-size: 18px;
-  color: #000; /* domyślny kolor, można zmieniać */
+  color: #000; /* domyślny kolor */
 }
 
-/* Prawdziwe przyciski - stylowe i działające */
+/* Przycisk i slider */
 .btn {
   background: transparent;
   border: 2px solid #000;
@@ -188,8 +189,6 @@ body {
   border-color: #666;
   cursor: not-allowed;
 }
-
-/* Głośność suwak */
 input[type=range] {
   flex: 1;
   height: 4px;
@@ -206,11 +205,15 @@ input[type=range] {
   <h1>Mini Radio PL</h1>
   <p>RMF RMF • Tylko najlepsze stacje</p>
 </div>
+
 <div class="status" id="status">
   <span class="status-text" id="statusText"></span>
   <span class="clock" id="clock">00:00:00</span>
 </div>
+
 <div class="grid" id="grid"></div>
+
+<!-- Kontrolki stacji -->
 <div class="controls" id="playerControls">
   <!-- Prawdziwe przyciski -->
   <button class="btn" id="playBtn" disabled>PLAY</button>
@@ -220,6 +223,7 @@ input[type=range] {
   <button class="btn" id="muteBtn">🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span></button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
+
 <audio id="player" crossorigin="anonymous"></audio>
 
 <script>
@@ -296,7 +300,7 @@ function playStation(index) {
     statusText.textContent = 'Gra: ' + st.name;
     playBtn.classList.add('active');
     [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
-    // Jeśli to aktywna stacja, pokaż ikonę głośnika
+    // pokaż ikonę głośnika
     speakerIcon.style.display = 'inline';
   }).catch(err => {
     statusText.textContent = 'Błąd: ' + st.name;
@@ -305,7 +309,7 @@ function playStation(index) {
     updateTileActive();
     [playBtn, stopBtn].forEach(b => b.disabled = true);
     playBtn.classList.remove('active');
-    // Ukryj ikonę, jeśli nie można odtworzyć
+    // ukryj ikonę, gdy nie można odtworzyć
     speakerIcon.style.display = 'none';
     console.error(err);
   });
@@ -353,13 +357,11 @@ muteBtn.onclick = () => {
     lastVolume = player.volume;
     player.volume = 0;
     volume.value = 0;
-    muteBtn.textContent = '🔈';
     // pokaż ikonę głośnika
     speakerIcon.style.display = 'inline';
   } else {
     player.volume = lastVolume;
     volume.value = lastVolume * 100;
-    muteBtn.textContent = '🔇';
     // ukryj ikonę głośnika
     speakerIcon.style.display = 'none';
   }
