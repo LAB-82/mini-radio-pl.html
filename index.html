@@ -26,14 +26,14 @@
         border-radius: 12px;
         margin-bottom: 20px;
         font-size: 14px;
-        border: 2px solid #E5B700;
+        border: 2px solid #000;
         display: flex;
         justify-content: space-between;
         align-items: center;
         min-height: 52px;
         font-weight: 600;
     }
-.status.error { background: #e22134; color: #fff; border-color: #e22134; }
+.status.error { background: #e22134; color: #fff; border-color: #000; }
 .status-text { flex: 1; }
 .clock {
         font-variant-numeric: tabular-nums;
@@ -63,7 +63,7 @@
     }
 .tile:hover { background: #2a2a2a; border-color: #3a3a; }
 .tile:active { transform: scale(0.96); }
-.tile.active { background: #FECB00; border-color: #FECB00; color: #000; }
+.tile.active { background: #FECB00; border-color: #000; color: #000; }
 .tile.icon {
         width: 80px;
         height: 80px;
@@ -76,7 +76,7 @@
         font-size: 14px;
         font-weight: 700;
     }
-.tile.active.icon { background: rgba(0,0,0,0.2); }
+.tile.active.icon { background: #000; color: #FECB00; }
 .tile.name { font-size: 14px; font-weight: 600; line-height: 1.2; }
 .controls {
         position: fixed;
@@ -89,7 +89,7 @@
         display: flex;
         gap: 8px;
         align-items: center;
-        border: 2px solid #E5B700;
+        border: 2px solid #000;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         z-index: 9999;
     }
@@ -122,16 +122,17 @@
         transition: all 0.2s;
         min-width: 50px;
     }
-.ctrl-btn:hover { background: rgba(0,0,0,0.1); }
+.ctrl-btn:hover { background: #000; color: #FECB00; }
 .ctrl-btn:active { transform: scale(0.95); }
-.ctrl-btn:disabled { color: #999; border-color: #999; cursor: not-allowed; }
+.ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; }
 .ctrl-btn.play {
         background: #000;
         color: #FECB00;
         min-width: 60px;
+        border-color: #000;
     }
 .ctrl-btn.play:hover { background: #333; }
-.ctrl-btn.play.active { background: #1db954; border-color: #1db954; }
+.ctrl-btn.play.active { background: #1db954; border-color: #1db954; color: #000; }
 .ctrl-btn.mute { min-width: 60px; }
     input[type="range"] {
         flex: 1;
