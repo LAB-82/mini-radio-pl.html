@@ -20,13 +20,13 @@
 .header h1 { font-size: 28px; margin-bottom: 8px; }
 .header p { color: #999; font-size: 14px; }
 .status {
-        background: #FFD200;
+        background: #FECB00;
         color: #000;
         padding: 15px 2.5cm;
         border-radius: 12px;
         margin-bottom: 20px;
         font-size: 14px;
-        border: 2px solid #FFC107;
+        border: 2px solid #E5B700;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -63,7 +63,7 @@
     }
 .tile:hover { background: #2a2a2a; border-color: #3a3a; }
 .tile:active { transform: scale(0.96); }
-.tile.active { background: #FFD200; border-color: #FFD200; color: #000; }
+.tile.active { background: #FECB00; border-color: #FECB00; color: #000; }
 .tile.icon {
         width: 80px;
         height: 80px;
@@ -73,7 +73,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 32px;
+        font-size: 14px;
+        font-weight: 700;
     }
 .tile.active.icon { background: rgba(0,0,0,0.2); }
 .tile.name { font-size: 14px; font-weight: 600; line-height: 1.2; }
@@ -82,13 +83,13 @@
         bottom: 20px;
         left: 20px;
         right: 20px;
-        background: #FFD200;
+        background: #FECB00;
         padding: 70px 16px 16px 16px;
         border-radius: 16px;
         display: flex;
-        gap: 12px;
+        gap: 8px;
         align-items: center;
-        border: 2px solid #FFC107;
+        border: 2px solid #E5B700;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         z-index: 9999;
     }
@@ -107,31 +108,31 @@
     }
 .ctrl-btn {
         background: transparent;
-        border: none;
-        width: 36px;
+        border: 1px solid #000;
+        color: #000;
+        padding: 0 12px;
         height: 36px;
-        border-radius: 50%;
-        font-size: 18px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.2s;
-        color: #000;
+        min-width: 50px;
     }
 .ctrl-btn:hover { background: rgba(0,0,0,0.1); }
-.ctrl-btn:active { transform: scale(0.9); }
-.ctrl-btn:disabled { color: #999; cursor: not-allowed; }
+.ctrl-btn:active { transform: scale(0.95); }
+.ctrl-btn:disabled { color: #999; border-color: #999; cursor: not-allowed; }
 .ctrl-btn.play {
         background: #000;
-        color: #FFD200;
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
+        color: #FECB00;
+        min-width: 60px;
     }
 .ctrl-btn.play:hover { background: #333; }
-.ctrl-btn.play.active { background: #1db954; }
-.ctrl-btn.mute { font-size: 20px; }
+.ctrl-btn.play.active { background: #1db954; border-color: #1db954; }
+.ctrl-btn.mute { min-width: 60px; }
     input[type="range"] {
         flex: 1;
         height: 4px;
@@ -155,12 +156,12 @@
     <div class="grid" id="grid"></div>
 
     <div class="controls" id="playerControls">
-        <button class="ctrl-btn play" id="playBtn" disabled>▶</button>
-        <button class="ctrl-btn" id="stopBtn" disabled>■</button>
-        <button class="ctrl-btn" id="prevBtn" disabled>⏮</button>
-        <button class="ctrl-btn" id="nextBtn" disabled>⏭</button>
+        <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
+        <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
+        <button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
+        <button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
         <input type="range" id="volume" min="0" max="100" value="80" />
-        <button class="ctrl-btn mute" id="muteBtn">🔊</button>
+        <button class="ctrl-btn mute" id="muteBtn">MUTE</button>
     </div>
 
     <audio id="player" crossorigin="anonymous"></audio>
@@ -220,7 +221,7 @@ STATIONS.forEach((st, i) => {
     const tile = document.createElement('div');
     tile.className = 'tile';
     tile.innerHTML = `
-        <div class="icon">📻</div>
+        <div class="icon">RADIO</div>
         <div class="name">${st.name}</div>
     `;
     tile.onclick = () => playStation(i);
@@ -291,7 +292,7 @@ volume.oninput = (e) => {
     const vol = e.target.value / 100;
     player.volume = vol;
     lastVolume = vol;
-    muteBtn.textContent = vol === 0? '🔇' : vol < 0.5? '🔉' : '🔊';
+    muteBtn.textContent = vol === 0? 'UNMUTE' : 'MUTE';
 };
 
 muteBtn.onclick = () => {
@@ -299,11 +300,11 @@ muteBtn.onclick = () => {
         lastVolume = player.volume;
         player.volume = 0;
         volume.value = 0;
-        muteBtn.textContent = '🔇';
+        muteBtn.textContent = 'UNMUTE';
     } else {
         player.volume = lastVolume;
         volume.value = lastVolume * 100;
-        muteBtn.textContent = lastVolume < 0.5? '🔉' : '🔊';
+        muteBtn.textContent = 'MUTE';
     }
 };
 
