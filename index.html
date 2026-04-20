@@ -13,12 +13,12 @@
 }
 html, body {
   height: 100%;
-  background-color: #000; /* zmieniłem na czarne tło */
+  background-color: #FFD700; /* złote tło */
   overflow: hidden;
 }
 body {
   font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #fff;
+  color: #000;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -92,7 +92,6 @@ body {
   user-select: none;
   color: #000;
   position: relative;
-  overflow: hidden;
   height: 100px;
 }
 .tile:hover {
@@ -156,13 +155,12 @@ body {
   margin-top: 8px;
   font-size: 20px;
   transition: opacity 0.3s;
-  opacity: 0; /* domyślnie ukryte */
 }
-.głośnik.show {
-  opacity: 1; /* widoczne tylko gdy gra aktywna */
+.głośnik.hidden {
+  opacity: 0;
 }
 
-/* Przycisk MUTE - ikona zmienia się */
+/* Przycisk MUTE - bez ikony kwadracika, tylko odwrócona ikona głośnika */
 #muteIcon {
   font-size: 20px;
   transition: transform 0.2s;
@@ -190,7 +188,7 @@ body {
   <button class="btn" id="prevBtn" disabled>PREV</button>
   <button class="btn" id="nextBtn" disabled>NEXT</button>
   <button class="btn" id="muteBtn">
-    <span id="muteIcon">🔇</span>
+    🔊
   </button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
@@ -259,9 +257,9 @@ function updateTileActive() {
     t.classList.toggle('active', i === currentIndex);
     const głośnik = t.querySelector('.głośnik');
     if (i === currentIndex && isPlaying) {
-      głośnik.classList.add('show');
+      głośnik.classList.remove('hidden');
     } else {
-      głośnik.classList.remove('show');
+      głośnik.classList.add('hidden');
     }
   });
 }
@@ -356,7 +354,7 @@ muteBtn.onclick = () => {
   updateTileActive();
 };
 
-// Aktualizacja stanu odtwarzacza
+// obsługa błędów odtwarzania
 player.onerror = () => {
   statusText.textContent = 'Błąd streamu';
   status.classList.add('error');
@@ -367,6 +365,7 @@ player.onerror = () => {
   playBtn.classList.remove('active');
 };
 
+// aktualizacja stanu odtwarzania
 player.addEventListener('play', () => {
   isPlaying = true;
   updateTileActive();
