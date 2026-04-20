@@ -96,7 +96,6 @@ body {
   height: 100px; /* stała wysokość dla kafli */
   font-size: 14px;
 }
-/* Efekt hover i aktywne */
 .tile:hover {
   background: #FFD633;
 }
@@ -112,7 +111,7 @@ body {
 /* Neonowy napis "RMF-FM" z tłem i efektem glow */
 .controls {
   position: relative;
-  background: #FECB00; /* tło dla ramki stacji */
+  background: #FECB00;
   padding: 65px 16px 12px 16px;
   border-radius: 16px;
   display: flex;
@@ -124,8 +123,6 @@ body {
   margin-bottom: 15px;
   justify-content: center;
 }
-
-/* Dodanie tła i neonowego efektu napisu RMF-FM */
 .controls::before {
   content: "RMF-FM";
   position: absolute;
@@ -141,12 +138,10 @@ body {
   /* Neon glow */
   text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
   border: 2px solid #fff700;
-  background: #FECB00; /* tło */
+  background: #FECB00;
   animation: neon-glow 1.5s infinite alternate;
-  z-index: 10; /* wyższy, aby był nad innymi elementami */
+  z-index: 10;
 }
-
-/* Animacja neon glow */
 @keyframes neon-glow {
   from {
     text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
@@ -156,20 +151,21 @@ body {
   }
 }
 
-/* Styl dla ikon głośnika */
+/* Głośnik w kafelku */
 .głośnik {
   display: inline-block;
-  margin-left: 4px;
-  vertical-align: middle;
-  font-size: 18px;
-  color: #000; /* domyślny kolor */
+  margin-top: 8px;
+  font-size: 20px;
+  transition: opacity 0.3s;
 }
 
+/* Ukryte, bo będą wstawione dynamicznie */
 #speakerIcon {
-  display: none; /* domyślnie ukryty, kontrolujemy w JS */
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-/* Przycisk i slider */
+/* Przyciski i slider */
 .btn {
   background: transparent;
   border: 2px solid #000;
@@ -226,7 +222,7 @@ input[type=range] {
   <button class="btn" id="prevBtn" disabled>PREV</button>
   <button class="btn" id="nextBtn" disabled>NEXT</button>
   <button class="btn" id="muteBtn">
-    🔇 <span class="głośnik" id="speakerIcon">🔊</span>
+    🔇
   </button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
@@ -263,18 +259,13 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volume = document.getElementById('volume');
 const muteBtn = document.getElementById('muteBtn');
-const speakerIcon = document.getElementById('speakerIcon');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
 let isPlaying = false;
+let isMuted = false;
 
 player.volume = 0.8;
-
-function updateSpeakerIcon() {
-  const shouldShow = currentIndex !== -1 && isPlaying && player.volume > 0;
-  speakerIcon.style.display = shouldShow ? 'inline' : 'none';
-}
 
 function updateClock() {
   const now = new Date();
@@ -283,7 +274,6 @@ function updateClock() {
   const s = now.getSeconds().toString().padStart(2, '0');
   clock.textContent = `${h}:${m}:${s}`;
 }
-
 setInterval(updateClock, 1000);
 updateClock();
 
@@ -299,6 +289,15 @@ function updateTileActive() {
   document.querySelectorAll('.tile').forEach((t, i) => {
     t.classList.toggle('active', i === currentIndex);
   });
+  // Aktualizacja ikony głośnika w kafelku
+  document.querySelectorAll('.tile').forEach((tile, i) => {
+    const głośnikEl = tile.querySelector('.głośnik');
+    if (i === currentIndex && isPlaying) {
+      głośnikEl.style.opacity = '1';
+    } else {
+      głośnikEl.style.opacity = '0';
+    }
+  });
 }
 
 function playStation(index) {
@@ -312,10 +311,9 @@ function playStation(index) {
   player.src = st.url;
   player.play().then(() => {
     statusText.textContent = 'Gra: ' + st.name;
-    playBtn.classList.add('active');
     [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
     isPlaying = true;
-    updateSpeakerIcon();
+    updateTileActive();
   }).catch(err => {
     statusText.textContent = 'Błąd: ' + st.name;
     status.classList.add('error');
@@ -324,7 +322,7 @@ function playStation(index) {
     updateTileActive();
     [playBtn, stopBtn].forEach(b => b.disabled = true);
     playBtn.classList.remove('active');
-    updateSpeakerIcon();
+    updateTileActive();
     console.error(err);
   });
 }
@@ -343,7 +341,8 @@ playBtn.onclick = () => {
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
     isPlaying = false;
   }
-  updateSpeakerIcon();
+  updateTileActive();
+  updateTileActive();
 };
 
 stopBtn.onclick = () => {
@@ -354,7 +353,7 @@ stopBtn.onclick = () => {
   if (currentIndex !== -1) {
     statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
-  updateSpeakerIcon();
+  updateTileActive();
 };
 
 prevBtn.onclick = () => {
@@ -367,24 +366,37 @@ nextBtn.onclick = () => {
 volume.oninput = (e) => {
   const vol = e.target.value / 100;
   player.volume = vol;
-  lastVolume = vol;
   if (vol === 0) {
-    speakerIcon.style.display = 'none';
+    isMuted = true;
   } else {
-    speakerIcon.style.display = 'inline';
+    isMuted = false;
   }
+  updateMuteIcon();
 };
 
+function updateMuteIcon() {
+  // zmienia ikonę przycisku mute w zależności od stanu
+  if (isMuted || player.volume === 0) {
+    muteBtn.textContent = '🔇'; // wyciszone
+  } else {
+    muteBtn.textContent = '🔊'; // odtwarzanie
+  }
+}
+
 muteBtn.onclick = () => {
-  if (player.volume > 0) {
+  if (!isMuted && player.volume > 0) {
+    // wycisz
     lastVolume = player.volume;
     player.volume = 0;
-    volume.value = 0;
+    isMuted = true;
   } else {
-    player.volume = lastVolume;
-    volume.value = lastVolume * 100;
+    // odtlum
+    player.volume = lastVolume || 0.8;
+    isMuted = false;
   }
-  updateSpeakerIcon();
+  volume.value = player.volume * 100;
+  updateMuteIcon();
+  updateTileActive();
 };
 
 player.onerror = () => {
@@ -395,21 +407,21 @@ player.onerror = () => {
   updateTileActive();
   [playBtn, stopBtn].forEach(b => b.disabled = true);
   playBtn.classList.remove('active');
-  updateSpeakerIcon();
+  updateTileActive();
 };
 
-// Monitorowanie zmian odtwarzania
+// monitor zmian stanu odtwarzania
 player.addEventListener('play', () => {
   isPlaying = true;
-  updateSpeakerIcon();
+  updateTileActive();
 });
 player.addEventListener('pause', () => {
   isPlaying = false;
-  updateSpeakerIcon();
+  updateTileActive();
 });
 player.addEventListener('ended', () => {
   isPlaying = false;
-  updateSpeakerIcon();
+  updateTileActive();
 });
 </script>
 </body>
