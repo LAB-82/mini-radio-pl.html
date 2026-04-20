@@ -43,7 +43,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 15px;
-        margin-bottom: 100px;
+        margin-bottom: 120px;
     }
 .tile {
         background: #1a1a1a;
@@ -81,8 +81,8 @@
         bottom: 20px;
         left: 20px;
         right: 20px;
-        background: #FFEB3B; /* żółte tło */
-        padding: 70px 16px 16px 16px; /* miejsce na logo nad przyciskami */
+        background: #FFEB3B;
+        padding: 70px 16px 16px 16px;
         border-radius: 16px;
         display: flex;
         gap: 12px;
@@ -90,21 +90,20 @@
         border: 2px solid #FFC107;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         z-index: 9999;
-        position: fixed;
     }
 .controls::before {
-    content: "";
-    position: absolute;
-    top: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 50px;
-    background-image: url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-/* Przyciski */
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 50px;
+        background-image: url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 .ctrl-btn {
         background: transparent;
         border: none;
@@ -119,30 +118,32 @@
         transition: all 0.2s;
         color: #000;
     }
-.ctrl-btn:hover { background: #ddd; }
+.ctrl-btn:hover { background: rgba(0,0,0,0.1); }
 .ctrl-btn:active { transform: scale(0.9); }
-.ctrl-btn:disabled { color: #666; cursor: not-allowed; }
+.ctrl-btn:disabled { color: #999; cursor: not-allowed; }
 .ctrl-btn.play {
-        background: #fff;
+        background: #000;
+        color: #FFEB3B;
         width: 42px;
         height: 42px;
         font-size: 20px;
     }
-.ctrl-btn.play:hover { background: #e6e6e6; }
+.ctrl-btn.play:hover { background: #333; }
 .ctrl-btn.mute { font-size: 20px; }
-input[type="range"] {
+    input[type="range"] {
         flex: 1;
         height: 4px;
         cursor: pointer;
         min-width: 60px;
-        accent-color: #1db954;
+        accent-color: #000;
     }
 .time {
         font-size: 13px;
-        color: #999;
+        color: #000;
         min-width: 45px;
         text-align: right;
         font-variant-numeric: tabular-nums;
+        font-weight: 600;
     }
 </style>
 </head>
@@ -156,14 +157,10 @@ input[type="range"] {
         <span class="status-text" id="statusText"></span>
         <span class="clock" id="clock">00:00:00</span>
     </div>
-    
+
     <div class="grid" id="grid"></div>
-    
-    <!-- Górny pasek z logo RMF-FM na środku -->
+
     <div class="controls" id="playerControls">
-        <!-- Logo RMF-FM na górze -->
-        <div style="position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:150px; height:50px; background-image:url('https://krosno24.pl/uploads/files/12326/logormf2000.jpg'); background-size:contain; background-repeat:no-repeat;"></div>
-        <!-- Przyciski -->
         <button class="ctrl-btn play" id="playBtn" disabled>▶</button>
         <button class="ctrl-btn" id="stopBtn" disabled>■</button>
         <button class="ctrl-btn" id="prevBtn" disabled>⏮</button>
