@@ -73,7 +73,7 @@ overflow: hidden;
 .tile:hover { background: #FFD633; }
 .tile:active { transform: scale(0.96); }
 .tile.active { background: #FECB00; border-color: #000; color: #000; }
-/* Ikona WiFi jak na zdjęciu - 3 łuki + kropka */
+/* Ikona WiFi ze zdjęcia */
 .tile::before {
 content: "";
 position: absolute;
@@ -91,7 +91,7 @@ filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0
 .tile.active::before {
 display: block;
 }
-/* ŻÓŁTY NEON - POPRAWIONE SELEKTORY ZE SPACJĄ */
+/* ŻÓŁTY NEON - TUTAJ BYŁ BŁĄD - MA BYĆ SPACJA */
 .tile.name {
 font-size: 27.34375px;
 font-weight: 700;
@@ -116,7 +116,7 @@ border: 2px solid #000;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 flex-shrink: 0;
 }
-/* Neon TYLKO na tekście RMF-FM - ramka bez neonu */
+/* Neon TYLKO na tekście RMF-FM */
 .controls::before {
 content: "";
 position: absolute;
