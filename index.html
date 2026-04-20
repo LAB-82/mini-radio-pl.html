@@ -109,48 +109,7 @@ body {
   color: #000;
 }
 
-/* Ikona WiFi */
-.tile::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 24px;
-  height: 16px;
-  display: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 16' fill='none' stroke='%2300BFFF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 13l2-2 2 2'/%3E%3Cpath d='M6 9l2-2 2 2'/%3E%3Cpath d='M10 5l2-2 2 2'/%3E%3Ccircle cx='4' cy='13' r='1' fill='%2300BFFF'/%3E%3Ccircle cx='20' cy='13' r='1' fill='%2300BFFF'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: drop-shadow(0 0 4px #00BFFF) drop-shadow(0 0 8px #00BFFF);
-}
-.tile.active::before {
-  display: block;
-}
-
-/* Tekst stacji - neonowy efekt na żółto */
-.tile .name {
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.1;
-  transition: all 0.3s;
-  color: #000;
-  margin-top: 8px;
-  /* Neon żółty */
-  text-shadow: 
-    0 0 5px #fff700,
-    0 0 10px #fff700,
-    0 0 15px #fff700,
-    0 0 20px #fff700;
-}
-.tile.active .name {
-  text-shadow: 
-    0 0 8px #fff700,
-    0 0 16px #fff700,
-    0 0 24px #fff700,
-    0 0 32px #fff700;
-}
-
-/* Kontrolki – nowoczesne, dopasowane do stylistyki */
+/* Neonowy napis "RMF-FM" w ramce na stylu neon, świecący na żółto */
 .controls {
   position: relative;
   background: #FECB00;
@@ -165,25 +124,38 @@ body {
   margin-bottom: 15px;
 }
 
-/* Ramka z napisem RMF-FM w stylu neon */
+/* Neonowy tekst "RMF-FM" */
 .controls::before {
-  content: "";
+  content: "RMF-FM";
   position: absolute;
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 140px;
-  height: 45px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Cdefs%3E%3Cfilter id='yellowglow'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='1.5' flood-color='%23FECB00'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='3' flood-color='%23FECB00'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='5' flood-color='%23FECB00'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='140' height='45' rx='22' fill='none' stroke='%23000' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Montserrat Alternates, sans-serif' font-size='16' font-weight='700' text-anchor='middle' fill='%23FECB00' filter='url(%23yellowglow)'%3ERMF-FM%3C/text%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  padding: 8px 20px;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff700;
+  border-radius: 20px;
+  /* Neon glow */
+  text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  border: 2px solid #fff700;
+  background: transparent;
+  animation: neon-glow 1.5s infinite alternate;
+}
+@keyframes neon-glow {
+  from {
+    text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  }
+  to {
+    text-shadow: 0 0 20px #fff700, 0 0 40px #fff700, 0 0 60px #fff700, 0 0 80px #fff700;
+  }
 }
 
-/* Nowe przyciski – bardziej nowoczesne, zachowując logikę */
+/* Prawdziwe przyciski - stylowe i działające */
 .btn {
   background: transparent;
-  border: none;
+  border: 2px solid #000;
   padding: 8px 16px;
   border-radius: 8px;
   font-family: 'Montserrat Alternates', sans-serif;
@@ -191,10 +163,6 @@ body {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-width: 60px;
 }
 .btn:hover {
@@ -206,17 +174,11 @@ body {
 }
 .btn.disabled {
   color: #666;
-  border: none;
+  border-color: #666;
   cursor: not-allowed;
 }
 
-/* Specjalne style dla przycisków Play/Stop/Prev/Next/Mute */
-#playBtn { font-size: 16px; font-weight: 700; }
-#stopBtn { font-size: 16px; font-weight: 700; }
-#prevBtn { font-size: 16px; font-weight: 700; }
-#nextBtn { font-size: 16px; font-weight: 700; }
-#muteBtn { font-size: 16px; font-weight: 700; }
-
+/* Głośność suwak */
 input[type=range] {
   flex: 1;
   height: 4px;
@@ -239,12 +201,12 @@ input[type=range] {
 </div>
 <div class="grid" id="grid"></div>
 <div class="controls" id="playerControls">
-  <!-- Zamiana przycisków na nowoczesne -->
-  <button class="btn" id="playBtn" disabled>▶️</button>
-  <button class="btn" id="stopBtn" disabled>⏹️</button>
-  <button class="btn" id="prevBtn" disabled>⏮️</button>
-  <button class="btn" id="nextBtn" disabled>⏭️</button>
-  <button class="btn" id="muteBtn">🔇</button>
+  <!-- Prawdziwe przyciski -->
+  <button class="btn" id="playBtn" disabled>PLAY</button>
+  <button class="btn" id="stopBtn" disabled>STOP</button>
+  <button class="btn" id="prevBtn" disabled>PREV</button>
+  <button class="btn" id="nextBtn" disabled>NEXT</button>
+  <button class="btn" id="muteBtn">MUTE</button>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
 <audio id="player" crossorigin="anonymous"></audio>
