@@ -13,32 +13,32 @@
         padding: 20px;
         min-height: 100vh;
     }
-  .header {
+ .header {
         text-align: center;
         margin-bottom: 30px;
     }
-  .header h1 { font-size: 28px; margin-bottom: 8px; }
-  .header p { color: #999; font-size: 14px; }
-  .status {
-        background: #1a1a1a;
+ .header h1 { font-size: 28px; margin-bottom: 8px; }
+ .header p { color: #999; font-size: 14px; }
+ .status {
+        background: #1a;
         padding: 15px;
         border-radius: 12px;
         text-align: center;
         margin-bottom: 20px;
         font-size: 14px;
-        border: 1px solid #2a2a2a;
+        border: 1px solid #2a;
     }
-  .status.playing { background: #1db954; color: #000; font-weight: 600; border-color: #1db954; }
-  .status.error { background: #e22134; border-color: #e22134; }
-  .grid {
+ .status.playing { background: #1db954; color: #000; font-weight: 600; border-color: #1db954; }
+ .status.error { background: #e22134; border-color: #e22134; }
+ .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 15px;
         margin-bottom: 100px;
     }
-  .tile {
+ .tile {
         background: #1a1a1a;
-        border: 2px solid #2a2a2a;
+        border: 2px solid #2a2a;
         border-radius: 16px;
         padding: 20px;
         text-align: center;
@@ -51,10 +51,10 @@
         justify-content: center;
         user-select: none;
     }
-  .tile:hover { background: #2a; border-color: #3a3a3a; }
-  .tile:active { transform: scale(0.96); }
-  .tile.active { background: #1db954; border-color: #1db954; color: #000; }
-  .tile.icon {
+ .tile:hover { background: #2a2a2a; border-color: #3a; }
+ .tile:active { transform: scale(0.96); }
+ .tile.active { background: #1db954; border-color: #1db954; color: #000; }
+ .tile.icon {
         width: 80px;
         height: 80px;
         background: #2a2a2a;
@@ -65,9 +65,9 @@
         justify-content: center;
         font-size: 32px;
     }
-  .tile.active.icon { background: rgba(0,0,0,0.2); }
-  .tile.name { font-size: 14px; font-weight: 600; line-height: 1.2; }
-  .controls {
+ .tile.active.icon { background: rgba(0,0,0,0.2); }
+ .tile.name { font-size: 14px; font-weight: 600; line-height: 1.2; }
+ .controls {
         position: fixed;
         bottom: 20px;
         left: 20px;
@@ -78,10 +78,10 @@
         display: flex;
         gap: 15px;
         align-items: center;
-        border: 1px solid #2a2a;
+        border: 1px solid #2a2a2a;
         backdrop-filter: blur(10px);
     }
-  .btn {
+ .btn {
         background: #1db954;
         border: none;
         color: #000;
@@ -92,22 +92,22 @@
         font-size: 16px;
         transition: all 0.2s;
     }
-  .btn:hover { background: #1ed760; }
-  .btn:active { transform: scale(0.95); }
-  .btn:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; }
+ .btn:hover { background: #1ed760; }
+ .btn:active { transform: scale(0.95); }
+ .btn:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; }
     input[type="range"] {
         flex: 1;
         accent-color: #1db954;
         height: 6px;
         cursor: pointer;
     }
-  .vol { font-size: 14px; min-width: 45px; text-align: right; }
+ .vol { font-size: 14px; min-width: 45px; text-align: right; }
 </style>
 </head>
 <body>
     <div class="header">
         <h1>Mini Radio PL</h1>
-        <p>15 stacji • wszystkie HTTPS i działające</p>
+        <p>15 stacji • tylko działające HTTPS</p>
     </div>
 
     <div class="status" id="status">Kliknij kafelek żeby zacząć</div>
@@ -123,20 +123,23 @@
 
 <script>
 const STATIONS = [
+    // Te 7 zostają bo działały u Ciebie
     { name: 'Antyradio', url: 'https://an.cdn.eurozet.pl/ant-waw.mp3' },
     { name: 'Radio 357', url: 'https://stream.rcs.revma.com/ye5kghkgcm0uv' },
-    { name: 'Radio Nowy Świat', url: 'https://stream.nowyswiat.online/mp3' },
-    { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-    { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
-    { name: 'RMF Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+    { name: 'Radio Eska', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
     { name: 'Radio ZET', url: 'https://zt.cdn.eurozet.pl/zet-tun.mp3' },
-    { name: 'ZET Chilli', url: 'https://ch.cdn.eurozet.pl/chi-waw.mp3' },
+    { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+    { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+    { name: 'RMF Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+
+    // 8 nowych zamiast niedziałających
+    { name: 'Radio Nowy Świat', url: 'https://stream.nowyswiat.online/mp3' },
     { name: 'Meloradio', url: 'https://mel.cdn.eurozet.pl/mel-waw.mp3' },
     { name: 'VOX FM', url: 'https://ic1.smcdn.pl/23-1.mp3' },
-    { name: 'Radio Złote Przeboje', url: 'https://radiostream.pl/zloteprzeboje' },
-    { name: 'Radio Pogoda', url: 'https://pl02.cdn.eurozet.pl/pla-pp.mp3' },
-    { name: 'Radio Eska', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
     { name: 'Eska Rock', url: 'https://ic1.smcdn.pl/2350-1.mp3' },
+    { name: 'ZET Chilli', url: 'https://ch.cdn.eurozet.pl/chi-waw.mp3' },
+    { name: 'Radio Pogoda', url: 'https://pl02.cdn.eurozet.pl/pla-pp.mp3' },
+    { name: 'Radio Złote Przeboje', url: 'https://pl01.cdn.eurozet.pl/pla-zp.mp3' },
     { name: 'Polskie Radio 24', url: 'https://stream3.polskieradio.pl:8904/;stream' }
 ];
 
