@@ -13,8 +13,8 @@
 }
 html, body {
   height: 100%;
-  /* Tło ustawione na kolor napisu RMF-FM (neonowy żółty) */
-  background-color: #fff700; 
+  /* Tło na kolor napisu RMF-FM (żółty neon) */
+  background-color: #fff700;
   overflow: hidden;
 }
 body {
@@ -95,6 +95,7 @@ body {
   position: relative;
   height: 100px;
 }
+/* Efekt hover i aktywne kafelki */
 .tile:hover {
   background: #FFD633;
 }
@@ -107,7 +108,7 @@ body {
   color: #000;
 }
 
-/* Neonowy napis "RMF-FM" z tłem i efektem glow */
+/* Neonowy napis "RMF-FM" */
 .controls {
   position: relative;
   background: #FECB00;
@@ -134,7 +135,7 @@ body {
   font-weight: 700;
   color: #fff700;
   border-radius: 20px;
-  /* Neon glow */
+  /* Neon glow efekt */
   text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
   border: 2px solid #fff700;
   background: #FECB00;
@@ -150,18 +151,20 @@ body {
   }
 }
 
-/* Głośnik w kafelku, domyślnie ukryty */
+/* Ikona głośnika w kafelku */
 .głośnik {
-  display: inline-block;
-  margin-top: 8px;
   font-size: 20px;
-  transition: opacity 0.3s;
+  margin-top: 8px;
+  display: inline-block;
+  transition: all 0.3s;
 }
-.głośnik.hidden {
-  opacity: 0;
+.głośnik.przekreslony {
+  /* Gdy wyciszone, przekreślona */
+  text-decoration: line-through;
+  opacity: 0.6;
 }
 
-/* Styl przycisku MUTE, z funkcją przekreślenia gdy wyciszone */
+/* Styl przycisku MUTE */
 #muteBtn {
   font-size: 20px;
   padding: 8px 12px;
@@ -171,15 +174,6 @@ body {
   background: transparent;
   font-family: 'Montserrat Alternates', sans-serif;
   font-weight: 600;
-  /* Domyślnie bez przekreślenia */
-  text-decoration: none;
-}
-#muteBtn:disabled {
-  opacity: 0.5;
-}
-/* Gdy radio jest wyciszone, dodajemy klasę 'muted' do przycisku */
-#muteBtn.muted {
-  text-decoration: line-through;
 }
 </style>
 </head>
@@ -198,7 +192,6 @@ body {
 
 <!-- Kontrolki stacji -->
 <div class="controls" id="playerControls">
-  <!-- Prawdziwe przyciski -->
   <button class="btn" id="playBtn" disabled>PLAY</button>
   <button class="btn" id="stopBtn" disabled>STOP</button>
   <button class="btn" id="prevBtn" disabled>PREV</button>
@@ -262,6 +255,11 @@ STATIONS.forEach((st, i) => {
   tile.className = 'tile';
   tile.innerHTML = `<div class="name">${st.name}</div>`;
   tile.onclick = () => playStation(i);
+  // dodaj ikonę fali (głośnika) przy nazwie stacji
+  const icon = document.createElement('div');
+  icon.className = 'głośnik';
+  icon.innerHTML = '🔊'; // ikona głośnika
+  tile.appendChild(icon);
   grid.appendChild(tile);
 });
 
@@ -270,7 +268,7 @@ function updateTileActive() {
     t.classList.toggle('active', i === currentIndex);
     const głośnik = t.querySelector('.głośnik');
     if (głośnik) {
-      głośnik.classList.toggle('hidden', !(i === currentIndex && isPlaying));
+      głośnik.classList.toggle('przekreslony', !(i === currentIndex && isPlaying));
     }
   });
 }
@@ -345,16 +343,12 @@ volume.oninput = (e) => {
 
 function updateMuteIcon() {
   if (isMuted || player.volume === 0) {
-    // Gdy wyciszone, dodaj klasę 'muted' do przycisku
-    muteBtn.classList.add('muted');
+    // Gdy wyciszone, ikonka głośnika przekreślona
+    muteBtn.innerHTML = '🔇'; // odtwarzanie
+    muteBtn.classList.add('przekreslony');
   } else {
-    muteBtn.classList.remove('muted');
-  }
-  // Tekst ikony bez zmian
-  if (isMuted || player.volume === 0) {
-    muteBtn.textContent = '🔇'; // wyciszone
-  } else {
-    muteBtn.textContent = '🔊'; // odtwarzanie
+    muteBtn.innerHTML = '🔊'; // odtwarzanie
+    muteBtn.classList.remove('przekreslony');
   }
 }
 
