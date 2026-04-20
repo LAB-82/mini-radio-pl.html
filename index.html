@@ -29,6 +29,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        min-height: 52px;
     }
 .status.playing { background: #1db954; color: #000; font-weight: 600; border-color: #1db954; }
 .status.error { background: #e22134; border-color: #e22134; }
@@ -138,7 +139,7 @@
     </div>
 
     <div class="status" id="status">
-        <span class="status-text" id="statusText">Kliknij kafelek żeby zacząć</span>
+        <span class="status-text" id="statusText"></span>
         <span class="clock" id="clock">00:00:00</span>
     </div>
     <div class="grid" id="grid"></div>
@@ -174,7 +175,7 @@ const STATIONS = [
     { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' },
     { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
     { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
-    { name: 'RMF Słoneczne', url: 'https://rs201-krk.rmfstream.pl/rmf_sloneczne' },
+    { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
     { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
     { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' }
 ];
@@ -245,7 +246,7 @@ function playStation(index) {
         status.className = 'status error';
         currentIndex = -1;
         updateTileActive();
-        [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = true);
+        [playBtn, stopBtn].forEach(b => b.disabled = true);
         console.error(err);
     });
 }
@@ -313,7 +314,7 @@ player.onerror = () => {
     status.className = 'status error';
     currentIndex = -1;
     updateTileActive();
-    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = true);
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
 };
 </script>
 </body>
