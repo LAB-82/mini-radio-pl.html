@@ -120,7 +120,7 @@
         transform: translateX(-50%);
         width: 140px;
         height: 45px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='none' stroke='%23FECB00' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23005DAA'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000' stroke='%23FECB00' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23005DAA'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
@@ -142,7 +142,7 @@
         transition: all 0.2s;
         min-width: 50px;
         font-family: 'Montserrat Alternates', sans-serif;
-        text-shadow: 0 0 6px #FECB00, 0 0 12px #FECB00;
+        text-shadow: 0 0 6px #FECB00, 0 0 12px #FECB00, 0 0 18px #FECB00;
     }
 .ctrl-btn:hover { background: #000; color: #FECB00; }
 .ctrl-btn:active { transform: scale(0.95); }
@@ -152,13 +152,13 @@
         color: #FECB00;
         min-width: 60px;
         border-color: #000;
-        text-shadow: 0 0 8px #FECB00, 0 0 16px #FECB00, 0 0 24px #FECB00;
+        text-shadow: 0 0 10px #FECB00, 0 0 20px #FECB00, 0 0 30px #FECB00;
     }
 .ctrl-btn.play:hover { background: #333; }
 .ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
 .ctrl-btn.mute {
         min-width: 60px;
-        text-shadow: 0 0 8px #FECB00, 0 0 16px #FECB00, 0 0 24px #FECB00;
+        text-shadow: 0 0 10px #FECB00, 0 0 20px #FECB00, 0 0 30px #FECB00;
     }
     input[type="range"] {
         flex: 1;
@@ -195,20 +195,20 @@
 
 <script>
 const STATIONS = [
-    { name: 'RMF<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-    { name: 'RMF<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-    { name: 'RMF<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
-    { name: 'RMF<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
-    { name: 'RMF<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
-    { name: 'RMF<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-    { name: 'RMF<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
-    { name: 'RMF<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
-    { name: 'RMF<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
-    { name: 'RMF<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
-    { name: 'RMF<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
-    { name: 'RMF<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
-    { name: 'RMF<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-    { name: 'RMF<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+    { name: 'RMF FM<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+    { name: 'RMF FM<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+    { name: 'RMF FM<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+    { name: 'RMF FM<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+    { name: 'RMF FM<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+    { name: 'RMF FM<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+    { name: 'RMF FM<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+    { name: 'RMF FM<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+    { name: 'RMF FM<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+    { name: 'RMF FM<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+    { name: 'RMF FM<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+    { name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+    { name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+    { name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
 ];
 
 const player = document.getElementById('player');
