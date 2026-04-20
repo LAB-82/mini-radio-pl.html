@@ -16,14 +16,14 @@
         display: flex;
         flex-direction: column;
     }
-    .header {
+.header {
         text-align: center;
         margin-bottom: 15px;
         flex-shrink: 0;
     }
-    .header h1 { font-size: 24px; margin-bottom: 4px; font-weight: 700; }
-    .header p { color: #999; font-size: 13px; font-weight: 600; }
-    .status {
+.header h1 { font-size: 24px; margin-bottom: 4px; font-weight: 700; }
+.header p { color: #999; font-size: 13px; font-weight: 600; }
+.status {
         background: #FECB00;
         color: #000;
         padding: 12px 2.5cm;
@@ -38,14 +38,14 @@
         font-weight: 700;
         flex-shrink: 0;
     }
-    .status.error { background: #e22134; color: #fff; border-color: #000; }
-    .status-text { flex: 1; }
-    .clock {
+.status.error { background: #e22134; color: #fff; border-color: #000; }
+.status-text { flex: 1; }
+.clock {
         font-variant-numeric: tabular-nums;
         min-width: 60px;
         text-align: right;
     }
-    .grid {
+.grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         grid-auto-rows: 1fr;
@@ -54,7 +54,7 @@
         min-height: 0;
         margin-bottom: 15px;
     }
-    .tile {
+.tile {
         background: #FECB00;
         border: 2px solid #000;
         border-radius: 16px;
@@ -69,23 +69,11 @@
         color: #000;
         position: relative;
         overflow: hidden;
-        box-shadow: 
-            inset 0 0 5px rgba(0,0,0,0.3);
     }
-    .tile:hover { 
-        background: #FFD633;
-        box-shadow: 
-            inset 0 0 10px rgba(0,0,0,0.4);
-    }
-    .tile:active { transform: scale(0.96); }
-    .tile.active { 
-        background: #FECB00; 
-        border-color: #000; 
-        color: #000;
-        box-shadow: 
-            inset 0 0 15px rgba(0,0,0,0.5);
-    }
-    .tile::before {
+.tile:hover { background: #FFD633; }
+.tile:active { transform: scale(0.96); }
+.tile.active { background: #FECB00; border-color: #000; color: #000; }
+.tile::before {
         content: "";
         position: absolute;
         top: 10px;
@@ -97,38 +85,22 @@
         background-size: contain;
         background-repeat: no-repeat;
         transition: all 0.2s;
-        filter: drop-shadow(0 0 3px #000);
     }
-    .tile.active::before {
+.tile.active::before {
         opacity: 1;
-        filter: drop-shadow(0 0 6px #FECB00) drop-shadow(0 0 12px #FECB00) drop-shadow(0 0 20px #FECB00);
+        filter: drop-shadow(0 0 8px #FECB00) drop-shadow(0 0 16px #FECB00) drop-shadow(0 0 24px #FECB00);
     }
-    .tile.name {
-        font-size: 26.25px;
+.tile.name {
+        font-size: 21.875px;
         font-weight: 700;
-        line-height: 1.2;
+        line-height: 1.1;
         transition: all 0.2s;
-        position: relative;
-        z-index: 2;
-        text-shadow: none;
     }
-    .tile:hover .name {
-        text-shadow: 
-            0 0 8px #FECB00, 
-            0 0 16px #FECB00, 
-            0 0 24px #FECB00, 
-            0 0 32px #FECB00,
-            0 0 40px #FECB00;
+.tile.active.name {
+        color: #000;
+        text-shadow: 0 0 10px #FECB00, 0 0 20px #FECB00, 0 0 30px #FECB00, 0 0 40px #FECB00;
     }
-    .tile.active .name {
-        text-shadow: 
-            0 0 12px #FECB00, 
-            0 0 24px #FECB00, 
-            0 0 36px #FECB00, 
-            0 0 48px #FECB00,
-            0 0 60px #FECB00;
-    }
-    .controls {
+.controls {
         position: relative;
         background: #FECB00;
         padding: 65px 16px 12px 16px;
@@ -137,13 +109,10 @@
         gap: 8px;
         align-items: center;
         border: 2px solid #000;
-        box-shadow: 
-            0 4px 12px rgba(0,0,0,0.2),
-            0 0 15px #FECB00,
-            0 0 25px #FECB00;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         flex-shrink: 0;
     }
-    .controls::before {
+.controls::before {
         content: "";
         position: absolute;
         top: 8px;
@@ -151,13 +120,13 @@
         transform: translateX(-50%);
         width: 140px;
         height: 45px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23FECB00' stroke='%23000' stroke-width='3'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23000'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='none' stroke='%23FECB00' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23005DAA'%3ERadio RMF-FM%3C/text%3E%3C/svg%3E");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
-        filter: drop-shadow(0 0 8px #000);
+        filter: drop-shadow(0 0 8px #FECB00) drop-shadow(0 0 16px #FECB00) drop-shadow(0 0 24px #FECB00);
     }
-    .ctrl-btn {
+.ctrl-btn {
         background: transparent;
         border: 1px solid #000;
         color: #000;
@@ -173,34 +142,24 @@
         transition: all 0.2s;
         min-width: 50px;
         font-family: 'Montserrat Alternates', sans-serif;
-        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        text-shadow: 0 0 6px #FECB00, 0 0 12px #FECB00;
     }
-    .ctrl-btn:hover { 
-        background: #000; 
-        color: #FECB00;
-        box-shadow: 
-            0 0 10px #FECB00,
-            0 0 20px #FECB00;
-    }
-    .ctrl-btn:active { transform: scale(0.95); }
-    .ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; }
-    .ctrl-btn.play {
+.ctrl-btn:hover { background: #000; color: #FECB00; }
+.ctrl-btn:active { transform: scale(0.95); }
+.ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; text-shadow: none; }
+.ctrl-btn.play {
         background: #000;
         color: #FECB00;
         min-width: 60px;
         border-color: #000;
-        box-shadow: 0 0 10px #FECB00;
+        text-shadow: 0 0 8px #FECB00, 0 0 16px #FECB00, 0 0 24px #FECB00;
     }
-    .ctrl-btn.play:hover { background: #333; }
-    .ctrl-btn.play.active { 
-        background: #FECB00; 
-        border-color: #000; 
-        color: #000;
-        box-shadow: 
-            0 0 15px #FECB00,
-            0 0 25px #FECB00;
+.ctrl-btn.play:hover { background: #333; }
+.ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
+.ctrl-btn.mute {
+        min-width: 60px;
+        text-shadow: 0 0 8px #FECB00, 0 0 16px #FECB00, 0 0 24px #FECB00;
     }
-    .ctrl-btn.mute { min-width: 60px; }
     input[type="range"] {
         flex: 1;
         height: 4px;
@@ -215,11 +174,14 @@
         <h1>Mini Radio PL</h1>
         <p>RMF RMF • Tylko najlepsze stacje</p>
     </div>
+
     <div class="status" id="status">
         <span class="status-text" id="statusText"></span>
         <span class="clock" id="clock">00:00:00</span>
     </div>
+
     <div class="grid" id="grid"></div>
+
     <div class="controls" id="playerControls">
         <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
         <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
@@ -228,25 +190,27 @@
         <input type="range" id="volume" min="0" max="100" value="80" />
         <button class="ctrl-btn mute" id="muteBtn">MUTE</button>
     </div>
+
     <audio id="player" crossorigin="anonymous"></audio>
 
 <script>
 const STATIONS = [
-    { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-    { name: 'RMF Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-    { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
-    { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
-    { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
-    { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-    { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
-    { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
-    { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
-    { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
-    { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
-    { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
-    { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-    { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+    { name: 'RMF<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+    { name: 'RMF<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+    { name: 'RMF<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+    { name: 'RMF<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+    { name: 'RMF<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+    { name: 'RMF<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+    { name: 'RMF<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+    { name: 'RMF<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+    { name: 'RMF<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+    { name: 'RMF<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+    { name: 'RMF<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+    { name: 'RMF<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+    { name: 'RMF<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+    { name: 'RMF<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
 ];
+
 const player = document.getElementById('player');
 const grid = document.getElementById('grid');
 const status = document.getElementById('status');
@@ -293,16 +257,16 @@ function playStation(index) {
     currentIndex = index;
     updateTileActive();
 
-    statusText.textContent = 'Ładowanie: ' + st.name;
+    statusText.textContent = 'Ładowanie: ' + st.name.replace('<br>', ' ');
     status.classList.remove('error');
 
     player.src = st.url;
     player.play().then(() => {
-        statusText.textContent = 'Gra: ' + st.name;
+        statusText.textContent = 'Gra: ' + st.name.replace('<br>', ' ');
         playBtn.classList.add('active');
         [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
     }).catch(err => {
-        statusText.textContent = 'Błąd: ' + st.name;
+        statusText.textContent = 'Błąd: ' + st.name.replace('<br>', ' ');
         status.classList.add('error');
         currentIndex = -1;
         updateTileActive();
@@ -317,12 +281,12 @@ playBtn.onclick = () => {
     if (player.paused) {
         player.play();
         playBtn.classList.add('active');
-        statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
+        statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
         status.classList.remove('error');
     } else {
         player.pause();
         playBtn.classList.remove('active');
-        statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+        statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
     }
 };
 
@@ -330,7 +294,7 @@ stopBtn.onclick = () => {
     player.pause();
     player.currentTime = 0;
     playBtn.classList.remove('active');
-    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
 };
 
 prevBtn.onclick = () => {
