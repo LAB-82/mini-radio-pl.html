@@ -13,7 +13,8 @@
 }
 html, body {
   height: 100%;
-  background-color: #FFD700; /* złote tło */
+  /* Tło ustawione na kolor napisu RMF-FM (neonowy żółty) */
+  background-color: #fff700; 
   overflow: hidden;
 }
 body {
@@ -149,7 +150,7 @@ body {
   }
 }
 
-/* Ikona głośnika w kafelku */
+/* Głośnik w kafelku, domyślnie ukryty */
 .głośnik {
   display: inline-block;
   margin-top: 8px;
@@ -160,7 +161,7 @@ body {
   opacity: 0;
 }
 
-/* Przycisk MUTE - bez żadnej ikony kwadracika, tylko zwykły przycisk z ikoną głośnika */
+/* Styl przycisku MUTE, z funkcją przekreślenia gdy wyciszone */
 #muteBtn {
   font-size: 20px;
   padding: 8px 12px;
@@ -170,6 +171,15 @@ body {
   background: transparent;
   font-family: 'Montserrat Alternates', sans-serif;
   font-weight: 600;
+  /* Domyślnie bez przekreślenia */
+  text-decoration: none;
+}
+#muteBtn:disabled {
+  opacity: 0.5;
+}
+/* Gdy radio jest wyciszone, dodajemy klasę 'muted' do przycisku */
+#muteBtn.muted {
+  text-decoration: line-through;
 }
 </style>
 </head>
@@ -334,6 +344,13 @@ volume.oninput = (e) => {
 };
 
 function updateMuteIcon() {
+  if (isMuted || player.volume === 0) {
+    // Gdy wyciszone, dodaj klasę 'muted' do przycisku
+    muteBtn.classList.add('muted');
+  } else {
+    muteBtn.classList.remove('muted');
+  }
+  // Tekst ikony bez zmian
   if (isMuted || player.volume === 0) {
     muteBtn.textContent = '🔇'; // wyciszone
   } else {
