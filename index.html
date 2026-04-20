@@ -21,15 +21,23 @@
 .header p { color: #999; font-size: 14px; }
 .status {
         background: #1a;
-        padding: 15px;
+        padding: 15px 2.5cm;
         border-radius: 12px;
-        text-align: center;
         margin-bottom: 20px;
         font-size: 14px;
         border: 1px solid #2a2a2a;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 .status.playing { background: #1db954; color: #000; font-weight: 600; border-color: #1db954; }
 .status.error { background: #e22134; border-color: #e22134; }
+.status-text { flex: 1; }
+.clock {
+        font-variant-numeric: tabular-nums;
+        min-width: 60px;
+        text-align: right;
+    }
 .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -129,7 +137,10 @@
         <p>20 stacji • tylko sprawdzone</p>
     </div>
 
-    <div class="status" id="status">Kliknij kafelek żeby zacząć</div>
+    <div class="status" id="status">
+        <span class="status-text" id="statusText">Kliknij kafelek żeby zacząć</span>
+        <span class="clock" id="clock">00:00:00</span>
+    </div>
     <div class="grid" id="grid"></div>
 
     <div class="controls">
@@ -146,7 +157,6 @@
 
 <script>
 const STATIONS = [
-    // 15 które już działały
     { name: 'Antyradio', url: 'https://an.cdn.eurozet.pl/ant-waw.mp3' },
     { name: 'Radio 357', url: 'https://stream.rcs.revma.com/ye5kghkgcm0uv' },
     { name: 'Radio Eska', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
@@ -162,8 +172,6 @@ const STATIONS = [
     { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
     { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
     { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' },
-
-    // 5 NOWYCH na tej samej zasadzie co RMF
     { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
     { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
     { name: 'RMF Słoneczne', url: 'https://rs201-krk.rmfstream.pl/rmf_sloneczne' },
@@ -176,6 +184,8 @@ STATIONS.sort((a, b) => a.name.localeCompare(b.name, 'pl'));
 const player = document.getElementById('player');
 const grid = document.getElementById('grid');
 const status = document.getElementById('status');
+const statusText = document.getElementById('statusText');
+const clock = document.getElementById('clock');
 const playBtn = document.getElementById('playBtn');
 const stopBtn = document.getElementById('stopBtn');
 const prevBtn = document.getElementById('prevBtn');
@@ -187,6 +197,16 @@ const timeText = document.getElementById('timeText');
 let currentIndex = -1;
 let lastVolume = 0.8;
 player.volume = 0.8;
+
+function updateClock() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2, '0');
+    const m = now.getMinutes().toString().padStart(2, '0');
+    const s = now.getSeconds().toString().padStart(2, '0');
+    clock.textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
 
 STATIONS.forEach((st, i) => {
     const tile = document.createElement('div');
@@ -211,17 +231,17 @@ function playStation(index) {
     currentIndex = index;
     updateTileActive();
 
-    status.textContent = 'Ładowanie: ' + st.name + '...';
+    statusText.textContent = 'Ładowanie: ' + st.name;
     status.className = 'status';
 
     player.src = st.url;
     player.play().then(() => {
-        status.textContent = 'Gra: ' + st.name;
+        statusText.textContent = 'Gra: ' + st.name;
         status.className = 'status playing';
         playBtn.textContent = '⏸';
         [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
     }).catch(err => {
-        status.textContent = 'Błąd: ' + st.name + ' - spróbuj inną stację';
+        statusText.textContent = 'Błąd: ' + st.name;
         status.className = 'status error';
         currentIndex = -1;
         updateTileActive();
@@ -235,12 +255,12 @@ playBtn.onclick = () => {
     if (player.paused) {
         player.play();
         playBtn.textContent = '⏸';
-        status.textContent = 'Gra: ' + STATIONS[currentIndex].name;
+        statusText.textContent = 'Gra: ' + STATIONS[currentIndex].name;
         status.className = 'status playing';
     } else {
         player.pause();
         playBtn.textContent = '▶';
-        status.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+        statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
         status.className = 'status';
     }
 };
@@ -249,7 +269,7 @@ stopBtn.onclick = () => {
     player.pause();
     player.currentTime = 0;
     playBtn.textContent = '▶';
-    status.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
     status.className = 'status';
 };
 
@@ -265,7 +285,7 @@ volume.oninput = (e) => {
     const vol = e.target.value / 100;
     player.volume = vol;
     lastVolume = vol;
-    muteBtn.textContent = vol === 0 ? '🔇' : vol < 0.5 ? '🔉' : '🔊';
+    muteBtn.textContent = vol === 0? '🔇' : vol < 0.5? '🔉' : '🔊';
 };
 
 muteBtn.onclick = () => {
@@ -277,7 +297,7 @@ muteBtn.onclick = () => {
     } else {
         player.volume = lastVolume;
         volume.value = lastVolume * 100;
-        muteBtn.textContent = lastVolume < 0.5 ? '🔉' : '🔊';
+        muteBtn.textContent = lastVolume < 0.5? '🔉' : '🔊';
     }
 };
 
@@ -289,7 +309,7 @@ player.ontimeupdate = () => {
 };
 
 player.onerror = () => {
-    status.textContent = 'Błąd streamu - spróbuj inną stację';
+    statusText.textContent = 'Błąd streamu';
     status.className = 'status error';
     currentIndex = -1;
     updateTileActive();
