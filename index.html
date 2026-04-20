@@ -11,29 +11,32 @@
         background: #0f0f0f;
         color: #fff;
         padding: 20px;
+        min-height: 100vh;
     }
-    .header {
+   .header {
         text-align: center;
         margin-bottom: 30px;
     }
-    .header h1 { font-size: 28px; margin-bottom: 8px; }
-    .status {
+   .header h1 { font-size: 28px; margin-bottom: 8px; }
+   .header p { color: #999; font-size: 14px; }
+   .status {
         background: #1a1a1a;
         padding: 15px;
         border-radius: 12px;
         text-align: center;
         margin-bottom: 20px;
         font-size: 14px;
+        border: 1px solid #2a2a2a;
     }
-    .status.playing { background: #1db954; color: #000; font-weight: 600; }
-    .status.error { background: #e22134; }
-    .grid {
+   .status.playing { background: #1db954; color: #000; font-weight: 600; border-color: #1db954; }
+   .status.error { background: #e22134; border-color: #e22134; }
+   .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 100px;
     }
-    .tile {
+   .tile {
         background: #1a1a1a;
         border: 2px solid #2a2a2a;
         border-radius: 16px;
@@ -46,10 +49,12 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        user-select: none;
     }
-    .tile:hover { background: #2a2a2a; border-color: #3a3a3a; }
-    .tile.active { background: #1db954; border-color: #1db954; color: #000; }
-    .tile .icon {
+   .tile:hover { background: #2a2a2a; border-color: #3a3a3a; }
+   .tile:active { transform: scale(0.96); }
+   .tile.active { background: #1db954; border-color: #1db954; color: #000; }
+   .tile.icon {
         width: 80px;
         height: 80px;
         background: #2a2a2a;
@@ -60,19 +65,23 @@
         justify-content: center;
         font-size: 32px;
     }
-    .tile.active .icon { background: rgba(0,0,0,0.2); }
-    .tile .name { font-size: 14px; font-weight: 600; line-height: 1.2; }
-    .controls {
-        position: sticky;
+   .tile.active.icon { background: rgba(0,0,0,0.2); }
+   .tile.name { font-size: 14px; font-weight: 600; line-height: 1.2; }
+   .controls {
+        position: fixed;
         bottom: 20px;
+        left: 20px;
+        right: 20px;
         background: #1a1a1a;
         padding: 15px;
         border-radius: 16px;
         display: flex;
         gap: 15px;
         align-items: center;
+        border: 1px solid #2a2a2a;
+        backdrop-filter: blur(10px);
     }
-    .btn {
+   .btn {
         background: #1db954;
         border: none;
         color: #000;
@@ -81,16 +90,24 @@
         font-weight: 700;
         cursor: pointer;
         font-size: 16px;
+        transition: all 0.2s;
     }
-    .btn:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; }
-    input[type="range"] { flex: 1; accent-color: #1db954; }
-    .vol { font-size: 14px; min-width: 45px; }
+   .btn:hover { background: #1ed760; }
+   .btn:active { transform: scale(0.95); }
+   .btn:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; }
+    input[type="range"] {
+        flex: 1;
+        accent-color: #1db954;
+        height: 6px;
+        cursor: pointer;
+    }
+   .vol { font-size: 14px; min-width: 45px; text-align: right; }
 </style>
 </head>
 <body>
     <div class="header">
         <h1>Mini Radio PL</h1>
-        <p>15 wybranych stacji</p>
+        <p>15 stacji • wszystkie HTTPS</p>
     </div>
 
     <div class="status" id="status">Kliknij kafelek żeby zacząć</div>
@@ -107,22 +124,22 @@
 <script>
 const STATIONS = [
     { name: 'Antyradio', url: 'https://an01.cdn.eurozet.pl/ant-waw.mp3' },
-    { name: 'Muzyczne Radio', url: 'https://pldm1.cdn.eurozet.pl/pldm-148-192.mp3' },
-    { name: 'Polskie Radio 24', url: 'https://stream3.polskieradio.pl:8900/' },
-    { name: 'Radio Eska Wrocław', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
-    { name: 'Radio Kampus', url: 'https://193.0.98.195:8000/radio' },
-    { name: 'Radio Kolor', url: 'https://cast.tunzilla.com:8000/radiokolor.mp3' },
-    { name: 'Radio Plus', url: 'https://pl01.cdn.eurozet.pl/pls-waw.mp3' },
-    { name: 'Radio Republika', url: 'https://stream.radio-republika.pl/radio.mp3' },
-    { name: 'Radio Rodzina', url: 'https://stream.radiorodzina.pl:8000/live' },
-    { name: 'Radio Wnet', url: 'https://radiownet.pl:8000/live' },
-    { name: 'Radio Wrocław', url: 'https://stream4.nadaje.com:9170/rwroc.mp3' },
-    { name: 'Radio Złote Przeboje', url: 'https://pldm3.cdn.eurozet.pl/pldm-028-192.mp3' },
+    { name: 'Radio 357', url: 'https://stream.radio357.pl/radio357' },
+    { name: 'Radio Nowy Świat', url: 'https://stream.rcs.revma.com/an1ugyygzk8uv' },
     { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-    { name: 'TOK FM', url: 'https://radiostream.pl/tuba.pl/1013-1.mp3' }
+    { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+    { name: 'RMF Maxx', url: 'https://rs201-krk.rmfstream.pl/rmf_maxxx' },
+    { name: 'TOK FM', url: 'https://radiostream.pl/tuba.pl/1013-1.mp3' },
+    { name: 'Radio ZET', url: 'https://zt.cdn.eurozet.pl/zet-tun.mp3' },
+    { name: 'ZET Chilli', url: 'https://ch.cdn.eurozet.pl/chi-waw.mp3' },
+    { name: 'Chillizet', url: 'https://chi.cdn.eurozet.pl/chichill.mp3' },
+    { name: 'Meloradio', url: 'https://mel.cdn.eurozet.pl/mel-waw.mp3' },
+    { name: 'Radio Kraków', url: 'https://stream4.nadaje.com:9170/rkrak.mp3' },
+    { name: 'Radio Wrocław', url: 'https://stream4.nadaje.com:9170/rwroc.mp3' },
+    { name: 'Radio Eska', url: 'https://ic1.smcdn.pl/2330-1.mp3' },
+    { name: 'Eska Rock', url: 'https://ic1.smcdn.pl/2350-1.mp3' }
 ];
 
-// Sortowanie alfabetyczne dla pewności
 STATIONS.sort((a, b) => a.name.localeCompare(b.name, 'pl'));
 
 const player = document.getElementById('player');
@@ -163,9 +180,10 @@ function playStation(index, tile) {
         playBtn.textContent = 'Stop';
         playBtn.disabled = false;
     }).catch(err => {
-        status.textContent = 'Błąd: ' + st.name + ' - spróbuj ponownie';
+        status.textContent = 'Błąd: ' + st.name + ' - spróbuj inną stację';
         status.className = 'status error';
         tile.classList.remove('active');
+        playBtn.disabled = true;
         console.error(err);
     });
 }
@@ -194,6 +212,7 @@ player.onerror = () => {
     status.textContent = 'Błąd streamu - spróbuj inną stację';
     status.className = 'status error';
     document.querySelector('.tile.active')?.classList.remove('active');
+    playBtn.disabled = true;
 };
 </script>
 </body>
