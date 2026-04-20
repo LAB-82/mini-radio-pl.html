@@ -93,10 +93,9 @@ body {
   color: #000;
   position: relative;
   overflow: hidden;
-  height: 100px; /* stała wysokość dla kafli */
+  height: 100px;
   font-size: 14px;
 }
-/* Efekt hover i aktywne */
 .tile:hover {
   background: #FFD633;
 }
@@ -109,10 +108,10 @@ body {
   color: #000;
 }
 
-/* Neonowy napis "RMF-FM" w ramce na stylu neon, świecący na żółto, z tłem */
+/* Neonowy napis "RMF-FM" */
 .controls {
   position: relative;
-  background: #FECB00; /* tło dla ramki stacji */
+  background: #FECB00;
   padding: 65px 16px 12px 16px;
   border-radius: 16px;
   display: flex;
@@ -124,7 +123,6 @@ body {
   margin-bottom: 15px;
 }
 
-/* Dodanie tła i neonowego efektu napisu RMF-FM */
 .controls::before {
   content: "RMF-FM";
   position: absolute;
@@ -137,15 +135,13 @@ body {
   font-weight: 700;
   color: #fff700;
   border-radius: 20px;
-  /* Neon glow */
   text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
   border: 2px solid #fff700;
-  background: #FECB00; /* tło */
+  background: #FECB00;
   animation: neon-glow 1.5s infinite alternate;
   z-index: 1;
 }
 
-/* Animacja neon glow */
 @keyframes neon-glow {
   from {
     text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
@@ -155,16 +151,16 @@ body {
   }
 }
 
-/* Styl dla ikon głośnika */
-.głośnik {
+/* Ikona głośnika */
+.speaker-icon {
   display: inline-block;
   margin-left: 4px;
   vertical-align: middle;
   font-size: 18px;
-  color: #000; /* domyślny kolor */
+  color: #000;
 }
 
-/* Przycisk i slider */
+/* Przyciski i slider */
 .btn {
   background: transparent;
   border: 2px solid #000;
@@ -213,21 +209,19 @@ input[type=range] {
 
 <div class="grid" id="grid"></div>
 
-<!-- Kontrolki stacji -->
 <div class="controls" id="playerControls">
-  <!-- Prawdziwe przyciski -->
   <button class="btn" id="playBtn" disabled>PLAY</button>
   <button class="btn" id="stopBtn" disabled>STOP</button>
   <button class="btn" id="prevBtn" disabled>PREV</button>
   <button class="btn" id="nextBtn" disabled>NEXT</button>
-  <button class="btn" id="muteBtn">🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span></button>
+  <button class="btn" id="muteBtn">🔇</button>
+  <span class="speaker-icon" id="speakerIcon" style="display: none;">🔊</span>
   <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
 
 <audio id="player" crossorigin="anonymous"></audio>
 
 <script>
-// Lista stacji
 const STATIONS = [
   { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
   { name: 'RMF MAXX', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
@@ -265,9 +259,8 @@ let isPlaying = false;
 player.volume = 0.8;
 
 function updateSpeakerIcon() {
-  // Ikona 🔊 pojawia się tylko gdy: stacja aktywna, odtwarzanie włączone, volume > 0
   const shouldShow = currentIndex !== -1 && isPlaying && player.volume > 0;
-  speakerIcon.style.display = shouldShow ? 'inline' : 'none';
+  speakerIcon.style.display = shouldShow ? 'inline-block' : 'none';
 }
 
 function updateClock() {
@@ -299,10 +292,11 @@ function playStation(index) {
   const st = STATIONS[index];
   player.pause();
   currentIndex = index;
+  isPlaying = false;
   updateTileActive();
   statusText.textContent = 'Ładowanie: ' + st.name;
   status.classList.remove('error');
-  isPlaying = false;
+  
   player.src = st.url;
   player.play().then(() => {
     statusText.textContent = 'Gra: ' + st.name;
@@ -354,6 +348,7 @@ stopBtn.onclick = () => {
 prevBtn.onclick = () => {
   if (currentIndex > 0) playStation(currentIndex - 1);
 };
+
 nextBtn.onclick = () => {
   if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
 };
@@ -362,20 +357,28 @@ volume.oninput = (e) => {
   const vol = e.target.value / 100;
   player.volume = vol;
   lastVolume = vol;
-  muteBtn.innerHTML = vol === 0 ? '🔈 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>' : '🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>';
+  updateMuteButton();
   updateSpeakerIcon();
 };
+
+function updateMuteButton() {
+  if (player.volume === 0) {
+    muteBtn.textContent = '🔈';
+  } else {
+    muteBtn.textContent = '🔇';
+  }
+}
 
 muteBtn.onclick = () => {
   if (player.volume > 0) {
     lastVolume = player.volume;
     player.volume = 0;
     volume.value = 0;
-    muteBtn.innerHTML = '🔈 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>';
+    muteBtn.textContent = '🔈';
   } else {
     player.volume = lastVolume;
     volume.value = lastVolume * 100;
-    muteBtn.innerHTML = '🔇 <span class="głośnik" id="speakerIcon" style="display:none;">🔊</span>';
+    muteBtn.textContent = '🔇';
   }
   updateSpeakerIcon();
 };
@@ -391,7 +394,7 @@ player.onerror = () => {
   updateSpeakerIcon();
 };
 
-// Monitorowanie zmian stanu odtwarzania
+// Event listeners dla precyzyjnej kontroli
 player.addEventListener('play', () => {
   isPlaying = true;
   updateSpeakerIcon();
