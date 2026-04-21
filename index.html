@@ -115,17 +115,9 @@ background-repeat: no-repeat;
 transition: all 0.2s;
 }
 .tile.active::before { opacity: 1; }
-.tile::after {
-content: "";
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 45%;
-height: 5px;
-background: #000;
-z-index: 0;
-}
+/* USUNIĘTE:.tile::after - pasek wywalony całkowicie */
+
+/* POPRAWIONE: SPACJA MIĘDZY.tile A.name - TO BYŁ BŁĄD */
 .tile.name {
 font-family: 'Montserrat Alternates', sans-serif;
 font-size: 15px;
@@ -146,9 +138,9 @@ text-shadow:
   -2px -2px 0 #000;
 position: relative;
 z-index: 1;
-padding: 4px 8px;
-background: radial-gradient(ellipse at center, rgba(255,215,0,0.25) 0%, rgba(255,215,0,0) 70%);
-border-radius: 8px;
+padding: 6px 10px;
+background: radial-gradient(ellipse at center, rgba(255,215,0,0.35) 0%, rgba(255,215,0,0) 75%);
+border-radius: 10px;
 }
 .tile.active.name {
 color: #FFFFFF;
@@ -163,7 +155,7 @@ text-shadow:
   -2px 2px 0 #000,
   2px -2px 0 #000,
   -2px -2px 0 #000;
-background: radial-gradient(ellipse at center, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0) 70%);
+background: radial-gradient(ellipse at center, rgba(255,215,0,0.5) 0%, rgba(255,215,0,0) 75%);
 }
 .big-logo {
 font-family: 'Montserrat Alternates', sans-serif;
@@ -258,8 +250,7 @@ body { overflow: hidden; }
 .controls { flex-wrap: wrap; justify-content: center; }
 .big-logo { font-size: 8vh; opacity: 0.8; }
 .tile { min-height: 48px; }
-.tile.name { font-size: 12px; }
-.tile::after { height: 4px; }
+.tile.name { font-size: 13.5px; } /* 15px - 10% na mobile żeby się mieściło */
 }
 </style>
 </head>
