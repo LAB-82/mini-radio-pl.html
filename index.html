@@ -40,28 +40,30 @@
 
       <!-- Przyciski ON, OFF, STOP, MUTE i głośność -->
       <div style="display:flex; flex-direction:column; align-items:center; height:clamp(90px,18vw,130px); justify-content:space-between;">
-        <div style="display:flex; gap:10px; align-items:center; justify-content:center;">
-          <!-- Przyciski -->
-          <button id="powerBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
-            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
-            ON
-          </button>
+        <div style="display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap;">
+          <!-- Przykładowe przyciski -->
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">ON</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">OFF</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">STOP</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">MUTE</button>
+          
+          <!-- 10 dodatkowych przykładowych przycisków -->
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk1</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk2</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk3</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk4</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk5</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk6</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk7</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk8</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk9</button>
+          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk10</button>
+        </div>
 
-          <button id="stopBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
-            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
-            OFF
-          </button>
-
-          <button id="muteBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
-            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
-            MUTE
-          </button>
-
-          <!-- Głośność -->
-          <div id="volKnob" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); display:flex; align-items:center; justify-content:center; user-select:none; touch-action:none;">
+        <!-- Głośność -->
+        <div id="volKnob" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); display:flex; align-items:center; justify-content:center; user-select:none; touch-action:none; margin-top:10px; position:relative;">
             <div id="volIndicator" style="position:absolute; top:5px; left:50%; width:3px; height:11px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a; transform-origin:50% 24px; transform:translateX(-50%) rotate(0deg);"></div>
             VOL
-          </div>
         </div>
       </div>
 
@@ -108,32 +110,17 @@
   }
 
   // Przyciski
-  playBtn.onclick = () => {
-    initAudio();
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    audio.play();
-    isPlaying = true;
-    draw();
-    // efekt świetlny
-    playBtn.style.boxShadow = '0 0 25px #00ff00, 0 0 45px rgba(0,255,0,0.4)';
-    stopBtn.style.boxShadow = '0 0 15px rgba(255,42,42,0.5)';
-  };
-
-  stopBtn.onclick = () => {
-    audio.pause();
-    isPlaying = false;
-    cancelAnimationFrame(animationId);
-    drawStatic();
-    // efekt
-    stopBtn.style.boxShadow = '0 0 25px #ff0000, 0 0 45px rgba(255,0,0,0.4)';
-    playBtn.style.boxShadow = '0 0 15px rgba(255,42,42,0.5)';
-  };
-
-  muteBtn.onclick = () => {
-    audio.muted = !audio.muted;
-    isMuted = audio.muted;
-    muteBtn.style.boxShadow = isMuted ? '0 0 25px #ffaa00, 0 0 45px rgba(255,170,0,0.4)' : '0 0 15px rgba(255,42,42,0.5)';
-  };
+  document.querySelectorAll('button').forEach(btn => {
+    if(btn.textContent==='ON'){
+      btn.onclick=()=>{ initAudio(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); audio.play(); isPlaying=true; draw(); };
+    } else if(btn.textContent==='OFF'){
+      btn.onclick=()=>{ audio.pause(); isPlaying=false; cancelAnimationFrame(animationId); drawStatic(); };
+    } else if(btn.textContent==='STOP'){
+      btn.onclick=()=>{ audio.pause(); isPlaying=false; cancelAnimationFrame(animationId); drawStatic(); };
+    } else if(btn.textContent==='MUTE'){
+      btn.onclick=()=>{ audio.muted=!audio.muted; isMuted=audio.muted; btn.style.boxShadow = isMuted ? '0 0 25px #ffaa00, 0 0 45px rgba(255,170,0,0.4)' : '0 0 15px rgba(255,42,42,0.5)'; };
+    }
+  });
 
   // Głośność
   let lastAngle = 0;
@@ -167,7 +154,7 @@
   volumeKnob.addEventListener('mousedown', e => { dragging=true; volMove(e); e.preventDefault(); });
   volumeKnob.addEventListener('touchstart', e => { dragging=true; volMove(e); e.preventDefault(); });
   document.addEventListener('mousemove', e => { if(dragging) volMove(e); });
-  document.addEventListener('touchmove', e => { if(dragging) volMove(e); }, {passive:false});
+  document.addEventListener('touchmove', e => { if(dragging) volMove(e); e.preventDefault(); });
   document.addEventListener('mouseup', () => { dragging=false; });
   document.addEventListener('touchend', () => { dragging=false; });
   updateVolumeRotation(0);
@@ -229,7 +216,6 @@
   }
 
   drawStatic();
-
 </script>
 </body>
 </html>
