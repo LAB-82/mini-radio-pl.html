@@ -2,324 +2,265 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Mini Radio PL</title>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
 
-@font-face {
-  font-family: 'Sketchy Times';
-  src: url('https://www.fonts4free.net/sketchy-times.regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+font-family:'Montserrat Alternates',sans-serif;
+background: radial-gradient(circle at top,#FFF3A0,#FFF9C4);
+color:#000;
+padding:12px;
+display:flex;
+flex-direction:column;
+gap:10px;
+height:100vh;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; overflow: hidden; }
-body {
-font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: #FFF9C4;
-color: #000;
-padding: 12px 12px 10px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-position: relative;
+/* STATUS BAR */
+.status{
+background:linear-gradient(#FFD633,#FECB00);
+border:2px solid #000;
+border-radius:16px;
+padding:12px 14px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,200,0,0.6);
+font-weight:700;
 }
-.status {
-position: relative;
-background: #FECB00;
-color: #000;
-padding: 12px 14px;
-border-radius: 16px;
-border: 2px solid #000;
-display: flex;
-align-items: center;
-justify-content: space-between;
-min-height: 70px;
-font-weight: 700;
-flex-shrink: 0;
-overflow: hidden;
-box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-z-index: 10;
-}
-.status.error { background: #e22134; color: #fff; border-color: #000; }
-.status-text,.clock {
-  position: relative;
-  z-index: 2;
-  font-family: 'Montserrat Alternates', sans-serif;
-  font-weight: 700;
-}
-.status-text { flex: 1; padding-right: 10px; }
-.status-text::before { content: "📻 "; font-size: 18px; }
-.clock { font-variant-numeric: tabular-nums; min-width: 80px; text-align: right; }
-.status-logo-wrap {
-position: absolute;
-left: 50%;
-top: 50%;
-transform: translate(-50%, -50%);
-width: 195px;
-height: 72px;
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1;
-pointer-events: none;
-}
-.status-logo {
-display: none;
-}
-.grid {
-display: grid;
-grid-template-columns: repeat(5, minmax(0, 1fr));
-grid-auto-rows: 1fr;
-gap: 10px;
-flex: 1;
-min-height: 0;
-overflow-y: auto;
-z-index: 10;
-position: relative;
-}
-.tile {
-background: #FECB00;
-border: 2px solid #000;
-border-radius: 16px;
-padding: 7.5px;
-text-align: center;
-cursor: pointer;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-user-select: none;
-color: #000;
-position: relative;
-overflow: hidden;
-min-height: 56px;
-}
-.tile:hover { background: #FFD633; }
-.tile:active { transform: scale(0.96); }
-.tile.active { background: #FECB00; border-color: #000; color: #000; }
-.tile::before {
-content: "";
-position: absolute;
-top: 5px;
-right: 5px;
-width: 25px;
-height: 25px;
-opacity: 0;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z'/%3E%3C/svg%3E");
-background-size: contain;
-background-repeat: no-repeat;
-transition: all 0.2s;
-}
-.tile.active::before { opacity: 1; }
-/* USUNIĘTE:.tile::after - pasek wywalony całkowicie */
+.status.error{background:#e22134;color:#fff;}
+.status-text::before{content:"📻 ";}
 
-/* POPRAWIONE: SPACJA MIĘDZY.tile A.name - TO BYŁ BŁĄD */
-.tile.name {
-font-family: 'Montserrat Alternates', sans-serif;
-font-size: 15px;
-font-weight: 700;
-line-height: 1.15;
-transition: all 0.2s;
-color: #FFFACD;
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+flex:1;
+overflow:auto;
+}
+
+/* TILE */
+.tile{
+background:linear-gradient(#FFD633,#FECB00);
+border:2px solid #000;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+transition:.2s;
+position:relative;
+box-shadow:0 3px 8px rgba(0,0,0,0.25);
+}
+
+.tile:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 14px rgba(0,0,0,0.35);
+}
+
+.tile.active{
+background:#111;
+border-color:#FFD700;
+box-shadow:0 0 12px #FFD700, inset 0 0 10px rgba(255,215,0,0.4);
+}
+
+/* TEXT */
+.tile .name{
+font-weight:700;
+text-align:center;
+line-height:1.2;
+color:#000;
+}
+
+.tile.active .name{
+color:#FFFACD;
 text-shadow:
-  0 0 5px #FFFACD,
-  0 0 10px #FFD700,
-  0 0 20px #FFD700,
-  0 0 40px #FFA500,
-  0 0 70px #FF8C00,
-  0 0 100px #FF8C00,
-  2px 2px 0 #000,
-  -2px 2px 0 #000,
-  2px -2px 0 #000,
-  -2px -2px 0 #000;
-position: relative;
-z-index: 1;
-padding: 6px 10px;
-background: radial-gradient(ellipse at center, rgba(255,215,0,0.35) 0%, rgba(255,215,0,0) 75%);
-border-radius: 10px;
+0 0 5px #FFFACD,
+0 0 10px #FFD700,
+0 0 20px #FFA500;
 }
-.tile.active.name {
-color: #FFFFFF;
+
+/* BIG LOGO */
+.big-logo{
+text-align:center;
+font-size:8vh;
+font-weight:700;
+color:#FFFACD;
 text-shadow:
-  0 0 8px #FFFFFF,
-  0 0 16px #FFD700,
-  0 0 32px #FFD700,
-  0 0 64px #FFA500,
-  0 0 100px #FF8C00,
-  0 0 140px #FF8C00,
-  2px 2px 0 #000,
-  -2px 2px 0 #000,
-  2px -2px 0 #000,
-  -2px -2px 0 #000;
-background: radial-gradient(ellipse at center, rgba(255,215,0,0.5) 0%, rgba(255,215,0,0) 75%);
+0 0 10px #FFD700,
+0 0 20px #FFD700,
+0 0 40px #FFA500,
+0 0 80px #FF8C00,
+0 3px 0 #000;
+-webkit-text-stroke:2px #000;
 }
-.big-logo {
-font-family: 'Montserrat Alternates', sans-serif;
-font-size: 10vh;
-font-weight: 700;
-text-align: center;
-color: #FFFACD;
-text-shadow:
-  0 0 10px #FFFACD,
-  0 0 20px #FFD700,
-  0 0 40px #FFD700,
-  0 0 80px #FFA500,
-  0 0 120px #FF8C00,
-  0 0 160px #FF8C00,
-  0 2px 0 #000,
-  0 4px 8px rgba(0,0,0,0.8);
--webkit-text-stroke: 2px #000;
-opacity: 0.85;
-pointer-events: none;
-flex-shrink: 0;
-line-height: 1;
-margin: 0;
-z-index: 15;
-position: relative;
+
+/* CONTROLS */
+.controls{
+background:linear-gradient(#FFD633,#FECB00);
+border:2px solid #000;
+border-radius:16px;
+padding:10px;
+display:flex;
+gap:8px;
+align-items:center;
+box-shadow:0 4px 12px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,200,0,0.6);
 }
-.controls {
-position: relative;
-background: #FECB00;
-padding: 12px 14px;
-border-radius: 16px;
-display: flex;
-gap: 8px;
-align-items: center;
-border: 2px solid #000;
-box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-flex-shrink: 0;
-z-index: 10;
+
+/* BUTTONS */
+.ctrl-btn{
+background:#111;
+border:2px solid #FFD700;
+color:#FFD700;
+border-radius:8px;
+height:36px;
+padding:0 12px;
+font-weight:700;
+cursor:pointer;
+transition:.2s;
 }
-.bottom-badge {
-display: none;
+
+.ctrl-btn:hover{
+background:#000;
+box-shadow:0 0 10px #FFD700;
 }
-.bottom-text {
-display: none;
+
+.ctrl-btn.play.active{
+background:#FECB00;
+color:#000;
 }
-.ctrl-btn {
-background: transparent;
-border: 2px solid #FFD700;
-color: #666;
-padding: 0 12px;
-height: 36px;
-border-radius: 8px;
-font-size: 15px;
-font-weight: 700;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-transition: all 0.2s;
-min-width: 50px;
-font-family: 'Montserrat Alternates', sans-serif;
-text-shadow: none;
+
+/* SLIDER */
+input[type="range"]{
+flex:1;
+height:6px;
+background:#111;
+border-radius:5px;
+appearance:none;
+outline:none;
+border:1px solid #FFD700;
 }
-.ctrl-btn:hover { background: #000; color: #FFD700; border-color: #FFD700; }
-.ctrl-btn:active { transform: scale(0.95); }
-.ctrl-btn:disabled { color: #999; border-color: #999; cursor: not-allowed; }
-.ctrl-btn.play {
-background: transparent;
-color: #666;
-min-width: 60px;
-border: 2px solid #FFD700;
-text-shadow: none;
+
+input[type="range"]::-webkit-slider-thumb{
+appearance:none;
+width:14px;
+height:14px;
+background:#FFD700;
+border-radius:50%;
+cursor:pointer;
+box-shadow:0 0 6px #FFD700;
 }
-.ctrl-btn.play:hover { background: #000; color: #FFD700; }
-.ctrl-btn.play.active { background: #FECB00; border-color: #FFD700; color: #000; }
-.ctrl-btn.mute {
-min-width: 60px;
-text-shadow: none;
-}
-input[type="range"] {
-flex: 1;
-height: 4px;
-cursor: pointer;
-min-width: 60px;
-accent-color: #000;
-}
-#playBtn { order: 1; } #stopBtn { order: 2; } #prevBtn { order: 3; } #nextBtn { order: 4; } #volume { order: 5; } #muteBtn { order: 6; }
-@media (max-width: 1100px) {.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 850px) {.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 640px) {
-.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-body { overflow: hidden; }
-.controls { flex-wrap: wrap; justify-content: center; }
-.big-logo { font-size: 8vh; opacity: 0.8; }
-.tile { min-height: 48px; }
-.tile.name { font-size: 13.5px; } /* 15px - 10% na mobile żeby się mieściło */
+
+/* MOBILE */
+@media(max-width:850px){
+.grid{grid-template-columns:repeat(3,1fr);}
 }
 </style>
 </head>
+
 <body>
-<div class="status" id="status">
-<span class="status-text" id="statusText"></span>
-<div class="status-logo-wrap">
-<div class="status-logo">RMF FM</div>
+
+<div class="status">
+<span id="statusText">Wybierz stację</span>
+<span id="clock"></span>
 </div>
-<span class="clock" id="clock">00:00:00</span>
-</div>
+
 <div class="grid" id="grid"></div>
+
 <div class="big-logo">RMF FM</div>
-<div class="controls" id="playerControls">
-<div class="bottom-badge">
-<div class="bottom-text">RMF-FM</div>
-</div>
+
+<div class="controls">
 <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
 <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
 <button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
 <button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
-<input type="range" id="volume" min="0" max="100" value="80" />
-<button class="ctrl-btn mute" id="muteBtn">MUTE</button>
+<input type="range" id="volume" min="0" max="100" value="80"/>
+<button class="ctrl-btn" id="muteBtn">MUTE</button>
 </div>
-<audio id="player" crossorigin="anonymous"></audio>
+
+<audio id="player"></audio>
+
 <script>
-const STATIONS = [
-{ name: 'RMF FM<br>' , url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-{ name: 'RMF FM<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-{ name: 'RMF FM<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
-{ name: 'RMF FM<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
-{ name: 'RMF FM<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
-{ name: 'RMF FM<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-{ name: 'RMF FM<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
-{ name: 'RMF FM<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
-{ name: 'RMF FM<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
-{ name: 'RMF FM<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
-{ name: 'RMF FM<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
-{ name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
-{ name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-{ name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' },
-{ name: 'RMF FM<br>Smooth Jazz', url: 'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' }
+const STATIONS=[
+{ name:'RMF FM', url:'https://rs201-krk.rmfstream.pl/rmf_fm' },
+{ name:'RMF FM Maxx', url:'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+{ name:'RMF 80s', url:'https://rs201-krk.rmfstream.pl/rmf_80s' },
+{ name:'RMF 90s', url:'https://rs201-krk.rmfstream.pl/rmf_90s' },
+{ name:'RMF 2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' },
+{ name:'Chillout', url:'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+{ name:'Classic', url:'https://rs201-krk.rmfstream.pl/rmf_classic' },
+{ name:'Dance', url:'https://rs201-krk.rmfstream.pl/rmf_dance' },
+{ name:'Gold', url:'https://rs201-krk.rmfstream.pl/rmf_gold' },
+{ name:'Latino', url:'https://rs201-krk.rmfstream.pl/rmf_latino' }
 ];
-const player = document.getElementById('player');
-const grid = document.getElementById('grid');
-const status = document.getElementById('status');
-const statusText = document.getElementById('statusText');
-const clock = document.getElementById('clock');
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('stopBtn');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const volume = document.getElementById('volume');
-const muteBtn = document.getElementById('muteBtn');
-let currentIndex = -1;
-let lastVolume = 0.8;
-player.volume = 0.8;
-function updateClock() { const now = new Date(); const h = now.getHours().toString().padStart(2, '0'); const m = now.getMinutes().toString().padStart(2, '0'); const s = now.getSeconds().toString().padStart(2, '0'); clock.textContent = `${h}:${m}:${s}`; }
-setInterval(updateClock, 1000); updateClock();
-STATIONS.forEach((st, i) => { const tile = document.createElement('div'); tile.className = 'tile'; tile.innerHTML = `<div class="name">${st.name}</div>`; tile.onclick = () => playStation(i); grid.appendChild(tile); });
-function updateTileActive() { document.querySelectorAll('.tile').forEach((t, i) => { t.classList.toggle('active', i === currentIndex); }); }
-function playStation(index) { const st = STATIONS[index]; player.pause(); currentIndex = index; updateTileActive(); statusText.textContent = 'Ładowanie: ' + st.name.replace('<br>', ' '); status.classList.remove('error'); player.src = st.url; player.play().then(() => { statusText.textContent = 'Gra: ' + st.name.replace('<br>', ' '); playBtn.classList.add('active'); [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false); }).catch(err => { statusText.textContent = 'Błąd: ' + st.name.replace('<br>', ' '); status.classList.add('error'); currentIndex = -1; updateTileActive(); [playBtn, stopBtn].forEach(b => b.disabled = true); playBtn.classList.remove('active'); console.error(err); }); }
-playBtn.onclick = () => { if (currentIndex === -1) return; if (player.paused) { player.play(); playBtn.classList.add('active'); statusText.textContent = 'Teraz gra: ' + STATIONS[currentIndex].name.replace('<br>', ' '); status.classList.remove('error'); } else { player.pause(); playBtn.classList.remove('active'); statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' '); } };
-stopBtn.onclick = () => { player.pause(); player.currentTime = 0; playBtn.classList.remove('active'); statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' '); };
-prevBtn.onclick = () => { if (currentIndex > 0) playStation(currentIndex - 1); };
-nextBtn.onclick = () => { if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1); };
-volume.oninput = (e) => { const vol = e.target.value / 100; player.volume = vol; lastVolume = vol; muteBtn.textContent = vol === 0? 'UNMUTE' : 'MUTE'; };
-muteBtn.onclick = () => { if (player.volume > 0) { lastVolume = player.volume; player.volume = 0; volume.value = 0; muteBtn.textContent = 'UNMUTE'; } else { player.volume = lastVolume; volume.value = lastVolume * 100; muteBtn.textContent = 'MUTE'; } };
-player.onerror = () => { statusText.textContent = 'Błąd streamu'; status.classList.add('error'); currentIndex = -1; updateTileActive(); [playBtn, stopBtn].forEach(b => b.disabled = true); playBtn.classList.remove('active'); };
+
+const player=document.getElementById('player');
+const grid=document.getElementById('grid');
+const statusText=document.getElementById('statusText');
+
+let currentIndex=-1;
+
+STATIONS.forEach((s,i)=>{
+let t=document.createElement('div');
+t.className='tile';
+t.innerHTML=`<div class="name">${s.name}</div>`;
+t.onclick=()=>play(i);
+grid.appendChild(t);
+});
+
+function updateTiles(){
+document.querySelectorAll('.tile').forEach((t,i)=>{
+t.classList.toggle('active',i===currentIndex);
+});
+}
+
+function play(i){
+const st=STATIONS[i];
+currentIndex=i;
+player.src=st.url;
+player.play();
+statusText.textContent="Gra: "+st.name;
+updateTiles();
+document.getElementById('playBtn').disabled=false;
+document.getElementById('stopBtn').disabled=false;
+}
+
+playBtn.onclick=()=>{
+if(player.paused){player.play();}
+else{player.pause();}
+};
+
+stopBtn.onclick=()=>{
+player.pause();
+};
+
+prevBtn.onclick=()=>{
+if(currentIndex>0)play(currentIndex-1);
+};
+
+nextBtn.onclick=()=>{
+if(currentIndex<STATIONS.length-1)play(currentIndex+1);
+};
+
+volume.oninput=e=>{
+player.volume=e.target.value/100;
+};
+
+muteBtn.onclick=()=>{
+player.muted=!player.muted;
+};
+
+/* CLOCK */
+setInterval(()=>{
+const d=new Date();
+clock.textContent=d.toLocaleTimeString();
+},1000);
 </script>
+
 </body>
 </html>
