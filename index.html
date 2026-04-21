@@ -278,7 +278,7 @@ body { overflow: hidden; }
 <audio id="player" crossorigin="anonymous"></audio>
 <script>
 const STATIONS = [
-{ name: 'RMF FM<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+{ name: 'RMF FM<br> , url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
 { name: 'RMF FM<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
 { name: 'RMF FM<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
 { name: 'RMF FM<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
@@ -313,7 +313,7 @@ setInterval(updateClock, 1000); updateClock();
 STATIONS.forEach((st, i) => { const tile = document.createElement('div'); tile.className = 'tile'; tile.innerHTML = `<div class="name">${st.name}</div>`; tile.onclick = () => playStation(i); grid.appendChild(tile); });
 function updateTileActive() { document.querySelectorAll('.tile').forEach((t, i) => { t.classList.toggle('active', i === currentIndex); }); }
 function playStation(index) { const st = STATIONS[index]; player.pause(); currentIndex = index; updateTileActive(); statusText.textContent = 'Ładowanie: ' + st.name.replace('<br>', ' '); status.classList.remove('error'); player.src = st.url; player.play().then(() => { statusText.textContent = 'Gra: ' + st.name.replace('<br>', ' '); playBtn.classList.add('active'); [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false); }).catch(err => { statusText.textContent = 'Błąd: ' + st.name.replace('<br>', ' '); status.classList.add('error'); currentIndex = -1; updateTileActive(); [playBtn, stopBtn].forEach(b => b.disabled = true); playBtn.classList.remove('active'); console.error(err); }); }
-playBtn.onclick = () => { if (currentIndex === -1) return; if (player.paused) { player.play(); playBtn.classList.add('active'); statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name.replace('<br>', ' '); status.classList.remove('error'); } else { player.pause(); playBtn.classList.remove('active'); statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' '); } };
+playBtn.onclick = () => { if (currentIndex === -1) return; if (player.paused) { player.play(); playBtn.classList.add('active'); statusText.textContent = 'Teraz gra: ' + STATIONS[currentIndex].name.replace('<br>', ' '); status.classList.remove('error'); } else { player.pause(); playBtn.classList.remove('active'); statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' '); } };
 stopBtn.onclick = () => { player.pause(); player.currentTime = 0; playBtn.classList.remove('active'); statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' '); };
 prevBtn.onclick = () => { if (currentIndex > 0) playStation(currentIndex - 1); };
 nextBtn.onclick = () => { if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1); };
