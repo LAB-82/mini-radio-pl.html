@@ -7,7 +7,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
 
-/* DODANE: tylko font-face */
 @font-face {
   font-family: 'Sketchy Times';
   src: url('https://www.fonts4free.net/sketchy-times.regular.ttf') format('truetype');
@@ -62,11 +61,11 @@ pointer-events: none;
 }
 .status-logo {
 color: #00BFFF;
-font-family: 'Sketchy Times', cursive; /* ZMIANA 1: tylko font-family */
+font-family: 'Sketchy Times', cursive;
 font-size: 33px;
 font-weight: 700;
 letter-spacing: 1px;
-text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIANA 2: currentColor zamiast rgba */
+text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor;
 }
 .grid {
 display: grid;
@@ -103,14 +102,14 @@ top: 10px;
 right: 10px;
 width: 24px;
 height: 24px;
-opacity: 0.25;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+opacity: 0; /* ZMIANA: ukryte domyślnie */
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 transition: all 0.2s;
 filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0 0 24px #00BFFF);
 }
-.tile.active::before { opacity: 1; }
+.tile.active::before { opacity: 1; } /* ZMIANA: widoczne tylko gdy aktywne */
 .tile.name {
 font-size: 27.34375px;
 font-weight: 700;
@@ -149,12 +148,12 @@ justify-content: center;
 overflow: hidden;
 }
 .bottom-text {
-font-family: 'Sketchy Times', cursive; /* ZMIANA 3: tylko font-family */
+font-family: 'Sketchy Times', cursive;
 font-size: 15px;
 font-weight: 700;
 letter-spacing: 0.5px;
 color: #00BFFF;
-text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIANA 4: currentColor zamiast rgba */
+text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor;
 pointer-events: none;
 }
 .ctrl-btn {
@@ -229,7 +228,8 @@ const STATIONS = [
 { name: 'RMF FM<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
 { name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
 { name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-{ name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+{ name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' },
+{ name: 'RMF FM<br>Smooth Jazz', url: 'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' } // DODANE
 ];
 const player = document.getElementById('player');
 const grid = document.getElementById('grid');
