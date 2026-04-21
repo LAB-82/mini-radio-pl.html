@@ -19,7 +19,7 @@
 html, body { height: 100%; overflow: hidden; }
 body {
 font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: #FFF9C4; /* ZMIANA: jasny żółty */
+background: #FFF9C4;
 color: #000;
 padding: 12px 12px 10px;
 display: flex;
@@ -62,7 +62,7 @@ z-index: 1;
 pointer-events: none;
 }
 .status-logo {
-display: none; /* ZMIANA: usunięty napis RMF FM z górnego paska */
+display: none;
 }
 .grid {
 display: grid;
@@ -119,32 +119,30 @@ color: #000;
 text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
 }
 .tile.active.name { color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF; }
-/* ZMIANA: duży napis RMF FM - pierwszy plan tła, widoczny */
+/* ZMIANA: złoty neon RMF FM pod kafelkami - widoczny desktop i mobile */
 .big-logo {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-font-family: 'Montserrat Alternates', sans-serif; /* prosta czcionka */
-font-size: 15vw; /* skaluje się z szerokością ekranu */
+font-family: 'Montserrat Alternates', sans-serif;
+font-size: 10vh;
 font-weight: 700;
 text-align: center;
-color: #FFD700; /* złoty */
+color: #FFD700;
 text-shadow:
   0 0 10px #FFD700,
   0 0 20px #FFD700,
   0 0 40px #FFA500,
-  0 0 80px #FF8C00; /* złoty neon */
-opacity: 0.3;
+  0 0 80px #FF8C00;
+opacity: 0.4;
 pointer-events: none;
-z-index: 1; /* na tle, ale przed body */
+flex-shrink: 0;
 line-height: 1;
-white-space: nowrap;
+margin: 0;
+z-index: 5;
+position: relative;
 }
 .controls {
 position: relative;
 background: #FECB00;
-padding: 12px 14px; /* ZMIANA: wyrównane, bez 52px na górze */
+padding: 12px 14px;
 border-radius: 16px;
 display: flex;
 gap: 8px;
@@ -155,15 +153,15 @@ flex-shrink: 0;
 z-index: 10;
 }
 .bottom-badge {
-display: none; /* ZMIANA: usunięty napis RMF-FM z dolnego paska */
+display: none;
 }
 .bottom-text {
 display: none;
 }
 .ctrl-btn {
 background: transparent;
-border: 1px solid #000;
-color: #000;
+border: 2px solid #FFD700; /* ZMIANA: złota ramka */
+color: #666; /* ZMIANA: szary tekst */
 padding: 0 12px;
 height: 36px;
 border-radius: 8px;
@@ -176,18 +174,23 @@ justify-content: center;
 transition: all 0.2s;
 min-width: 50px;
 font-family: 'Montserrat Alternates', sans-serif;
-text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
+text-shadow: none; /* ZMIANA: usunięte podświetlenie */
 }
-.ctrl-btn:hover { background: #000; color: #FECB00; }
+.ctrl-btn:hover { background: #000; color: #FFD700; border-color: #FFD700; }
 .ctrl-btn:active { transform: scale(0.95); }
-.ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; text-shadow: none; }
-.ctrl-btn.play { background: transparent; color: #000; min-width: 60px; border-color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF; }
-.ctrl-btn.play:hover { background: #000; color: #FECB00; }
-.ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
+.ctrl-btn:disabled { color: #999; border-color: #999; cursor: not-allowed; }
+.ctrl-btn.play {
+background: transparent;
+color: #666; /* ZMIANA: szary tekst */
+min-width: 60px;
+border: 2px solid #FFD700; /* ZMIANA: złota ramka */
+text-shadow: none; /* ZMIANA: usunięte podświetlenie */
+}
+.ctrl-btn.play:hover { background: #000; color: #FFD700; }
+.ctrl-btn.play.active { background: #FECB00; border-color: #FFD700; color: #000; }
 .ctrl-btn.mute {
 min-width: 60px;
-text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
-/* ZMIANA: usunięte margin-left: auto - teraz w jednej linii */
+text-shadow: none; /* ZMIANA: usunięte podświetlenie */
 }
 input[type="range"] {
 flex: 1;
@@ -203,7 +206,7 @@ accent-color: #000;
 .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 body { overflow: hidden; }
 .controls { flex-wrap: wrap; justify-content: center; }
-.big-logo { font-size: 18vw; opacity: 0.25; } /* ZMIANA: widoczny na telefonie */
+.big-logo { font-size: 8vh; opacity: 0.35; } /* ZMIANA: widoczny na telefonie */
 .tile { min-height: 48px; }
 .tile.name { font-size: 11px; }
 }
@@ -213,15 +216,15 @@ body { overflow: hidden; }
 <div class="status" id="status">
 <span class="status-text" id="statusText"></span>
 <div class="status-logo-wrap">
-<div class="status-logo">RMF FM</div> <!-- ukryty przez CSS -->
+<div class="status-logo">RMF FM</div>
 </div>
 <span class="clock" id="clock">00:00:00</span>
 </div>
 <div class="grid" id="grid"></div>
-<div class="big-logo">RMF FM</div> <!-- ZMIANA: widoczny, pierwszy plan tła -->
+<div class="big-logo">RMF FM</div>
 <div class="controls" id="playerControls">
 <div class="bottom-badge">
-<div class="bottom-text">RMF-FM</div> <!-- ukryty przez CSS -->
+<div class="bottom-text">RMF-FM</div>
 </div>
 <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
 <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
