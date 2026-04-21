@@ -19,7 +19,7 @@
 html, body { height: 100%; overflow: hidden; }
 body {
 font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: #f5f4f0;
+background: #E5D3B3; /* ZMIANA: piaskowy kolor tła */
 color: #000;
 padding: 12px 12px 10px;
 display: flex;
@@ -74,12 +74,13 @@ grid-auto-rows: 1fr;
 gap: 10px;
 flex: 1;
 min-height: 0;
+overflow-y: auto; /* ZMIANA: przewijanie */
 }
 .tile {
 background: #FECB00;
 border: 2px solid #000;
 border-radius: 16px;
-padding: 15px;
+padding: 7.5px; /* ZMIANA: 50% mniejszy padding 15px -> 7.5px */
 text-align: center;
 cursor: pointer;
 transition: all 0.2s;
@@ -90,7 +91,7 @@ user-select: none;
 color: #000;
 position: relative;
 overflow: hidden;
-min-height: 112px;
+min-height: 56px; /* ZMIANA: 50% mniejsza wysokość 112px -> 56px */
 }
 .tile:hover { background: #FFD633; }
 .tile:active { transform: scale(0.96); }
@@ -98,20 +99,20 @@ min-height: 112px;
 .tile::before {
 content: "";
 position: absolute;
-top: 10px;
-right: 10px;
-width: 24px;
-height: 24px;
-opacity: 0; /* ZMIANA: ukryte domyślnie */
+top: 5px; /* ZMIANA: dopasowane do mniejszego kafelka */
+right: 5px;
+width: 12px; /* ZMIANA: 50% mniejsze 24px -> 12px */
+height: 12px;
+opacity: 0;
 background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 transition: all 0.2s;
 filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0 0 24px #00BFFF);
 }
-.tile.active::before { opacity: 1; } /* ZMIANA: widoczne tylko gdy aktywne */
+.tile.active::before { opacity: 1; }
 .tile.name {
-font-size: 27.34375px;
+font-size: 13.67px; /* ZMIANA: 50% mniejszy font 27.34px -> 13.67px */
 font-weight: 700;
 line-height: 1.1;
 transition: all 0.2s;
@@ -119,6 +120,19 @@ color: #000;
 text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
 }
 .tile.active.name { color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF; }
+/* DODANE: duży napis pod kafelkami */
+.big-logo {
+font-family: 'Sketchy Times', cursive;
+font-size: 12vh; /* 50% strony w pionie */
+text-align: center;
+color: #00BFFF;
+text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
+opacity: 0.15;
+pointer-events: none;
+flex-shrink: 0;
+line-height: 1;
+margin: 5px 0;
+}
 .controls {
 position: relative;
 background: #FECB00;
@@ -184,11 +198,15 @@ text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
 input[type="range"] { flex: 1; height: 4px; cursor: pointer; min-width: 60px; accent-color: #000; }
 #playBtn { order: 1; } #stopBtn { order: 2; } #prevBtn { order: 3; } #nextBtn { order: 4; } #volume { order: 5; } #muteBtn { order: 6; }
 @media (max-width: 1100px) {.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 850px) {.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 850px) {.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } } /* ZMIANA: 3 kolumny zamiast 2 */
 @media (max-width: 640px) {
-.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } /* ZMIANA: 3 kolumny na telefonie */
+body { overflow: hidden; } /* zapobiega scrollowaniu całej strony */
 .controls { flex-wrap: wrap; justify-content: center; padding-top: 58px; }
 .ctrl-btn.mute { margin-left: 0; }
+.big-logo { font-size: 8vh; } /* mniejszy na mobile */
+.tile { min-height: 48px; } /* jeszcze mniejsze na mobile */
+.tile.name { font-size: 11px; }
 }
 </style>
 </head>
@@ -201,6 +219,7 @@ input[type="range"] { flex: 1; height: 4px; cursor: pointer; min-width: 60px; ac
 <span class="clock" id="clock">00:00:00</span>
 </div>
 <div class="grid" id="grid"></div>
+<div class="big-logo">RMF FM</div> <!-- DODANE: duży napis -->
 <div class="controls" id="playerControls">
 <div class="bottom-badge">
 <div class="bottom-text">RMF-FM</div>
@@ -229,7 +248,7 @@ const STATIONS = [
 { name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
 { name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
 { name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' },
-{ name: 'RMF FM<br>Smooth Jazz', url: 'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' } // DODANE
+{ name: 'RMF FM<br>Smooth Jazz', url: 'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' }
 ];
 const player = document.getElementById('player');
 const grid = document.getElementById('grid');
