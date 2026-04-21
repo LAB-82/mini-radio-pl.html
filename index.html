@@ -23,8 +23,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-/* Twoje istniejące style ... */
-
 .header {
   text-align: center;
   margin-bottom: 15px;
@@ -101,81 +99,39 @@ body {
   border-color: #000;
   color: #000;
 }
-.controls {
-  position: relative;
-  background: #FECB00;
-  padding: 65px 16px 12px 16px;
-  border-radius: 16px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  border: 2px solid #000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  flex-shrink: 0;
-  margin-bottom: 15px;
-  justify-content: center;
-}
-.controls::before {
-  content: "RMF-FM";
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 8px 20px;
-  font-family: 'Montserrat Alternates', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff700;
-  border-radius: 20px;
-  text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
-  border: 2px solid #fff700;
-  background: #FECB00;
-  animation: neon-glow 1.5s infinite alternate;
-  z-index: 10;
-}
-@keyframes neon-glow {
-  from {
-    text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
-  }
-  to {
-    text-shadow: 0 0 20px #fff700, 0 0 40px #fff700, 0 0 60px #fff700, 0 0 80px #fff700;
-  }
-}
-.głośnik {
-  font-size: 20px;
-  margin-top: 8px;
-  display: inline-block;
-  transition: all 0.3s;
-}
-.głośnik.przekreslony {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-/* Styl przycisków sterowania jako osobne koła z symbolami */
-.control-buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 20px;
-}
-.control-button {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #f0f0f0;
-  border: 2px solid #000;
-  font-size: 24px;
+/* Styl dla kontenera sterowania */
+.control-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+/* Przyciski typu Winamp z ikonami dźwięku */
+.control-btn {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  transition: all 0.3s;
+  font-size: 24px;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
 }
-.control-button:hover {
-  background-color: #e0e0e0;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+.control-btn:hover {
+  background: rgba(0,0,0,0.1);
+}
+.control-btn:focus {
+  outline: none;
+}
+/* Przycisk w stylu Winamp - z ikoną głośnika, wyciszenia itd. */
+#volumeIcon {
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+#volumeIcon:hover {
+  background: rgba(0,0,0,0.1);
 }
 </style>
 </head>
@@ -193,34 +149,60 @@ body {
 <div class="grid" id="grid"></div>
 
 <div class="controls" id="playerControls">
-  <button class="btn" id="playBtn" disabled>▶️</button>
-  <button class="btn" id="stopBtn" disabled>⏹️</button>
-  <button class="btn" id="prevBtn" disabled>⏮️</button>
-  <button class="btn" id="nextBtn" disabled>⏭️</button>
+  <button class="btn" id="playBtn" disabled>PLAY</button>
+  <button class="btn" id="stopBtn" disabled>STOP</button>
+  <button class="btn" id="prevBtn" disabled>PREV</button>
+  <button class="btn" id="nextBtn" disabled>NEXT</button>
   <button class="btn" id="muteBtn">🔊</button>
-  <input type="range" id="volume" min="0" max="100" value="80" />
+  <div class="control-wrapper">
+    <!-- Ikona głośnika, wyciszenia itp. -->
+    <div id="volumeIcon" title="Wycisz / Włącz dźwięk">🔊</div>
+    <!-- Suwak głośności -->
+    <input type="range" id="volume" min="0" max="100" value="80" />
+  </div>
 </div>
 
-<!-- Osobne przyciski w kształcie kółek z symbolami -->
-<div class="control-buttons">
-  <button id="btnPrev" class="control-button" title="Poprzednia" aria-label="Poprzednia">⏮️</button>
-  <button id="btnStop" class="control-button" title="Stop" aria-label="Stop">⏹️</button>
-  <button id="btnPlayPause" class="control-button" title="Play/Pauza" aria-label="Play/Pauza">▶️</button>
-  <button id="btnNext" class="control-button" title="Następna" aria-label="Następna">⏭️</button>
-  <button id="btnMute" class="control-button" title="Wycisz" aria-label="Wycisz">🔇</button>
+<!-- Nowe przyciski w stylu Winamp -->
+<div class="control-wrapper" style="margin-top: 20px;">
+  <button id="btnPrev" class="control-btn" title="Poprzednia">⏮️</button>
+  <button id="btnStop" class="control-btn" title="Stop">⏹️</button>
+  <button id="btnPlayPause" class="control-btn" title="Play/Pause">▶️</button>
+  <button id="btnNext" class="control-btn" title="Następna">⏭️</button>
+  <button id="btnMute" class="control-btn" title="Wycisz">🔇</button>
 </div>
 
 <audio id="player" crossorigin="anonymous"></audio>
 
 <script>
-// Skrypt pozostaje taki sam, tylko podpięcie pod nowe przyciski
+// Lista stacji
+const STATIONS = [
+  { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+  { name: 'RMF MAXX', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+  { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+  { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+  { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+  { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+  { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+  { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+  { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+  { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+  { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+  { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+  { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+  { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+];
+
 const player = document.getElementById('player');
+const grid = document.getElementById('grid');
+const status = document.getElementById('status');
+const statusText = document.getElementById('statusText');
+const clock = document.getElementById('clock');
 const playBtn = document.getElementById('playBtn');
 const stopBtn = document.getElementById('stopBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
-const muteBtn = document.getElementById('muteBtn');
 const volume = document.getElementById('volume');
+const muteBtn = document.getElementById('muteBtn');
 
 const btnPrev = document.getElementById('btnPrev');
 const btnStop = document.getElementById('btnStop');
@@ -229,38 +211,122 @@ const btnNext = document.getElementById('btnNext');
 const btnMute = document.getElementById('btnMute');
 
 let currentIndex = -1;
+let lastVolume = 0.8;
 let isPlaying = false;
 let isMuted = false;
-let lastVolume = 0.8;
 
 player.volume = 0.8;
 
-// Obsługa przycisków w kształcie kółek
-btnPrev.onclick = () => {
-  if (currentIndex > 0) {
-    playStation(currentIndex - 1);
-  }
-};
-btnStop.onclick = () => {
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const s = now.getSeconds().toString().padStart(2, '0');
+  clock.textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+STATIONS.forEach((st, i) => {
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.innerHTML = `<div class="name">${st.name}</div>`;
+  const icon = document.createElement('div');
+  icon.className = 'głośnik';
+  icon.innerHTML = '🔊';
+  tile.appendChild(icon);
+  tile.onclick = () => playStation(i);
+  grid.appendChild(tile);
+});
+
+function updateTileActive() {
+  document.querySelectorAll('.tile').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIndex);
+    const głośnik = t.querySelector('.głośnik');
+    if (głośnik) {
+      głośnik.style.display = (i === currentIndex && isPlaying) ? 'block' : 'none';
+      głośnik.classList.toggle('przekreslony', !(i === currentIndex && isPlaying));
+    }
+  });
+}
+
+function playStation(index) {
+  const st = STATIONS[index];
   player.pause();
-  player.currentTime = 0;
+  currentIndex = index;
+  updateTileActive();
+  statusText.textContent = 'Ładowanie: ' + st.name;
+  status.classList.remove('error');
   isPlaying = false;
-  updatePlayPauseButton();
-};
-btnPlayPause.onclick = () => {
+  player.src = st.url;
+  player.play().then(() => {
+    statusText.textContent = 'Gra: ' + st.name;
+    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+    isPlaying = true;
+    updateTileActive();
+  }).catch(err => {
+    statusText.textContent = 'Błąd: ' + st.name;
+    status.classList.add('error');
+    currentIndex = -1;
+    isPlaying = false;
+    updateTileActive();
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
+    playBtn.classList.remove('active');
+  });
+}
+
+// Przyciski z UI (stare)
+playBtn.onclick = () => {
   if (currentIndex === -1) return;
   if (player.paused) {
     player.play();
+    playBtn.classList.add('active');
+    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
   } else {
     player.pause();
+    playBtn.classList.remove('active');
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
 };
-btnNext.onclick = () => {
-  if (currentIndex < STATIONS.length - 1) {
-    playStation(currentIndex + 1);
+stopBtn.onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  playBtn.classList.remove('active');
+  if (currentIndex !== -1) {
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
 };
-btnMute.onclick = () => {
+prevBtn.onclick = () => {
+  if (currentIndex > 0) playStation(currentIndex - 1);
+};
+nextBtn.onclick = () => {
+  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
+
+// Głośność i ikona głośnika
+volume.oninput = (e) => {
+  const vol = e.target.value / 100;
+  player.volume = vol;
+  if (vol === 0) {
+    isMuted = true;
+  } else {
+    isMuted = false;
+  }
+  updateMuteIcon();
+};
+
+function updateMuteIcon() {
+  if (isMuted || player.volume === 0) {
+    document.getElementById('volumeIcon').innerHTML = '🔇';
+  } else {
+    document.getElementById('volumeIcon').innerHTML = '🔊';
+  }
+}
+
+// Klikanie ikony głośnika
+document.getElementById('volumeIcon').onclick = () => {
   if (!isMuted && player.volume > 0) {
     lastVolume = player.volume;
     player.volume = 0;
@@ -273,14 +339,38 @@ btnMute.onclick = () => {
   updateMuteIcon();
 };
 
-function updatePlayPauseButton() {
-  btnPlayPause.textContent = player.paused ? '▶️' : '⏸️';
-}
-function updateMuteIcon() {
-  btnMute.textContent = (isMuted || player.volume === 0) ? '🔇' : '🔊';
-}
-
-// Reszta kodu odtwarzania, obsługi stacji itd.
+// Nowe przyciski Winamp (sterowanie)
+document.getElementById('btnPrev').onclick = () => {
+  if (currentIndex > 0) playStation(currentIndex - 1);
+};
+document.getElementById('btnStop').onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  // Aktualizacja UI
+};
+document.getElementById('btnPlayPause').onclick = () => {
+  if (currentIndex === -1) return;
+  if (player.paused) {
+    player.play();
+  } else {
+    player.pause();
+  }
+};
+document.getElementById('btnNext').onclick = () => {
+  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
+document.getElementById('btnMute').onclick = () => {
+  if (!isMuted && player.volume > 0) {
+    lastVolume = player.volume;
+    player.volume = 0;
+    isMuted = true;
+  } else {
+    player.volume = lastVolume || 0.8;
+    isMuted = false;
+  }
+  volume.value = player.volume * 100;
+  updateMuteIcon();
+};
 </script>
 </body>
 </html>
