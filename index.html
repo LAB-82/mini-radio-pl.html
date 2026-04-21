@@ -7,7 +7,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
 
-/* DODANE: Czcionka Sketchy Times */
+/* DODANE: tylko font-face */
 @font-face {
   font-family: 'Sketchy Times';
   src: url('https://www.fonts4free.net/sketchy-times.regular.ttf') format('truetype');
@@ -62,11 +62,11 @@ pointer-events: none;
 }
 .status-logo {
 color: #00BFFF;
-font-family: 'Sketchy Times', cursive; /* ZMIENIONE */
+font-family: 'Sketchy Times', cursive; /* ZMIANA 1: tylko font-family */
 font-size: 33px;
 font-weight: 700;
 letter-spacing: 1px;
-text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIENIONE: glow w kolorze tekstu */
+text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIANA 2: currentColor zamiast rgba */
 }
 .grid {
 display: grid;
@@ -104,7 +104,7 @@ right: 10px;
 width: 24px;
 height: 24px;
 opacity: 0.25;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 transition: all 0.2s;
@@ -149,12 +149,12 @@ justify-content: center;
 overflow: hidden;
 }
 .bottom-text {
-font-family: 'Sketchy Times', cursive; /* ZMIENIONE */
+font-family: 'Sketchy Times', cursive; /* ZMIANA 3: tylko font-family */
 font-size: 15px;
 font-weight: 700;
 letter-spacing: 0.5px;
 color: #00BFFF;
-text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIENIONE: glow w kolorze tekstu */
+text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIANA 4: currentColor zamiast rgba */
 pointer-events: none;
 }
 .ctrl-btn {
@@ -198,6 +198,7 @@ input[type="range"] { flex: 1; height: 4px; cursor: pointer; min-width: 60px; ac
 <span class="status-text" id="statusText"></span>
 <div class="status-logo-wrap">
 <div class="status-logo">RMF FM</div>
+</div>
 <span class="clock" id="clock">00:00:00</span>
 </div>
 <div class="grid" id="grid"></div>
