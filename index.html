@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Mini Radio PL</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Radio</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
 
 *{margin:0;padding:0;box-sizing:border-box;}
+
 body{
 font-family:'Montserrat Alternates',sans-serif;
-background: radial-gradient(circle at top,#FFF3A0,#FFF9C4);
-color:#000;
+background:#FFF4B5;
 padding:12px;
 display:flex;
 flex-direction:column;
@@ -20,113 +20,119 @@ gap:10px;
 height:100vh;
 }
 
-/* STATUS BAR */
+/* STATUS */
 .status{
-background:linear-gradient(#FFD633,#FECB00);
+background:#FECB00;
 border:2px solid #000;
 border-radius:16px;
-padding:12px 14px;
+padding:12px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-box-shadow:0 4px 12px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,200,0,0.6);
 font-weight:700;
+box-shadow:0 4px 10px rgba(0,0,0,.3);
 }
-.status.error{background:#e22134;color:#fff;}
-.status-text::before{content:"📻 ";}
+
+/* GRID WRAPPER (CZARNY PANEL!) */
+.panel{
+background:#0d0d0d;
+border-radius:18px;
+padding:12px;
+box-shadow:
+0 10px 25px rgba(0,0,0,.6),
+inset 0 0 40px rgba(255,200,0,.15);
+}
 
 /* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:10px;
-flex:1;
-overflow:auto;
 }
 
 /* TILE */
 .tile{
-background:linear-gradient(#FFD633,#FECB00);
+background:#FECB00;
+border-radius:12px;
 border:2px solid #000;
-border-radius:14px;
-display:flex;
-align-items:center;
-justify-content:center;
+padding:12px;
+text-align:center;
 cursor:pointer;
 transition:.2s;
-position:relative;
-box-shadow:0 3px 8px rgba(0,0,0,0.25);
+font-weight:700;
 }
 
 .tile:hover{
-transform:translateY(-2px);
-box-shadow:0 6px 14px rgba(0,0,0,0.35);
+background:#FFD633;
 }
 
 .tile.active{
 background:#111;
 border-color:#FFD700;
-box-shadow:0 0 12px #FFD700, inset 0 0 10px rgba(255,215,0,0.4);
+box-shadow:
+0 0 10px #FFD700,
+0 0 25px #FFD700,
+inset 0 0 10px rgba(255,215,0,.5);
 }
 
 /* TEXT */
-.tile .name{
-font-weight:700;
-text-align:center;
-line-height:1.2;
+.tile span{
 color:#000;
 }
 
-.tile.active .name{
+.tile.active span{
 color:#FFFACD;
 text-shadow:
-0 0 5px #FFFACD,
-0 0 10px #FFD700,
-0 0 20px #FFA500;
+0 0 5px #FFD700,
+0 0 15px #FFA500,
+0 0 30px #FF8C00;
 }
 
-/* BIG LOGO */
-.big-logo{
+/* LOGO PANEL */
+.logo-box{
+background:#0d0d0d;
+border-radius:18px;
+padding:20px;
 text-align:center;
+box-shadow:
+0 10px 25px rgba(0,0,0,.6),
+inset 0 0 40px rgba(255,200,0,.2);
+}
+
+.logo{
 font-size:8vh;
+color:#FFD700;
 font-weight:700;
-color:#FFFACD;
 text-shadow:
 0 0 10px #FFD700,
-0 0 20px #FFD700,
-0 0 40px #FFA500,
-0 0 80px #FF8C00,
-0 3px 0 #000;
+0 0 30px #FFA500,
+0 0 60px #FF8C00;
 -webkit-text-stroke:2px #000;
 }
 
 /* CONTROLS */
 .controls{
-background:linear-gradient(#FFD633,#FECB00);
-border:2px solid #000;
+background:#FECB00;
 border-radius:16px;
+border:2px solid #000;
 padding:10px;
 display:flex;
 gap:8px;
 align-items:center;
-box-shadow:0 4px 12px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,200,0,0.6);
+box-shadow:0 4px 10px rgba(0,0,0,.3);
 }
 
-/* BUTTONS */
+/* BUTTON */
 .ctrl-btn{
 background:#111;
 border:2px solid #FFD700;
 color:#FFD700;
 border-radius:8px;
-height:36px;
-padding:0 12px;
-font-weight:700;
+padding:8px 12px;
 cursor:pointer;
-transition:.2s;
+font-weight:700;
 }
 
 .ctrl-btn:hover{
-background:#000;
 box-shadow:0 0 10px #FFD700;
 }
 
@@ -140,10 +146,8 @@ input[type="range"]{
 flex:1;
 height:6px;
 background:#111;
-border-radius:5px;
-appearance:none;
-outline:none;
 border:1px solid #FFD700;
+border-radius:5px;
 }
 
 input[type="range"]::-webkit-slider-thumb{
@@ -152,7 +156,6 @@ width:14px;
 height:14px;
 background:#FFD700;
 border-radius:50%;
-cursor:pointer;
 box-shadow:0 0 6px #FFD700;
 }
 
@@ -170,16 +173,20 @@ box-shadow:0 0 6px #FFD700;
 <span id="clock"></span>
 </div>
 
+<div class="panel">
 <div class="grid" id="grid"></div>
+</div>
 
-<div class="big-logo">RMF FM</div>
+<div class="logo-box">
+<div class="logo">RMF FM</div>
+</div>
 
 <div class="controls">
 <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
 <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
-<button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
-<button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
-<input type="range" id="volume" min="0" max="100" value="80"/>
+<button class="ctrl-btn" id="prevBtn">PREV</button>
+<button class="ctrl-btn" id="nextBtn">NEXT</button>
+<input type="range" id="volume" min="0" max="100" value="80">
 <button class="ctrl-btn" id="muteBtn">MUTE</button>
 </div>
 
@@ -188,46 +195,38 @@ box-shadow:0 0 6px #FFD700;
 <script>
 const STATIONS=[
 { name:'RMF FM', url:'https://rs201-krk.rmfstream.pl/rmf_fm' },
-{ name:'RMF FM Maxx', url:'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+{ name:'RMF Maxx', url:'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
 { name:'RMF 80s', url:'https://rs201-krk.rmfstream.pl/rmf_80s' },
 { name:'RMF 90s', url:'https://rs201-krk.rmfstream.pl/rmf_90s' },
-{ name:'RMF 2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' },
-{ name:'Chillout', url:'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-{ name:'Classic', url:'https://rs201-krk.rmfstream.pl/rmf_classic' },
-{ name:'Dance', url:'https://rs201-krk.rmfstream.pl/rmf_dance' },
-{ name:'Gold', url:'https://rs201-krk.rmfstream.pl/rmf_gold' },
-{ name:'Latino', url:'https://rs201-krk.rmfstream.pl/rmf_latino' }
+{ name:'RMF 2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' }
 ];
 
-const player=document.getElementById('player');
 const grid=document.getElementById('grid');
+const player=document.getElementById('player');
 const statusText=document.getElementById('statusText');
 
-let currentIndex=-1;
+let current=-1;
 
 STATIONS.forEach((s,i)=>{
-let t=document.createElement('div');
-t.className='tile';
-t.innerHTML=`<div class="name">${s.name}</div>`;
-t.onclick=()=>play(i);
-grid.appendChild(t);
+let el=document.createElement('div');
+el.className='tile';
+el.innerHTML=`<span>${s.name}</span>`;
+el.onclick=()=>play(i);
+grid.appendChild(el);
 });
-
-function updateTiles(){
-document.querySelectorAll('.tile').forEach((t,i)=>{
-t.classList.toggle('active',i===currentIndex);
-});
-}
 
 function play(i){
-const st=STATIONS[i];
-currentIndex=i;
-player.src=st.url;
+current=i;
+player.src=STATIONS[i].url;
 player.play();
-statusText.textContent="Gra: "+st.name;
-updateTiles();
-document.getElementById('playBtn').disabled=false;
-document.getElementById('stopBtn').disabled=false;
+statusText.textContent="Gra: "+STATIONS[i].name;
+update();
+}
+
+function update(){
+document.querySelectorAll('.tile').forEach((t,i)=>{
+t.classList.toggle('active',i===current);
+});
 }
 
 playBtn.onclick=()=>{
@@ -235,30 +234,18 @@ if(player.paused){player.play();}
 else{player.pause();}
 };
 
-stopBtn.onclick=()=>{
-player.pause();
-};
+stopBtn.onclick=()=>player.pause();
 
-prevBtn.onclick=()=>{
-if(currentIndex>0)play(currentIndex-1);
-};
+prevBtn.onclick=()=>{if(current>0)play(current-1);};
+nextBtn.onclick=()=>{if(current<STATIONS.length-1)play(current+1);};
 
-nextBtn.onclick=()=>{
-if(currentIndex<STATIONS.length-1)play(currentIndex+1);
-};
+volume.oninput=e=>player.volume=e.target.value/100;
 
-volume.oninput=e=>{
-player.volume=e.target.value/100;
-};
-
-muteBtn.onclick=()=>{
-player.muted=!player.muted;
-};
+muteBtn.onclick=()=>player.muted=!player.muted;
 
 /* CLOCK */
 setInterval(()=>{
-const d=new Date();
-clock.textContent=d.toLocaleTimeString();
+clock.textContent=new Date().toLocaleTimeString();
 },1000);
 </script>
 
