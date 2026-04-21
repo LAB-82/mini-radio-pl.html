@@ -21,9 +21,13 @@ body {
 }
 
 .header {
+  position: relative;
   text-align: center;
   flex-shrink: 0;
-  margin-bottom: 0;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header h1 {
@@ -37,6 +41,21 @@ body {
   color: #999;
   font-size: 16.25px;
   font-weight: 600;
+  position: relative;
+  z-index: 2;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 180px;
+  height: 46px;
+  background: url("https://i.discogs.com/DnA_zyepthmbKMSlb7t0fb6af4AKVpGzY54bk1VVvaE/rs:fit/g:sm/q:90/h:250/w:400/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWltYWdlcy9MLTcxNjgzOS0xNDA2MTI5OTkyLTM4MzcuanBlZw.jpeg") center center / contain no-repeat;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .status {
