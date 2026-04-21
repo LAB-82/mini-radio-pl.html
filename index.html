@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -99,21 +101,65 @@ body {
   border-color: #000;
   color: #000;
 }
-/* Styl dla sterowania: zostaje suwak, a zamiast niego IKONA głośnika */
-.control-volume {
+.controls {
+  position: relative;
+  background: #FECB00;
+  padding: 65px 16px 12px 16px;
+  border-radius: 16px;
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
+  border: 2px solid #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  margin-bottom: 15px;
+  justify-content: center;
 }
-#volume {
-  width: 150px; /* szerokość suwaka */
+.controls::before {
+  content: "RMF-FM";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff700;
+  border-radius: 20px;
+  text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  border: 2px solid #fff700;
+  background: #FECB00;
+  animation: neon-glow 1.5s infinite alternate;
+  z-index: 10;
 }
-
-/* Ikona głośnika styl */
-#volumeIcon {
-  font-size: 24px;
+@keyframes neon-glow {
+  from {
+    text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  }
+  to {
+    text-shadow: 0 0 20px #fff700, 0 0 40px #fff700, 0 0 60px #fff700, 0 0 80px #fff700;
+  }
+}
+.głośnik {
+  font-size: 20px;
+  margin-top: 8px;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.głośnik.przekreslony {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+#muteBtn {
+  font-size: 20px;
+  padding: 8px 12px;
   cursor: pointer;
-  user-select: none;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background: transparent;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -131,19 +177,13 @@ body {
 <div class="grid" id="grid"></div>
 
 <div class="controls" id="playerControls">
-  <button class="btn" id="playBtn" disabled>PLAY</button>
-  <button class="btn" id="stopBtn" disabled>STOP</button>
-  <button class="btn" id="prevBtn" disabled>PREV</button>
-  <button class="btn" id="nextBtn" disabled>NEXT</button>
-  <!-- Zamieniłem suwak na ikonę głośnika obok niego -->
-  <div class="control-volume">
-    <div id="volumeIcon" title="Wycisz / Włącz dźwięk">🔊</div>
-    <input type="range" id="volume" min="0" max="100" value="80" />
-  </div>
+  <button class="btn" id="playBtn" disabled>▶️</button>
+  <button class="btn" id="stopBtn" disabled⏹️</button>
+  <button class="btn" id="prevBtn" disabled>⏮️</button>
+  <button class="btn" id="nextBtn" disabled>⏭️</button>
+  <button class="btn" id="muteBtn">🔊</button>
+  <input type="range" id="volume" min="0" max="100" value="80" />
 </div>
-
-<!-- Dodatkowa ikona głośnika do obsługi wyciszenia -->
-<!-- Nie trzeba, bo od teraz ikona obsługuje wyciszenie -->
 
 <audio id="player" crossorigin="anonymous"></audio>
 
@@ -177,7 +217,6 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volume = document.getElementById('volume');
 const muteBtn = document.getElementById('muteBtn');
-const volumeIcon = document.getElementById('volumeIcon');
 
 let currentIndex = -1;
 let lastVolume = 0.8;
@@ -200,6 +239,7 @@ STATIONS.forEach((st, i) => {
   const tile = document.createElement('div');
   tile.className = 'tile';
   tile.innerHTML = `<div class="name">${st.name}</div>`;
+  // dodaj ikonę głośnika
   const icon = document.createElement('div');
   icon.className = 'głośnik';
   icon.innerHTML = '🔊';
@@ -213,6 +253,7 @@ function updateTileActive() {
     t.classList.toggle('active', i === currentIndex);
     const głośnik = t.querySelector('.głośnik');
     if (głośnik) {
+      // widoczny tylko, gdy radio gra i to jest aktualna stacja
       głośnik.style.display = (i === currentIndex && isPlaying) ? 'block' : 'none';
       głośnik.classList.toggle('przekreslony', !(i === currentIndex && isPlaying));
     }
@@ -244,19 +285,33 @@ function playStation(index) {
   });
 }
 
-// Obsługa przycisków
+// przycisk PLAY / PAUSE
 playBtn.onclick = () => {
   if (currentIndex === -1) return;
   if (player.paused) {
     player.play();
+    playBtn.classList.add('active');
+    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
   } else {
     player.pause();
+    playBtn.classList.remove('active');
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
 };
+
+// STOP
 stopBtn.onclick = () => {
   player.pause();
   player.currentTime = 0;
+  playBtn.classList.remove('active');
+  if (currentIndex !== -1) {
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+  }
+  updateTileActive();
 };
+
+// PREV / NEXT
 prevBtn.onclick = () => {
   if (currentIndex > 0) playStation(currentIndex - 1);
 };
@@ -276,38 +331,54 @@ volume.oninput = (e) => {
   updateMuteIcon();
 };
 
-// Funkcja do aktualizacji ikony wyciszenia
 function updateMuteIcon() {
-  if (player.volume === 0) {
-    volumeIcon.innerHTML = '🔇';
+  if (isMuted || player.volume === 0) {
+    // ikonka wyciszenia
+    muteBtn.innerHTML = '🔇';
   } else {
-    volumeIcon.innerHTML = '🔊';
+    muteBtn.innerHTML = '🔊';
   }
 }
 
-// Klikanie ikony głośnika wyciszania
-volumeIcon.onclick = () => {
-  if (player.volume > 0) {
+// obsługa kliknięcia MUTE
+muteBtn.onclick = () => {
+  if (!isMuted && player.volume > 0) {
     lastVolume = player.volume;
     player.volume = 0;
+    isMuted = true;
   } else {
     player.volume = lastVolume || 0.8;
+    isMuted = false;
   }
   volume.value = player.volume * 100;
   updateMuteIcon();
+  updateTileActive();
 };
 
-// Obsługa błędów odtwarzania
+// obsługa błędów
 player.onerror = () => {
   statusText.textContent = 'Błąd streamu';
   status.classList.add('error');
   currentIndex = -1;
   isPlaying = false;
   updateTileActive();
+  [playBtn, stopBtn].forEach(b => b.disabled = true);
+  playBtn.classList.remove('active');
 };
-player.addEventListener('play', () => { isPlaying = true; });
-player.addEventListener('pause', () => { isPlaying = false; });
-player.addEventListener('ended', () => { isPlaying = false; });
+
+// stan odtwarzania
+player.addEventListener('play', () => {
+  isPlaying = true;
+  updateTileActive();
+});
+player.addEventListener('pause', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+player.addEventListener('ended', () => {
+  isPlaying = false;
+  updateTileActive();
+});
 
 // Inicjalizacja
 updateTileActive();
