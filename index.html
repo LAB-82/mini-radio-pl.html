@@ -32,14 +32,12 @@ font-weight:700;
 box-shadow:0 4px 10px rgba(0,0,0,.3);
 }
 
-/* GRID WRAPPER (CZARNY PANEL!) */
+/* PANEL */
 .panel{
 background:#0d0d0d;
 border-radius:18px;
 padding:12px;
-box-shadow:
-0 10px 25px rgba(0,0,0,.6),
-inset 0 0 40px rgba(255,200,0,.15);
+box-shadow:0 10px 25px rgba(0,0,0,.6), inset 0 0 40px rgba(255,200,0,.15);
 }
 
 /* GRID */
@@ -47,6 +45,7 @@ inset 0 0 40px rgba(255,200,0,.15);
 display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:10px;
+overflow:auto;
 }
 
 /* TILE */
@@ -57,55 +56,38 @@ border:2px solid #000;
 padding:12px;
 text-align:center;
 cursor:pointer;
-transition:.2s;
 font-weight:700;
+transition:.2s;
 }
 
-.tile:hover{
-background:#FFD633;
-}
+.tile:hover{background:#FFD633;}
 
 .tile.active{
 background:#111;
 border-color:#FFD700;
-box-shadow:
-0 0 10px #FFD700,
-0 0 25px #FFD700,
-inset 0 0 10px rgba(255,215,0,.5);
+box-shadow:0 0 12px #FFD700, inset 0 0 10px rgba(255,215,0,.5);
 }
 
-/* TEXT */
-.tile span{
-color:#000;
-}
-
+.tile span{color:#000;}
 .tile.active span{
 color:#FFFACD;
-text-shadow:
-0 0 5px #FFD700,
-0 0 15px #FFA500,
-0 0 30px #FF8C00;
+text-shadow:0 0 10px #FFD700,0 0 25px #FFA500;
 }
 
-/* LOGO PANEL */
+/* LOGO */
 .logo-box{
 background:#0d0d0d;
 border-radius:18px;
 padding:20px;
 text-align:center;
-box-shadow:
-0 10px 25px rgba(0,0,0,.6),
-inset 0 0 40px rgba(255,200,0,.2);
+box-shadow:0 10px 25px rgba(0,0,0,.6), inset 0 0 40px rgba(255,200,0,.2);
 }
 
 .logo{
 font-size:8vh;
 color:#FFD700;
 font-weight:700;
-text-shadow:
-0 0 10px #FFD700,
-0 0 30px #FFA500,
-0 0 60px #FF8C00;
+text-shadow:0 0 15px #FFD700,0 0 40px #FFA500;
 -webkit-text-stroke:2px #000;
 }
 
@@ -121,7 +103,6 @@ align-items:center;
 box-shadow:0 4px 10px rgba(0,0,0,.3);
 }
 
-/* BUTTON */
 .ctrl-btn{
 background:#111;
 border:2px solid #FFD700;
@@ -132,8 +113,9 @@ cursor:pointer;
 font-weight:700;
 }
 
-.ctrl-btn:hover{
-box-shadow:0 0 10px #FFD700;
+.ctrl-btn:disabled{
+opacity:.4;
+cursor:not-allowed;
 }
 
 .ctrl-btn.play.active{
@@ -141,7 +123,6 @@ background:#FECB00;
 color:#000;
 }
 
-/* SLIDER */
 input[type="range"]{
 flex:1;
 height:6px;
@@ -156,7 +137,6 @@ width:14px;
 height:14px;
 background:#FFD700;
 border-radius:50%;
-box-shadow:0 0 6px #FFD700;
 }
 
 /* MOBILE */
@@ -184,8 +164,8 @@ box-shadow:0 0 6px #FFD700;
 <div class="controls">
 <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
 <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
-<button class="ctrl-btn" id="prevBtn">PREV</button>
-<button class="ctrl-btn" id="nextBtn">NEXT</button>
+<button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
+<button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
 <input type="range" id="volume" min="0" max="100" value="80">
 <button class="ctrl-btn" id="muteBtn">MUTE</button>
 </div>
@@ -198,50 +178,101 @@ const STATIONS=[
 { name:'RMF Maxx', url:'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
 { name:'RMF 80s', url:'https://rs201-krk.rmfstream.pl/rmf_80s' },
 { name:'RMF 90s', url:'https://rs201-krk.rmfstream.pl/rmf_90s' },
-{ name:'RMF 2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' }
+{ name:'RMF 2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' },
+{ name:'Chillout', url:'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+{ name:'Classic', url:'https://rs201-krk.rmfstream.pl/rmf_classic' },
+{ name:'Dance', url:'https://rs201-krk.rmfstream.pl/rmf_dance' },
+{ name:'Gold', url:'https://rs201-krk.rmfstream.pl/rmf_gold' },
+{ name:'Latino', url:'https://rs201-krk.rmfstream.pl/rmf_latino' },
+{ name:'Love', url:'https://rs201-krk.rmfstream.pl/rmf_love' },
+{ name:'Party', url:'https://rs201-krk.rmfstream.pl/rmf_party' },
+{ name:'Polski Rock', url:'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+{ name:'Rock', url:'https://rs201-krk.rmfstream.pl/rmf_rock' },
+{ name:'Smooth Jazz', url:'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' }
 ];
 
-const grid=document.getElementById('grid');
 const player=document.getElementById('player');
+const grid=document.getElementById('grid');
 const statusText=document.getElementById('statusText');
 
-let current=-1;
+const playBtn=document.getElementById('playBtn');
+const stopBtn=document.getElementById('stopBtn');
+const prevBtn=document.getElementById('prevBtn');
+const nextBtn=document.getElementById('nextBtn');
+const volume=document.getElementById('volume');
+const muteBtn=document.getElementById('muteBtn');
 
+let currentIndex=-1;
+player.volume=0.8;
+
+/* GRID */
 STATIONS.forEach((s,i)=>{
 let el=document.createElement('div');
 el.className='tile';
 el.innerHTML=`<span>${s.name}</span>`;
-el.onclick=()=>play(i);
+el.onclick=()=>playStation(i);
 grid.appendChild(el);
 });
 
-function play(i){
-current=i;
-player.src=STATIONS[i].url;
-player.play();
-statusText.textContent="Gra: "+STATIONS[i].name;
-update();
-}
-
-function update(){
+function updateTiles(){
 document.querySelectorAll('.tile').forEach((t,i)=>{
-t.classList.toggle('active',i===current);
+t.classList.toggle('active',i===currentIndex);
 });
 }
 
+function playStation(i){
+const st=STATIONS[i];
+player.pause();
+currentIndex=i;
+player.src=st.url;
+
+statusText.textContent="Ładowanie: "+st.name;
+
+player.play().then(()=>{
+statusText.textContent="Gra: "+st.name;
+playBtn.classList.add('active');
+[playBtn,stopBtn,prevBtn,nextBtn].forEach(b=>b.disabled=false);
+}).catch(()=>{
+statusText.textContent="Błąd";
+});
+
+updateTiles();
+}
+
+/* BUTTONS */
 playBtn.onclick=()=>{
-if(player.paused){player.play();}
-else{player.pause();}
+if(currentIndex===-1)return;
+
+if(player.paused){
+player.play();
+playBtn.classList.add('active');
+}else{
+player.pause();
+playBtn.classList.remove('active');
+}
 };
 
-stopBtn.onclick=()=>player.pause();
+stopBtn.onclick=()=>{
+player.pause();
+player.currentTime=0;
+playBtn.classList.remove('active');
+};
 
-prevBtn.onclick=()=>{if(current>0)play(current-1);};
-nextBtn.onclick=()=>{if(current<STATIONS.length-1)play(current+1);};
+prevBtn.onclick=()=>{
+if(currentIndex>0)playStation(currentIndex-1);
+};
 
-volume.oninput=e=>player.volume=e.target.value/100;
+nextBtn.onclick=()=>{
+if(currentIndex<STATIONS.length-1)playStation(currentIndex+1);
+};
 
-muteBtn.onclick=()=>player.muted=!player.muted;
+volume.oninput=e=>{
+player.volume=e.target.value/100;
+};
+
+muteBtn.onclick=()=>{
+player.muted=!player.muted;
+};
 
 /* CLOCK */
 setInterval(()=>{
