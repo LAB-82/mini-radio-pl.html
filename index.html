@@ -45,7 +45,12 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 z-index: 10;
 }
 .status.error { background: #e22134; color: #fff; border-color: #000; }
-.status-text,.clock { position: relative; z-index: 2; }
+.status-text,.clock {
+  position: relative;
+  z-index: 2;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 700;
+}
 .status-text { flex: 1; padding-right: 10px; }
 .status-text::before { content: "📻 "; font-size: 18px; }
 .clock { font-variant-numeric: tabular-nums; min-width: 80px; text-align: right; }
@@ -110,7 +115,6 @@ background-repeat: no-repeat;
 transition: all 0.2s;
 }
 .tile.active::before { opacity: 1; }
-/* Jeden pasek 45% szerokości, wyśrodkowany między liniami nazwy */
 .tile::after {
 content: "";
 position: absolute;
@@ -122,9 +126,10 @@ height: 5px;
 background: #000;
 z-index: 0;
 }
-/* POPRAWKA:.tile.name ze spacją - teraz neon działa */
+/* Nazwa stacji - taka sama czcionka jak big-logo + powiększona o 10% + podświetlenie */
 .tile.name {
-font-size: 13.67px;
+font-family: 'Montserrat Alternates', sans-serif;
+font-size: 15px;
 font-weight: 700;
 line-height: 1.15;
 transition: all 0.2s;
@@ -142,7 +147,9 @@ text-shadow:
   -2px -2px 0 #000;
 position: relative;
 z-index: 1;
-padding: 2px 6px;
+padding: 4px 8px;
+background: radial-gradient(ellipse at center, rgba(255,215,0,0.25) 0%, rgba(255,215,0,0) 70%);
+border-radius: 8px;
 }
 .tile.active.name {
 color: #FFFFFF;
@@ -157,6 +164,7 @@ text-shadow:
   -2px 2px 0 #000,
   2px -2px 0 #000,
   -2px -2px 0 #000;
+background: radial-gradient(ellipse at center, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0) 70%);
 }
 .big-logo {
 font-family: 'Montserrat Alternates', sans-serif;
@@ -251,7 +259,7 @@ body { overflow: hidden; }
 .controls { flex-wrap: wrap; justify-content: center; }
 .big-logo { font-size: 8vh; opacity: 0.8; }
 .tile { min-height: 48px; }
-.tile.name { font-size: 11px; }
+.tile.name { font-size: 12px; }
 .tile::after { height: 4px; }
 }
 </style>
