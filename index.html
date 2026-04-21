@@ -21,55 +21,45 @@ body {
 }
 
 .header {
-  position: relative;
-  background: #FECB00;
-  padding: 12px 14px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  flex-shrink: 0;
-  min-height: 70px;
-  overflow: hidden;
-}
-
-.header h1,
-.header p {
   display: none;
 }
 
-.header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 135px;
-  height: 40px;
-  background: url("https://i.discogs.com/DnA_zyepthmbKMSlb7t0fb6af4AKVpGzY54bk1VVvaE/rs:fit/g:sm/q:90/h:250/w:400/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWltYWdlcy9MLTcxNjgzOS0xNDA2MTI5OTkyLTM4MzcuanBlZw.jpeg") center center / contain no-repeat;
-  opacity: 0.32;
-  pointer-events: none;
-  z-index: 1;
-  filter: drop-shadow(0 0 10px #00BFFF) drop-shadow(0 0 18px #00BFFF);
-}
-
 .status {
+  position: relative;
   background: #FECB00;
   color: #000;
-  padding: 12px 18px;
-  border-radius: 12px;
-  font-size: 17.5px;
+  padding: 10px 16px;
+  border-radius: 16px;
   border: 2px solid #000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 40px;
+  min-height: 70px;
   font-weight: 700;
   flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.status::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 118px;
+  height: 118px;
+  transform: translate(-50%, -50%);
+  background: url("https://i.discogs.com/DnA_zyepthmbKMSlb7t0fb6af4AKVpGzY54bk1VVvaE/rs:fit/g:sm/q:90/h:250/w:400/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWltYWdlcy9MLTcxNjgzOS0xNDA2MTI5OTkyLTM4MzcuanBlZw.jpeg") center center / contain no-repeat;
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .status.error { background: #e22134; color: #fff; border-color: #000; }
+.status-text, .clock {
+  position: relative;
+  z-index: 2;
+}
 .status-text { flex: 1; }
 .clock {
   font-variant-numeric: tabular-nums;
@@ -195,213 +185,4 @@ body {
   border-color: #000;
   text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
 }
-.ctrl-btn.play:hover { background: #000; color: #FECB00; }
-.ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
-
-.ctrl-btn.mute {
-  min-width: 60px;
-  text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
-  margin-left: auto;
-}
-
-input[type="range"] {
-  flex: 1;
-  height: 4px;
-  cursor: pointer;
-  min-width: 60px;
-  accent-color: #000;
-}
-
-#playBtn { order: 1; }
-#stopBtn { order: 2; }
-#prevBtn { order: 3; }
-#nextBtn { order: 4; }
-#volume { order: 5; }
-#muteBtn { order: 6; }
-
-@media (max-width: 1100px) {
-  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-@media (max-width: 850px) {
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-
-@media (max-width: 640px) {
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .controls {
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-top: 58px;
-  }
-  .ctrl-btn.mute {
-    margin-left: 0;
-  }
-}
-</style>
-</head>
-<body>
-<div class="header">
-  <h1>Mini Radio PL</h1>
-  <p>RMF RMF • Tylko najlepsze stacje</p>
-</div>
-
-<div class="status" id="status">
-  <span class="status-text" id="statusText"></span>
-  <span class="clock" id="clock">00:00:00</span>
-</div>
-
-<div class="grid" id="grid"></div>
-
-<div class="controls" id="playerControls">
-  <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
-  <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
-  <button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
-  <button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
-  <input type="range" id="volume" min="0" max="100" value="80" />
-  <button class="ctrl-btn mute" id="muteBtn">MUTE</button>
-</div>
-
-<audio id="player" crossorigin="anonymous"></audio>
-
-<script>
-const STATIONS = [
-{ name: 'RMF FM<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
-{ name: 'RMF FM<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-{ name: 'RMF FM<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
-{ name: 'RMF FM<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
-{ name: 'RMF FM<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
-{ name: 'RMF FM<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-{ name: 'RMF FM<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
-{ name: 'RMF FM<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
-{ name: 'RMF FM<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
-{ name: 'RMF FM<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
-{ name: 'RMF FM<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
-{ name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
-{ name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-{ name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
-];
-
-const player = document.getElementById('player');
-const grid = document.getElementById('grid');
-const status = document.getElementById('status');
-const statusText = document.getElementById('statusText');
-const clock = document.getElementById('clock');
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('stopBtn');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const volume = document.getElementById('volume');
-const muteBtn = document.getElementById('muteBtn');
-
-let currentIndex = -1;
-let lastVolume = 0.8;
-player.volume = 0.8;
-
-function updateClock() {
-  const now = new Date();
-  const h = now.getHours().toString().padStart(2, '0');
-  const m = now.getMinutes().toString().padStart(2, '0');
-  const s = now.getSeconds().toString().padStart(2, '0');
-  clock.textContent = `${h}:${m}:${s}`;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-STATIONS.forEach((st, i) => {
-  const tile = document.createElement('div');
-  tile.className = 'tile';
-  tile.innerHTML = `<div class="name">${st.name}</div>`;
-  tile.onclick = () => playStation(i);
-  grid.appendChild(tile);
-});
-
-function updateTileActive() {
-  document.querySelectorAll('.tile').forEach((t, i) => {
-    t.classList.toggle('active', i === currentIndex);
-  });
-}
-
-function playStation(index) {
-  const st = STATIONS[index];
-  player.pause();
-  currentIndex = index;
-  updateTileActive();
-  statusText.textContent = 'Ładowanie: ' + st.name.replace('<br>', ' ');
-  status.classList.remove('error');
-  player.src = st.url;
-  player.play().then(() => {
-    statusText.textContent = 'Gra: ' + st.name.replace('<br>', ' ');
-    playBtn.classList.add('active');
-    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
-  }).catch(err => {
-    statusText.textContent = 'Błąd: ' + st.name.replace('<br>', ' ');
-    status.classList.add('error');
-    currentIndex = -1;
-    updateTileActive();
-    [playBtn, stopBtn].forEach(b => b.disabled = true);
-    playBtn.classList.remove('active');
-    console.error(err);
-  });
-}
-
-playBtn.onclick = () => {
-  if (currentIndex === -1) return;
-  if (player.paused) {
-    player.play();
-    playBtn.classList.add('active');
-    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
-    status.classList.remove('error');
-  } else {
-    player.pause();
-    playBtn.classList.remove('active');
-    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
-  }
-};
-
-stopBtn.onclick = () => {
-  player.pause();
-  player.currentTime = 0;
-  playBtn.classList.remove('active');
-  statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
-};
-
-prevBtn.onclick = () => {
-  if (currentIndex > 0) playStation(currentIndex - 1);
-};
-
-nextBtn.onclick = () => {
-  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
-};
-
-volume.oninput = (e) => {
-  const vol = e.target.value / 100;
-  player.volume = vol;
-  lastVolume = vol;
-  muteBtn.textContent = vol === 0 ? 'UNMUTE' : 'MUTE';
-};
-
-muteBtn.onclick = () => {
-  if (player.volume > 0) {
-    lastVolume = player.volume;
-    player.volume = 0;
-    volume.value = 0;
-    muteBtn.textContent = 'UNMUTE';
-  } else {
-    player.volume = lastVolume;
-    volume.value = lastVolume * 100;
-    muteBtn.textContent = 'MUTE';
-  }
-};
-
-player.onerror = () => {
-  statusText.textContent = 'Błąd streamu';
-  status.classList.add('error');
-  currentIndex = -1;
-  updateTileActive();
-  [playBtn, stopBtn].forEach(b => b.disabled = true);
-  playBtn.classList.remove('active');
-};
-</script>
-</body>
-</html>
+.ctrl-btn.play:hover { background: #000; 
