@@ -2,195 +2,415 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<title>Muzyczne Radio PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini Radio PL</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  background-color: #fff700;
+  overflow: hidden;
+}
+body {
+  font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #000;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.header h1 {
+  font-size: 30px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.header p {
+  color: #999;
+  font-size: 16.25px;
+  font-weight: 600;
+}
+.status {
+  background: #FECB00;
+  color: #000;
+  padding: 12px 2.5cm;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  font-size: 17.5px;
+  border: 2px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px;
+  font-weight: 700;
+}
+.status.error {
+  background: #e22134;
+  color: #fff;
+}
+.status-text {
+  flex: 1;
+}
+.clock {
+  font-variant-numeric: tabular-nums;
+  min-width: 60px;
+  text-align: right;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 15px;
+}
+.tile {
+  background: #FECB00;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  color: #000;
+  position: relative;
+  height: 100px;
+}
+.tile:hover {
+  background: #FFD633;
+}
+.tile:active {
+  transform: scale(0.96);
+}
+.tile.active {
+  background: #FECB00;
+  border-color: #000;
+  color: #000;
+}
+.controls {
+  position: relative;
+  background: #FECB00;
+  padding: 65px 16px 12px 16px;
+  border-radius: 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 2px solid #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+.controls::before {
+  content: "RMF-FM";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff700;
+  border-radius: 20px;
+  text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  border: 2px solid #fff700;
+  background: #FECB00;
+  animation: neon-glow 1.5s infinite alternate;
+  z-index: 10;
+}
+@keyframes neon-glow {
+  from {
+    text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  }
+  to {
+    text-shadow: 0 0 20px #fff700, 0 0 40px #fff700, 0 0 60px #fff700, 0 0 80px #fff700;
+  }
+}
+.głośnik {
+  font-size: 20px;
+  margin-top: 8px;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.głośnik.przekreslony {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+#muteBtn {
+  font-size: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background: transparent;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 600;
+}
+
+/* Nowe przyciski - styl (opcjonalnie można dostosować) */
+.extra-buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.extra-buttons button {
+  width: 60px;
+  padding: 6px;
+  font-size: 14px;
+}
+</style>
 </head>
-<body style="margin:0; background:#000; height:100vh; overflow:hidden; font-family:Arial,sans-serif; display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box;">
-<div style="width:100%; max-width:900px; max-height:calc(100vh - 20px); background:#1a1a1a; border:4px solid #ff2a2a; border-radius:12px; box-shadow:0 0 40px rgba(255,42,0.5); box-sizing:border-box; display:flex; flex-direction:column;">
-  <div style="background:#0a0a0a; flex:1; margin:8px; border-radius:8px; border:1px solid #333; padding:12px; display:flex; flex-direction:column; box-shadow:inset 0 0 25px #000; overflow:hidden;">
-    <!-- Górna część: nazwa, scale, equalizer -->
-    <div style="width:fit-content; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
-      <div style="color:#3399ff; font-size:clamp(28px,6vw,52px); text-align:center; margin-bottom:8px; text-shadow:0 0 10px #3399ff, 0 0 20px #3399ff; font-weight:bold; letter-spacing:3px; flex-shrink:0; white-space:nowrap;">
-        Radio Zet
-      </div>
-      <div id="scale" style="width:100%; height:45px; min-height:45px; max-height:45px; background:#1a0505; border:2px solid #ff2a2a; border-radius:4px; margin-bottom:8px; position:relative; flex-shrink:0;">
-        <div style="position:absolute; width:100%; height:100%; background:repeating-linear-gradient(90deg, transparent, transparent 9%, #ff000040 9%, #ff000040 10%);"></div>
-        <div style="position:absolute; width:100%; text-align:center; top:50%; transform:translateY(-50%); color:#ff6a3a; font-size:11px; text-shadow:0 0 8px #ff3300; display:flex; justify-content:space-between; padding:0 5%; box-sizing:border-box;">
-          <span>88</span><span>92</span><span>96</span><span>100</span><span id="pos104">104</span><span id="pos108">108</span>
-        </div>
-        <div id="needle" style="position:absolute; top:0px; width:4px; height:42px; background:#ff2a2a; box-shadow:0 0 12px #ff2a2a; transform:translateX(-50%); display:none;"></div>
-        <div id="needleLabel" style="position:absolute; bottom:-2px; transform:translateX(-50%); color:#ff2a2a; font-size:10px; font-weight:bold; text-shadow:0 0 8px red; display:none;">105.8 FM</div>
-      </div>
-      <canvas id="eq" style="width:100%; height:100px; min-height:100px; max-height:100px; background:#000; border:2px solid #ff2a2a; border-radius:6px; display:block; margin-bottom:10px; flex-shrink:0;"></canvas>
-    </div>
-    <!-- Dolna część: przyciski, głośnik, regulacja -->
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex:1; min-height:0; padding:0 1.5cm; padding-bottom:1.5cm; position:relative;">
-      <!-- Głośnik -->
-      <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
-      <!-- Przyciski ON, OFF, STOP, MUTE i głośność -->
-      <div style="display:flex; flex-direction:column; align-items:center; height:clamp(90px,18vw,130px); justify-content:space-between;">
-        <div style="display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap;">
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">ON</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">OFF</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">STOP</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">MUTE</button>
-          <!-- 10 dodatkowych przycisków -->
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk1</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk2</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk3</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk4</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk5</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk6</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk7</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk8</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk9</button>
-          <button style="width:60px; height:60px; border-radius:50%; background:#333; color:#ddd; font-weight:bold;">Przycisk10</button>
-        </div>
-        <!-- Głośność -->
-        <div id="volKnob" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); display:flex; align-items:center; justify-content:center; user-select:none; touch-action:none; margin-top:10px; position:relative;">
-            <div id="volIndicator" style="position:absolute; top:5px; left:50%; width:3px; height:11px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a; transform-origin:50% 24px; transform:translateX(-50%) rotate(0deg);"></div>
-            VOL
-        </div>
-      </div>
-      <!-- Drugi głośnik -->
-      <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
-    </div>
+<body>
+<div class="header">
+  <h1>Mini Radio PL</h1>
+  <p>RMF RMF • Tylko najlepsze stacje</p>
+</div>
+
+<div class="status" id="status">
+  <span class="status-text" id="statusText"></span>
+  <span class="clock" id="clock">00:00:00</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="controls" id="playerControls">
+  <button class="btn" id="playBtn" disabled>▶️</button>
+  <button class="btn" id="stopBtn" disabled>⏹️</button>
+  <button class="btn" id="prevBtn" disabled>⏮️</button>
+  <button class="btn" id="nextBtn" disabled>⏭️</button>
+  <button class="btn" id="muteBtn">🔊</button>
+  <input type="range" id="volume" min="0" max="100" value="80" />
+
+  <!-- Dodajemy 14 przycisków bez funkcji -->
+  <div class="extra-buttons">
+    <button>Przycisk1</button>
+    <button>Przycisk2</button>
+    <button>Przycisk3</button>
+    <button>Przycisk4</button>
+    <button>Przycisk5</button>
+    <button>Przycisk6</button>
+    <button>Przycisk7</button>
+    <button>Przycisk8</button>
+    <button>Przycisk9</button>
+    <button>Przycisk10</button>
+    <button>Przycisk11</button>
+    <button>Przycisk12</button>
+    <button>Przycisk13</button>
+    <button>Przycisk14</button>
   </div>
 </div>
-<!-- Odtwarzacz audio -->
-<audio id="audio" crossorigin="anonymous" src="https://stream.rcs.revma.com/gzwc1xcq042vv" preload="none"></audio>
+
+<audio id="player" crossorigin="anonymous"></audio>
+
 <script>
-  // Elementy
-  const audio = document.getElementById('audio');
-  const ctxCanvas = document.getElementById('eq');
-  const ctx = ctxCanvas.getContext('2d');
+// Lista stacji
+const STATIONS = [
+  { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+  { name: 'RMF MAXX', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+  { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+  { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+  { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+  { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+  { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+  { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+  { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+  { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+  { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+  { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+  { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+  { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+];
 
-  // Inicjalizacja
-  let audioCtx, analyser, source, dataArray, animationId;
-  let isPlaying = false;
+const player = document.getElementById('player');
+const grid = document.getElementById('grid');
+const status = document.getElementById('status');
+const statusText = document.getElementById('statusText');
+const clock = document.getElementById('clock');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const volume = document.getElementById('volume');
+const muteBtn = document.getElementById('muteBtn');
 
-  function initAudio(){
-    if(audioCtx) return;
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      source = audioCtx.createMediaElementSource(audio);
-      analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64;
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
-    } catch(e){
-      console.warn("Analyser nie działa:", e);
-    }
-  }
+let currentIndex = -1;
+let lastVolume = 0.8;
+let isPlaying = false;
+let isMuted = false;
 
-  // Przyciski
-  document.querySelectorAll('button').forEach(btn => {
-    if(btn.textContent==='ON'){
-      btn.onclick=()=>{ initAudio(); if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); audio.play(); isPlaying=true; draw(); };
-    } else if(btn.textContent==='OFF'){
-      btn.onclick=()=>{ audio.pause(); isPlaying=false; cancelAnimationFrame(animationId); drawStatic(); };
-    } else if(btn.textContent==='STOP'){
-      btn.onclick=()=>{ audio.pause(); isPlaying=false; cancelAnimationFrame(animationId); drawStatic(); };
-    } else if(btn.textContent==='MUTE'){
-      btn.onclick=()=>{ audio.muted=!audio.muted; };
+player.volume = 0.8;
+
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const s = now.getSeconds().toString().padStart(2, '0');
+  clock.textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+STATIONS.forEach((st, i) => {
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.innerHTML = `<div class="name">${st.name}</div>`;
+  // ikonka głośnika
+  const icon = document.createElement('div');
+  icon.className = 'głośnik';
+  icon.innerHTML = '🔊';
+  tile.appendChild(icon);
+  tile.onclick = () => playStation(i);
+  grid.appendChild(tile);
+});
+
+function updateTileActive() {
+  document.querySelectorAll('.tile').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIndex);
+    const głośnik = t.querySelector('.głośnik');
+    if (głośnik) {
+      głośnik.style.display = (i === currentIndex && isPlaying) ? 'block' : 'none';
+      głośnik.classList.toggle('przekreslony', !(i === currentIndex && isPlaying));
     }
   });
+}
 
-  // Głośność
-  let lastAngle = 0;
-  let dragging = false;
+function playStation(index) {
+  const st = STATIONS[index];
+  player.pause();
+  currentIndex = index;
+  updateTileActive();
+  statusText.textContent = 'Ładowanie: ' + st.name;
+  status.classList.remove('error');
+  isPlaying = false;
+  player.src = st.url;
+  player.play().then(() => {
+    statusText.textContent = 'Gra: ' + st.name;
+    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+    isPlaying = true;
+    updateTileActive();
+  }).catch(err => {
+    statusText.textContent = 'Błąd: ' + st.name;
+    status.classList.add('error');
+    currentIndex = -1;
+    isPlaying = false;
+    updateTileActive();
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
+    playBtn.classList.remove('active');
+  });
+}
 
-  function updateVolumeRotation(angle) {
-    angle = Math.max(-135, Math.min(135, angle));
-    lastAngle = angle;
-    document.getElementById('volIndicator').style.transform = 'translateX(-50%) rotate(' + angle + 'deg)';
-    const volumePercent = (angle + 135) / 270;
-    audio.volume = volumePercent;
+// przycisk PLAY / PAUSE
+playBtn.onclick = () => {
+  if (currentIndex === -1) return;
+  if (player.paused) {
+    player.play();
+    playBtn.classList.add('active');
+    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
+  } else {
+    player.pause();
+    playBtn.classList.remove('active');
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
+};
 
-  function volMove(e) {
-    if(!dragging) return;
-    const rect = document.getElementById('volKnob').getBoundingClientRect();
-    const cx = rect.left + rect.width/2;
-    const cy = rect.top + rect.height/2;
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - cx;
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - cy;
-    let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
-    if(angle > 180) angle -= 360;
-    if(angle < -180) angle += 360;
-
-    if(lastAngle < -90 && angle > 90) angle = -135;
-    if(lastAngle > 90 && angle < -90) angle = 135;
-
-    updateVolumeRotation(angle);
+// STOP
+stopBtn.onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  playBtn.classList.remove('active');
+  if (currentIndex !== -1) {
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
   }
+  updateTileActive();
+};
 
-  document.getElementById('volKnob').addEventListener('mousedown', e => { dragging=true; volMove(e); e.preventDefault(); });
-  document.getElementById('volKnob').addEventListener('touchstart', e => { dragging=true; volMove(e); e.preventDefault(); });
-  document.addEventListener('mousemove', e => { if(dragging) volMove(e); });
-  document.addEventListener('touchmove', e => { if(dragging) volMove(e); e.preventDefault(); });
-  document.addEventListener('mouseup', () => { dragging=false; });
-  document.addEventListener('touchend', () => { dragging=false; });
-  updateVolumeRotation(0);
+// PREV / NEXT
+prevBtn.onclick = () => {
+  if (currentIndex > 0) playStation(currentIndex - 1);
+};
+nextBtn.onclick = () => {
+  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
 
-  // Rysowanie statycznego equalizera
-  function drawStatic() {
-    ctx.canvas.width = ctxCanvas.offsetWidth;
-    ctx.canvas.height = 100;
-    ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
-    const bars=12;
-    const barWidth = ctx.canvas.width / bars;
-    const ledH=6;
-    const ledGap=2;
-    for(let i=0; i<bars; i++){
-      for(let j=0; j<10; j++){
-        const y= ctx.canvas.height - (j+1)*(ledH+ledGap);
-        ctx.fillStyle='#1a0000';
-        ctx.fillRect(i*barWidth+2, y, barWidth-4, ledH);
-      }
-    }
+// Głośność
+volume.oninput = (e) => {
+  const vol = e.target.value / 100;
+  player.volume = vol;
+  if (vol === 0) {
+    isMuted = true;
+  } else {
+    isMuted = false;
   }
+  updateMuteIcon();
+};
 
-  // Rysowanie z analizą dźwięku
-  function draw() {
-    if(!analyser || !isPlaying) {
-      cancelAnimationFrame(animationId);
-      drawStatic();
-      return;
-    }
-    animationId = requestAnimationFrame(draw);
-    ctx.canvas.width=ctxCanvas.offsetWidth;
-    ctx.canvas.height=100;
-    analyser.getByteFrequencyData(dataArray);
-    ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
-    const bars=12;
-    const barWidth= ctx.canvas.width / bars;
-    const ledH=6;
-    const ledGap=2;
-    for(let i=0; i<bars; i++){
-      let value = (dataArray[i*2]||0)/255;
-      let leds = Math.floor(value * 10);
-      for(let j=0; j<10; j++){
-        const y= ctx.canvas.height - (j+1)*(ledH+ledGap);
-        if(j<leds){
-          const g = ctx.createLinearGradient(0,y+ledH,0,y);
-          g.addColorStop(0,'#ff0000');
-          g.addColorStop(1,'#ff6666');
-          ctx.fillStyle=g;
-          ctx.shadowBlur=8;
-          ctx.shadowColor='#ff0000';
-        } else {
-          ctx.fillStyle='#1a0000';
-          ctx.shadowBlur=0;
-        }
-        ctx.fillRect(i*barWidth+2,y,barWidth-4,ledH);
-      }
-    }
-    ctx.shadowBlur=0;
+function updateMuteIcon() {
+  if (isMuted || player.volume === 0) {
+    // ikonka wyciszenia
+    muteBtn.innerHTML = '🔇';
+  } else {
+    muteBtn.innerHTML = '🔊';
   }
+}
 
-  drawStatic();
+// obsługa kliknięcia MUTE
+muteBtn.onclick = () => {
+  if (!isMuted && player.volume > 0) {
+    lastVolume = player.volume;
+    player.volume = 0;
+    isMuted = true;
+  } else {
+    player.volume = lastVolume || 0.8;
+    isMuted = false;
+  }
+  volume.value = player.volume * 100;
+  updateMuteIcon();
+  updateTileActive();
+};
+
+// obsługa błędów
+player.onerror = () => {
+  statusText.textContent = 'Błąd streamu';
+  status.classList.add('error');
+  currentIndex = -1;
+  isPlaying = false;
+  updateTileActive();
+  [playBtn, stopBtn].forEach(b => b.disabled = true);
+  playBtn.classList.remove('active');
+};
+
+// stan odtwarzania
+player.addEventListener('play', () => {
+  isPlaying = true;
+  updateTileActive();
+});
+player.addEventListener('pause', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+player.addEventListener('ended', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+
+// Inicjalizacja
+updateTileActive();
 </script>
 </body>
 </html>
