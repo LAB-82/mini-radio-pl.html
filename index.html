@@ -42,7 +42,7 @@ font-weight: 700;
 flex-shrink: 0;
 overflow: hidden;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-z-index: 2;
+z-index: 10;
 }
 .status.error { background: #e22134; color: #fff; border-color: #000; }
 .status-text,.clock { position: relative; z-index: 2; }
@@ -62,7 +62,7 @@ z-index: 1;
 pointer-events: none;
 }
 .status-logo {
-display: none; /* ZMIANA: ukryty napis RMF FM z górnego paska */
+display: none; /* ZMIANA: usunięty napis RMF FM z górnego paska */
 }
 .grid {
 display: grid;
@@ -72,7 +72,7 @@ gap: 10px;
 flex: 1;
 min-height: 0;
 overflow-y: auto;
-z-index: 2;
+z-index: 10;
 position: relative;
 }
 .tile {
@@ -119,32 +119,32 @@ color: #000;
 text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
 }
 .tile.active.name { color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF; }
-/* ZMIANA: duży napis RMF FM na pierwszy plan tła */
+/* ZMIANA: duży napis RMF FM - pierwszy plan tła, widoczny */
 .big-logo {
-position: absolute;
+position: fixed;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
-font-family: 'Montserrat Alternates', sans-serif; /* ZMIANA: prosta czcionka */
-font-size: 20vh; /* 50% strony */
+font-family: 'Montserrat Alternates', sans-serif; /* prosta czcionka */
+font-size: 15vw; /* skaluje się z szerokością ekranu */
 font-weight: 700;
 text-align: center;
-color: #FFD700; /* ZMIANA: złoty */
+color: #FFD700; /* złoty */
 text-shadow:
   0 0 10px #FFD700,
   0 0 20px #FFD700,
   0 0 40px #FFA500,
-  0 0 80px #FF8C00; /* ZMIANA: złoty neon */
-opacity: 0.25;
+  0 0 80px #FF8C00; /* złoty neon */
+opacity: 0.3;
 pointer-events: none;
-z-index: 0; /* tło */
+z-index: 1; /* na tle, ale przed body */
 line-height: 1;
 white-space: nowrap;
 }
 .controls {
 position: relative;
 background: #FECB00;
-padding: 12px 14px; /* ZMIANA: wyrównany padding, bez 52px na górze */
+padding: 12px 14px; /* ZMIANA: wyrównane, bez 52px na górze */
 border-radius: 16px;
 display: flex;
 gap: 8px;
@@ -152,10 +152,10 @@ align-items: center;
 border: 2px solid #000;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 flex-shrink: 0;
-z-index: 2;
+z-index: 10;
 }
 .bottom-badge {
-display: none; /* ZMIANA: ukryty napis RMF-FM z dolnego paska */
+display: none; /* ZMIANA: usunięty napis RMF-FM z dolnego paska */
 }
 .bottom-text {
 display: none;
@@ -187,7 +187,7 @@ text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
 .ctrl-btn.mute {
 min-width: 60px;
 text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
-/* ZMIANA: usunięte margin-left: auto; teraz w jednej linii */
+/* ZMIANA: usunięte margin-left: auto - teraz w jednej linii */
 }
 input[type="range"] {
 flex: 1;
@@ -203,7 +203,7 @@ accent-color: #000;
 .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 body { overflow: hidden; }
 .controls { flex-wrap: wrap; justify-content: center; }
-.big-logo { font-size: 12vh; }
+.big-logo { font-size: 18vw; opacity: 0.25; } /* ZMIANA: widoczny na telefonie */
 .tile { min-height: 48px; }
 .tile.name { font-size: 11px; }
 }
@@ -218,7 +218,7 @@ body { overflow: hidden; }
 <span class="clock" id="clock">00:00:00</span>
 </div>
 <div class="grid" id="grid"></div>
-<div class="big-logo">RMF FM</div> <!-- ZMIANA: na pierwszym planie tła -->
+<div class="big-logo">RMF FM</div> <!-- ZMIANA: widoczny, pierwszy plan tła -->
 <div class="controls" id="playerControls">
 <div class="bottom-badge">
 <div class="bottom-text">RMF-FM</div> <!-- ukryty przez CSS -->
