@@ -110,7 +110,7 @@ background-repeat: no-repeat;
 transition: all 0.2s;
 }
 .tile.active::before { opacity: 1; }
-/* POPRAWKA: tylko jeden pasek, skrócony o 50%, wyśrodkowany */
+/* ZMIANA: tylko jeden pasek, skrócony o 50% do 45%, wyśrodkowany między częściami nazwy */
 .tile::after {
 content: "";
 position: absolute;
@@ -122,19 +122,20 @@ height: 5px;
 background: #000;
 z-index: 0;
 }
+/* POPRAWKA: selektor.tile.name zamiast.tile.name */
 .tile.name {
 font-size: 13.67px;
 font-weight: 700;
 line-height: 1.15;
 transition: all 0.2s;
-color: #FFF4B8;
+color: #FFFACD;
 text-shadow:
-  0 0 4px #FFF4B8,
-  0 0 8px #FFD700,
-  0 0 16px #FFD700,
-  0 0 32px #FFA500,
-  0 0 48px #FF8C00,
+  0 0 5px #FFFACD,
+  0 0 10px #FFD700,
+  0 0 20px #FFD700,
+  0 0 40px #FFA500,
   0 0 70px #FF8C00,
+  0 0 100px #FF8C00,
   2px 2px 0 #000,
   -2px 2px 0 #000,
   2px -2px 0 #000,
@@ -144,14 +145,14 @@ z-index: 1;
 padding: 2px 6px;
 }
 .tile.active.name {
-color: #FFFFE0;
+color: #FFFFFF;
 text-shadow:
-  0 0 6px #FFFFE0,
-  0 0 12px #FFD700,
-  0 0 24px #FFD700,
-  0 0 48px #FFA500,
-  0 0 80px #FF8C00,
-  0 0 110px #FF8C00,
+  0 0 8px #FFFFFF,
+  0 0 16px #FFD700,
+  0 0 32px #FFD700,
+  0 0 64px #FFA500,
+  0 0 100px #FF8C00,
+  0 0 140px #FF8C00,
   2px 2px 0 #000,
   -2px 2px 0 #000,
   2px -2px 0 #000,
@@ -162,14 +163,14 @@ font-family: 'Montserrat Alternates', sans-serif;
 font-size: 10vh;
 font-weight: 700;
 text-align: center;
-color: #FFF4B8;
+color: #FFFACD;
 text-shadow:
-  0 0 8px #FFF4B8,
-  0 0 16px #FFD700,
-  0 0 32px #FFD700,
-  0 0 64px #FFA500,
-  0 0 100px #FF8C00,
-  0 0 140px #FF8C00,
+  0 0 10px #FFFACD,
+  0 0 20px #FFD700,
+  0 0 40px #FFD700,
+  0 0 80px #FFA500,
+  0 0 120px #FF8C00,
+  0 0 160px #FF8C00,
   0 2px 0 #000,
   0 4px 8px rgba(0,0,0,0.8);
 -webkit-text-stroke: 2px #000;
