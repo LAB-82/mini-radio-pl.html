@@ -6,6 +6,16 @@
 <title>Mini Radio PL</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
+
+/* DODANE: Czcionka Sketchy Times */
+@font-face {
+  font-family: 'Sketchy Times';
+  src: url('https://www.fonts4free.net/sketchy-times.regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; overflow: hidden; }
 body {
@@ -34,7 +44,7 @@ overflow: hidden;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 .status.error { background: #e22134; color: #fff; border-color: #000; }
-.status-text, .clock { position: relative; z-index: 2; }
+.status-text,.clock { position: relative; z-index: 2; }
 .status-text { flex: 1; padding-right: 10px; }
 .clock { font-variant-numeric: tabular-nums; min-width: 80px; text-align: right; }
 .status-logo-wrap {
@@ -52,11 +62,11 @@ pointer-events: none;
 }
 .status-logo {
 color: #00BFFF;
-font-family: 'Montserrat Alternates', sans-serif;
+font-family: 'Sketchy Times', cursive; /* ZMIENIONE */
 font-size: 33px;
 font-weight: 700;
 letter-spacing: 1px;
-text-shadow: 0 0 5px rgba(0,191,255,0.75), 0 0 10px rgba(0,191,255,0.55);
+text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIENIONE: glow w kolorze tekstu */
 }
 .grid {
 display: grid;
@@ -139,12 +149,12 @@ justify-content: center;
 overflow: hidden;
 }
 .bottom-text {
-font-family: 'Montserrat Alternates', sans-serif;
+font-family: 'Sketchy Times', cursive; /* ZMIENIONE */
 font-size: 15px;
 font-weight: 700;
 letter-spacing: 0.5px;
 color: #00BFFF;
-text-shadow: 0 0 5px rgba(0,191,255,0.75), 0 0 10px rgba(0,191,255,0.55);
+text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor; /* ZMIENIONE: glow w kolorze tekstu */
 pointer-events: none;
 }
 .ctrl-btn {
@@ -174,8 +184,8 @@ text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
 .ctrl-btn.mute { min-width: 60px; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF; margin-left: auto; }
 input[type="range"] { flex: 1; height: 4px; cursor: pointer; min-width: 60px; accent-color: #000; }
 #playBtn { order: 1; } #stopBtn { order: 2; } #prevBtn { order: 3; } #nextBtn { order: 4; } #volume { order: 5; } #muteBtn { order: 6; }
-@media (max-width: 1100px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 850px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1100px) {.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 850px) {.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 640px) {
 .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .controls { flex-wrap: wrap; justify-content: center; padding-top: 58px; }
@@ -188,7 +198,6 @@ input[type="range"] { flex: 1; height: 4px; cursor: pointer; min-width: 60px; ac
 <span class="status-text" id="statusText"></span>
 <div class="status-logo-wrap">
 <div class="status-logo">RMF FM</div>
-</div>
 <span class="clock" id="clock">00:00:00</span>
 </div>
 <div class="grid" id="grid"></div>
@@ -244,7 +253,7 @@ playBtn.onclick = () => { if (currentIndex === -1) return; if (player.paused) { 
 stopBtn.onclick = () => { player.pause(); player.currentTime = 0; playBtn.classList.remove('active'); statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' '); };
 prevBtn.onclick = () => { if (currentIndex > 0) playStation(currentIndex - 1); };
 nextBtn.onclick = () => { if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1); };
-volume.oninput = (e) => { const vol = e.target.value / 100; player.volume = vol; lastVolume = vol; muteBtn.textContent = vol === 0 ? 'UNMUTE' : 'MUTE'; };
+volume.oninput = (e) => { const vol = e.target.value / 100; player.volume = vol; lastVolume = vol; muteBtn.textContent = vol === 0? 'UNMUTE' : 'MUTE'; };
 muteBtn.onclick = () => { if (player.volume > 0) { lastVolume = player.volume; player.volume = 0; volume.value = 0; muteBtn.textContent = 'UNMUTE'; } else { player.volume = lastVolume; volume.value = lastVolume * 100; muteBtn.textContent = 'MUTE'; } };
 player.onerror = () => { statusText.textContent = 'Błąd streamu'; status.classList.add('error'); currentIndex = -1; updateTileActive(); [playBtn, stopBtn].forEach(b => b.disabled = true); playBtn.classList.remove('active'); };
 </script>
