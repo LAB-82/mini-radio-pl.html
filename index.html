@@ -1,76 +1,387 @@
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<title>Radio - RMF FM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini Radio PL</title>
 <style>
-  /* Twój styl, który już miałeś, z zamianą czerwonych elementów na żółte */
-  /* Dodajemy tylko niezbędne style do przycisków */
-  #station-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  background-color: #fff700;
+  overflow: hidden;
+}
+body {
+  font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #000;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.header h1 {
+  font-size: 30px;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.header p {
+  color: #999;
+  font-size: 16.25px;
+  font-weight: 600;
+}
+.status {
+  background: #FECB00;
+  color: #000;
+  padding: 12px 2.5cm;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  font-size: 17.5px;
+  border: 2px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px;
+  font-weight: 700;
+}
+.status.error {
+  background: #e22134;
+  color: #fff;
+}
+.status-text {
+  flex: 1;
+}
+.clock {
+  font-variant-numeric: tabular-nums;
+  min-width: 60px;
+  text-align: right;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 15px;
+}
+.tile {
+  background: #FECB00;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  color: #000;
+  position: relative;
+  height: 100px;
+}
+.tile:hover {
+  background: #FFD633;
+}
+.tile:active {
+  transform: scale(0.96);
+}
+.tile.active {
+  background: #FECB00;
+  border-color: #000;
+  color: #000;
+}
+.controls {
+  position: relative;
+  background: #FECB00;
+  padding: 65px 16px 12px 16px;
+  border-radius: 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 2px solid #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+.controls::before {
+  content: "RMF-FM";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff700;
+  border-radius: 20px;
+  text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
+  border: 2px solid #fff700;
+  background: #FECB00;
+  animation: neon-glow 1.5s infinite alternate;
+  z-index: 10;
+}
+@keyframes neon-glow {
+  from {
+    text-shadow: 0 0 10px #fff700, 0 0 20px #fff700, 0 0 30px #fff700, 0 0 40px #fff700;
   }
-  #station-buttons button {
-    margin: 4px;
-    padding: 8px 12px;
-    background-color: #555;
-    border: 2px solid yellow;
-    color: yellow;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
+  to {
+    text-shadow: 0 0 20px #fff700, 0 0 40px #fff700, 0 0 60px #fff700, 0 0 80px #fff700;
   }
+}
+.głośnik {
+  font-size: 20px;
+  margin-top: 8px;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.głośnik.przekreslony {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+#muteBtn {
+  font-size: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background: transparent;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 600;
+}
 </style>
 </head>
 <body>
-
-<!-- Twój kod radia z pierwszego kodu - przykładowe elementy -->
-<div id="radio-container">
-  <!-- tutaj umieścisz swój kod radia, np. ekran, przyciski, etc. -->
-  <!-- Przykład: -->
-  <div id="radio-screen">FM 103.2</div>
-  <!-- Przycisk odtwarzania -->
-  <button id="play">►</button>
+<div class="header">
+  <h1>Mini Radio PL</h1>
+  <p>RMF RMF • Tylko najlepsze stacje</p>
 </div>
 
-<!-- Dodajemy 14 przycisków pod radiem -->
-<div id="station-buttons"></div>
+<div class="status" id="status">
+  <span class="status-text" id="statusText"></span>
+  <span class="clock" id="clock">00:00:00</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="controls" id="playerControls">
+  <button class="btn" id="playBtn" disabled>▶️</button>
+  <button class="btn" id="stopBtn" disabled⏹️</button>
+  <button class="btn" id="prevBtn" disabled>⏮️</button>
+  <button class="btn" id="nextBtn" disabled>⏭️</button>
+  <button class="btn" id="muteBtn">🔊</button>
+  <input type="range" id="volume" min="0" max="100" value="80" />
+</div>
+
+<audio id="player" crossorigin="anonymous"></audio>
 
 <script>
-  // Przypisanie stacji radiowych do przycisków
-  const stations = [
-    { name: "Stacja 1", frequency: "FM 103.2" },
-    { name: "Stacja 2", frequency: "FM 99.5" },
-    { name: "Stacja 3", frequency: "FM 105.8" },
-    { name: "Stacja 4", frequency: "FM 88.0" },
-    { name: "Stacja 5", frequency: "FM 97.2" },
-    { name: "Stacja 6", frequency: "FM 101.1" },
-    { name: "Stacja 7", frequency: "FM 107.0" },
-    { name: "Stacja 8", frequency: "FM 102.4" },
-    { name: "Stacja 9", frequency: "FM 94.7" },
-    { name: "Stacja 10", frequency: "FM 90.3" },
-    { name: "Stacja 11", frequency: "FM 98.1" },
-    { name: "Stacja 12", frequency: "FM 104.5" },
-    { name: "Stacja 13", frequency: "FM 96.7" },
-    { name: "Stacja 14", frequency: "FM 100.0" }
-  ];
+// Lista stacji
+const STATIONS = [
+  { name: 'RMF FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+  { name: 'RMF MAXX', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+  { name: 'RMF 80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+  { name: 'RMF 90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+  { name: 'RMF 2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+  { name: 'RMF Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+  { name: 'RMF Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+  { name: 'RMF Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+  { name: 'RMF Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+  { name: 'RMF Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+  { name: 'RMF Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+  { name: 'RMF Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+  { name: 'RMF Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+  { name: 'RMF Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+];
 
-  const container = document.getElementById('station-buttons');
+const player = document.getElementById('player');
+const grid = document.getElementById('grid');
+const status = document.getElementById('status');
+const statusText = document.getElementById('statusText');
+const clock = document.getElementById('clock');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const volume = document.getElementById('volume');
+const muteBtn = document.getElementById('muteBtn');
 
-  stations.forEach((station, index) => {
-    const btn = document.createElement('button');
-    btn.innerText = station.name;
-    btn.addEventListener('click', () => {
-      // tutaj ustawiasz odtwarzanie stacji, np. zmiana tekstu na ekranie
-      document.getElementById('radio-screen').innerText = station.frequency;
-      // jeśli masz odtwarzacz audio, ustaw jego źródło na odpowiedni stream
-      // np. audio.src = station.streamUrl;
-    });
-    container.appendChild(btn);
+let currentIndex = -1;
+let lastVolume = 0.8;
+let isPlaying = false;
+let isMuted = false;
+
+player.volume = 0.8;
+
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const s = now.getSeconds().toString().padStart(2, '0');
+  clock.textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+STATIONS.forEach((st, i) => {
+  const tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.innerHTML = `<div class="name">${st.name}</div>`;
+  // dodaj ikonę głośnika
+  const icon = document.createElement('div');
+  icon.className = 'głośnik';
+  icon.innerHTML = '🔊';
+  tile.appendChild(icon);
+  tile.onclick = () => playStation(i);
+  grid.appendChild(tile);
+});
+
+function updateTileActive() {
+  document.querySelectorAll('.tile').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIndex);
+    const głośnik = t.querySelector('.głośnik');
+    if (głośnik) {
+      // widoczny tylko, gdy radio gra i to jest aktualna stacja
+      głośnik.style.display = (i === currentIndex && isPlaying) ? 'block' : 'none';
+      głośnik.classList.toggle('przekreslony', !(i === currentIndex && isPlaying));
+    }
   });
-</script>
+}
 
+function playStation(index) {
+  const st = STATIONS[index];
+  player.pause();
+  currentIndex = index;
+  updateTileActive();
+  statusText.textContent = 'Ładowanie: ' + st.name;
+  status.classList.remove('error');
+  isPlaying = false;
+  player.src = st.url;
+  player.play().then(() => {
+    statusText.textContent = 'Gra: ' + st.name;
+    [playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+    isPlaying = true;
+    updateTileActive();
+  }).catch(err => {
+    statusText.textContent = 'Błąd: ' + st.name;
+    status.classList.add('error');
+    currentIndex = -1;
+    isPlaying = false;
+    updateTileActive();
+    [playBtn, stopBtn].forEach(b => b.disabled = true);
+    playBtn.classList.remove('active');
+  });
+}
+
+// przycisk PLAY / PAUSE
+playBtn.onclick = () => {
+  if (currentIndex === -1) return;
+  if (player.paused) {
+    player.play();
+    playBtn.classList.add('active');
+    statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name;
+  } else {
+    player.pause();
+    playBtn.classList.remove('active');
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+  }
+  updateTileActive();
+};
+
+// STOP
+stopBtn.onclick = () => {
+  player.pause();
+  player.currentTime = 0;
+  playBtn.classList.remove('active');
+  if (currentIndex !== -1) {
+    statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name;
+  }
+  updateTileActive();
+};
+
+// PREV / NEXT
+prevBtn.onclick = () => {
+  if (currentIndex > 0) playStation(currentIndex - 1);
+};
+nextBtn.onclick = () => {
+  if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
+
+// Głośność
+volume.oninput = (e) => {
+  const vol = e.target.value / 100;
+  player.volume = vol;
+  if (vol === 0) {
+    isMuted = true;
+  } else {
+    isMuted = false;
+  }
+  updateMuteIcon();
+};
+
+function updateMuteIcon() {
+  if (isMuted || player.volume === 0) {
+    // ikonka wyciszenia
+    muteBtn.innerHTML = '🔇';
+  } else {
+    muteBtn.innerHTML = '🔊';
+  }
+}
+
+// obsługa kliknięcia MUTE
+muteBtn.onclick = () => {
+  if (!isMuted && player.volume > 0) {
+    lastVolume = player.volume;
+    player.volume = 0;
+    isMuted = true;
+  } else {
+    player.volume = lastVolume || 0.8;
+    isMuted = false;
+  }
+  volume.value = player.volume * 100;
+  updateMuteIcon();
+  updateTileActive();
+};
+
+// obsługa błędów
+player.onerror = () => {
+  statusText.textContent = 'Błąd streamu';
+  status.classList.add('error');
+  currentIndex = -1;
+  isPlaying = false;
+  updateTileActive();
+  [playBtn, stopBtn].forEach(b => b.disabled = true);
+  playBtn.classList.remove('active');
+};
+
+// stan odtwarzania
+player.addEventListener('play', () => {
+  isPlaying = true;
+  updateTileActive();
+});
+player.addEventListener('pause', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+player.addEventListener('ended', () => {
+  isPlaying = false;
+  updateTileActive();
+});
+
+// Inicjalizacja
+updateTileActive();
+</script>
 </body>
 </html>
