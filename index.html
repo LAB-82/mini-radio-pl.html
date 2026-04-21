@@ -3,21 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini Radio</title>
+<title>Mini Radio PL</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
 
 *{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
 
 body{
 font-family:'Montserrat Alternates',sans-serif;
-background:#FFF4B5;
+background:#FFF9C4;
+color:#000;
 padding:12px;
 display:flex;
 flex-direction:column;
 gap:10px;
-height:100vh;
 }
 
 /* STATUS */
@@ -25,19 +26,28 @@ height:100vh;
 background:#FECB00;
 border:2px solid #000;
 border-radius:16px;
-padding:12px;
+padding:12px 14px;
 display:flex;
 justify-content:space-between;
+align-items:center;
 font-weight:700;
-box-shadow:0 4px 10px rgba(0,0,0,.3);
+min-height:70px;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
+.status.error{background:#e22134;color:#fff;}
+.status-text::before{content:"📻 ";}
 
 /* PANEL */
 .panel{
 background:#0d0d0d;
-border-radius:18px;
-padding:12px;
-box-shadow:0 10px 25px rgba(0,0,0,.6), inset 0 0 40px rgba(255,200,0,.15);
+border-radius:16px;
+padding:10px;
+box-shadow:
+0 4px 12px rgba(0,0,0,0.4),
+inset 0 0 20px rgba(255,215,0,0.15);
+flex:1;
+overflow:hidden;
+display:flex;
 }
 
 /* GRID */
@@ -45,72 +55,102 @@ box-shadow:0 10px 25px rgba(0,0,0,.6), inset 0 0 40px rgba(255,200,0,.15);
 display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:10px;
-overflow:auto;
+width:100%;
+overflow-y:auto;
 }
 
 /* TILE */
 .tile{
 background:#FECB00;
-border-radius:12px;
 border:2px solid #000;
-padding:12px;
-text-align:center;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
 cursor:pointer;
-font-weight:700;
+min-height:56px;
 transition:.2s;
 }
 
 .tile:hover{background:#FFD633;}
+.tile:active{transform:scale(0.96);}
 
 .tile.active{
 background:#111;
 border-color:#FFD700;
-box-shadow:0 0 12px #FFD700, inset 0 0 10px rgba(255,215,0,.5);
+box-shadow:
+0 0 8px #FFD700,
+0 0 20px #FFD700,
+inset 0 0 8px rgba(255,215,0,0.5);
 }
 
-.tile span{color:#000;}
-.tile.active span{
+.tile .name{
+font-weight:700;
+text-align:center;
+color:#000;
+}
+
+.tile.active .name{
 color:#FFFACD;
-text-shadow:0 0 10px #FFD700,0 0 25px #FFA500;
+text-shadow:
+0 0 6px #FFD700,
+0 0 14px #FFA500,
+0 0 30px #FF8C00;
 }
 
 /* LOGO */
 .logo-box{
 background:#0d0d0d;
-border-radius:18px;
-padding:20px;
+border-radius:16px;
+padding:14px;
 text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,.6), inset 0 0 40px rgba(255,200,0,.2);
+box-shadow:
+0 4px 12px rgba(0,0,0,0.4),
+inset 0 0 20px rgba(255,215,0,0.2);
 }
 
 .logo{
-font-size:8vh;
-color:#FFD700;
+font-size:10vh;
 font-weight:700;
-text-shadow:0 0 15px #FFD700,0 0 40px #FFA500;
+color:#FFFACD;
+text-shadow:
+0 0 10px #FFD700,
+0 0 30px #FFA500,
+0 0 60px #FF8C00,
+0 2px 0 #000;
 -webkit-text-stroke:2px #000;
 }
 
 /* CONTROLS */
 .controls{
 background:#FECB00;
-border-radius:16px;
 border:2px solid #000;
-padding:10px;
+border-radius:16px;
+padding:12px 14px;
 display:flex;
 gap:8px;
 align-items:center;
-box-shadow:0 4px 10px rgba(0,0,0,.3);
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 
+/* BUTTON */
 .ctrl-btn{
 background:#111;
 border:2px solid #FFD700;
 color:#FFD700;
+height:36px;
 border-radius:8px;
-padding:8px 12px;
-cursor:pointer;
+padding:0 12px;
 font-weight:700;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:.2s;
+}
+
+.ctrl-btn:hover{
+box-shadow:0 0 8px #FFD700;
 }
 
 .ctrl-btn:disabled{
@@ -123,25 +163,61 @@ background:#FECB00;
 color:#000;
 }
 
+/* SLIDER — TERAZ SPÓJNY */
 input[type="range"]{
 flex:1;
-height:6px;
+height:36px;
 background:#111;
-border:1px solid #FFD700;
-border-radius:5px;
+border:2px solid #FFD700;
+border-radius:8px;
+appearance:none;
+padding:0 6px;
+cursor:pointer;
 }
 
+/* TRACK */
+input[type="range"]::-webkit-slider-runnable-track{
+height:4px;
+background:#FFD700;
+border-radius:2px;
+}
+
+/* THUMB */
 input[type="range"]::-webkit-slider-thumb{
 appearance:none;
 width:14px;
 height:14px;
 background:#FFD700;
 border-radius:50%;
+margin-top:-5px;
+box-shadow:0 0 6px #FFD700;
 }
 
-/* MOBILE */
-@media(max-width:850px){
+/* FIREFOX */
+input[type="range"]::-moz-range-track{
+height:4px;
+background:#FFD700;
+}
+input[type="range"]::-moz-range-thumb{
+width:14px;
+height:14px;
+background:#FFD700;
+border:none;
+border-radius:50%;
+}
+
+/* RESPONSIVE – BEZ ZMIANY UKŁADU */
+@media (max-width:1100px){
+.grid{grid-template-columns:repeat(4,1fr);}
+}
+@media (max-width:850px){
 .grid{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:640px){
+.grid{grid-template-columns:repeat(3,1fr);}
+.controls{flex-wrap:wrap;justify-content:center;}
+.logo{font-size:8vh;}
+.tile{min-height:48px;}
 }
 </style>
 </head>
@@ -149,7 +225,7 @@ border-radius:50%;
 <body>
 
 <div class="status">
-<span id="statusText">Wybierz stację</span>
+<span class="status-text" id="statusText">Wybierz stację</span>
 <span id="clock"></span>
 </div>
 
@@ -194,7 +270,6 @@ const STATIONS=[
 const player=document.getElementById('player');
 const grid=document.getElementById('grid');
 const statusText=document.getElementById('statusText');
-
 const playBtn=document.getElementById('playBtn');
 const stopBtn=document.getElementById('stopBtn');
 const prevBtn=document.getElementById('prevBtn');
@@ -203,46 +278,47 @@ const volume=document.getElementById('volume');
 const muteBtn=document.getElementById('muteBtn');
 
 let currentIndex=-1;
+let lastVolume=0.8;
 player.volume=0.8;
 
-/* GRID */
-STATIONS.forEach((s,i)=>{
-let el=document.createElement('div');
-el.className='tile';
-el.innerHTML=`<span>${s.name}</span>`;
-el.onclick=()=>playStation(i);
-grid.appendChild(el);
+function updateClock(){
+clock.textContent=new Date().toLocaleTimeString();
+}
+setInterval(updateClock,1000);
+updateClock();
+
+STATIONS.forEach((st,i)=>{
+const tile=document.createElement('div');
+tile.className='tile';
+tile.innerHTML=`<div class="name">${st.name}</div>`;
+tile.onclick=()=>playStation(i);
+grid.appendChild(tile);
 });
 
-function updateTiles(){
+function updateTileActive(){
 document.querySelectorAll('.tile').forEach((t,i)=>{
 t.classList.toggle('active',i===currentIndex);
 });
 }
 
-function playStation(i){
-const st=STATIONS[i];
+function playStation(index){
+const st=STATIONS[index];
 player.pause();
-currentIndex=i;
+currentIndex=index;
+updateTileActive();
+
+statusText.textContent='Ładowanie: '+st.name;
 player.src=st.url;
 
-statusText.textContent="Ładowanie: "+st.name;
-
 player.play().then(()=>{
-statusText.textContent="Gra: "+st.name;
+statusText.textContent='Gra: '+st.name;
 playBtn.classList.add('active');
 [playBtn,stopBtn,prevBtn,nextBtn].forEach(b=>b.disabled=false);
-}).catch(()=>{
-statusText.textContent="Błąd";
 });
-
-updateTiles();
 }
 
-/* BUTTONS */
 playBtn.onclick=()=>{
 if(currentIndex===-1)return;
-
 if(player.paused){
 player.play();
 playBtn.classList.add('active');
@@ -258,26 +334,25 @@ player.currentTime=0;
 playBtn.classList.remove('active');
 };
 
-prevBtn.onclick=()=>{
-if(currentIndex>0)playStation(currentIndex-1);
-};
-
-nextBtn.onclick=()=>{
-if(currentIndex<STATIONS.length-1)playStation(currentIndex+1);
-};
+prevBtn.onclick=()=>{if(currentIndex>0)playStation(currentIndex-1);};
+nextBtn.onclick=()=>{if(currentIndex<STATIONS.length-1)playStation(currentIndex+1);};
 
 volume.oninput=e=>{
-player.volume=e.target.value/100;
+const vol=e.target.value/100;
+player.volume=vol;
+lastVolume=vol;
 };
 
 muteBtn.onclick=()=>{
-player.muted=!player.muted;
+if(player.volume>0){
+lastVolume=player.volume;
+player.volume=0;
+volume.value=0;
+}else{
+player.volume=lastVolume;
+volume.value=lastVolume*100;
+}
 };
-
-/* CLOCK */
-setInterval(()=>{
-clock.textContent=new Date().toLocaleTimeString();
-},1000);
 </script>
 
 </body>
