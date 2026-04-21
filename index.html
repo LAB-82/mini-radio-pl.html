@@ -1,258 +1,323 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<title>Muzyczne Radio PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini Radio PL</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body {
+font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+background: #0f;
+color: #fff;
+padding: 15px;
+display: flex;
+flex-direction: column;
+}
+.header {
+text-align: center;
+margin-bottom: 15px;
+flex-shrink: 0;
+}
+.header h1 { font-size: 30px; margin-bottom: 4px; font-weight: 700; }
+.header p { color: #999; font-size: 16.25px; font-weight: 600; }
+.status {
+background: #FECB00;
+color: #000;
+padding: 12px 2.5cm;
+border-radius: 12px;
+margin-bottom: 15px;
+font-size: 17.5px;
+border: 2px solid #000;
+display: flex;
+justify-content: space-between;
+align-items: center;
+min-height: 48px;
+font-weight: 700;
+flex-shrink: 0;
+}
+.status.error { background: #e22134; color: #fff; border-color: #000; }
+.status-text { flex: 1; }
+.clock {
+font-variant-numeric: tabular-nums;
+min-width: 60px;
+text-align: right;
+}
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+grid-auto-rows: 1fr;
+gap: 12px;
+flex: 1;
+min-height: 0;
+margin-bottom: 15px;
+}
+.tile {
+background: #FECB00;
+border: 2px solid #000;
+border-radius: 16px;
+padding: 15px;
+text-align: center;
+cursor: pointer;
+transition: all 0.2s;
+display: flex;
+align-items: center;
+justify-content: center;
+user-select: none;
+color: #000;
+position: relative;
+overflow: hidden;
+}
+.tile:hover { background: #FFD633; }
+.tile:active { transform: scale(0.96); }
+.tile.active { background: #FECB00; border-color: #000; color: #000; }
+/* Znak fali w kafelku – niebieski neon */
+.tile::before {
+content: "";
+position: absolute;
+top: 10px;
+right: 10px;
+width: 24px;
+height: 24px;
+opacity: 0.25;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+background-size: contain;
+background-repeat: no-repeat;
+transition: all 0.2s;
+filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0 0 24px #00BFFF);
+}
+.tile.active::before {
+opacity: 1;
+}
+/* Niebieski neon dla nazw stacji w kafelkach */
+.tile.name {
+font-size: 27.34375px;
+font-weight: 700;
+line-height: 1.1;
+transition: all 0.2s;
+color: #000;
+text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
+}
+.tile.active.name {
+color: #000;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF;
+}
+.controls {
+position: relative;
+background: #FECB00;
+padding: 65px 16px 12px 16px;
+border-radius: 16px;
+display: flex;
+gap: 8px;
+align-items: center;
+border: 2px solid #000;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+flex-shrink: 0;
+}
+/* Dolny pasek: niebieski neon, obramowanie ramki żółte, czcionka Montserrat Alternates */
+.controls::before {
+content: "";
+position: absolute;
+top: 8px;
+left: 50%;
+transform: translateX(-50%);
+width: 140px;
+height: 45px;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 45'%3E%3Crect width='140' height='45' rx='22' fill='%23000' stroke='%23FECB00' stroke-width='2'/%3E%3Ctext x='70' y='29' font-family='Montserrat Alternates' font-size='16.25' font-weight='700' text-anchor='middle' fill='%2300BFFF'%3ERMF-FM%3C/text%3E%3C/svg%3E");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+filter: drop-shadow(0 0 10px #00BFFF) drop-shadow(0 0 20px #00BFFF) drop-shadow(0 0 30px #00BFFF);
+}
+.ctrl-btn {
+background: transparent;
+border: 1px solid #000;
+color: #000;
+padding: 0 12px;
+height: 36px;
+border-radius: 8px;
+font-size: 15px;
+font-weight: 700;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.2s;
+min-width: 50px;
+font-family: 'Montserrat Alternates', sans-serif;
+text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
+}
+.ctrl-btn:hover { background: #000; color: #FECB00; }
+.ctrl-btn:active { transform: scale(0.95); }
+.ctrl-btn:disabled { color: #666; border-color: #666; cursor: not-allowed; text-shadow: none; }
+.ctrl-btn.play {
+background: transparent;
+color: #000;
+min-width: 60px;
+border-color: #000;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
+}
+.ctrl-btn.play:hover { background: #000; color: #FECB00; }
+.ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
+.ctrl-btn.mute {
+min-width: 60px;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
+}
+input[type="range"] {
+flex: 1;
+height: 4px;
+cursor: pointer;
+min-width: 60px;
+accent-color: #000;
+}
+</style>
 </head>
-<body style="margin:0; background:#000; height:100vh; overflow:hidden; font-family:Arial,sans-serif; display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box;">
-
-<div style="width:100%; max-width:900px; max-height:calc(100vh - 20px); background:#1a1a1a; border:4px solid #ff2a2a; border-radius:12px; box-shadow:0 0 40px rgba(255,42,0.5); box-sizing:border-box; display:flex; flex-direction:column;">
-
-  <div style="background:#0a0a0a; flex:1; margin:8px; border-radius:8px; border:1px solid #333; padding:12px; display:flex; flex-direction:column; box-shadow:inset 0 0 25px #000; overflow:hidden;">
-    
-    <!-- Usunięto ramkę i link, zostaje tylko napis -->
-    <div style="width:fit-content; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
-      
-      <!-- Zamiana tekstu na RMF FM, kolor niebieski -->
-      <div style="color:#0000FF; font-size:clamp(28px,6vw,52px); text-align:center; margin-bottom:8px; font-weight:bold; letter-spacing:3px; flex-shrink:0; white-space:nowrap;">
-        RMF FM
-      </div>
-
-      <div id="scale" style="width:100%; height:45px; min-height:45px; max-height:45px; background:#1a0505; border:2px solid #ff2a2a; border-radius:4px; margin-bottom:8px; position:relative; flex-shrink:0; box-sizing:border-box;">
-        <div style="position:absolute; width:100%; height:100%; background:repeating-linear-gradient(90deg, transparent, transparent 9%, #ff000040 9%, #ff000040 10%);"></div>
-        <div style="position:absolute; width:100%; text-align:center; top:50%; transform:translateY(-50%); color:#ff6a3a; font-size:11px; text-shadow:0 0 8px #ff3300; display:flex; justify-content:space-between; padding:0 5%; box-sizing:border-box;">
-          <span>88</span><span>92</span><span>96</span><span>100</span><span id="pos104">104</span><span id="pos108">108</span>
-        </div>
-        <div id="needle" style="position:absolute; top:0px; width:4px; height:42px; background:#ff2a2a; box-shadow:0 0 12px #ff2a2a; transform:translateX(-50%); display:none;"></div>
-        <div id="needleLabel" style="position:absolute; bottom:-2px; transform:translateX(-50%); color:#ff2a2a; font-size:10px; font-weight:bold; text-shadow:0 0 8px red; display:none;">105.8 FM</div>
-      </div>
-
-      <canvas id="eq" style="width:100%; height:100px; min-height:100px; max-height:100px; background:#000; border:2px solid #ff2a2a; border-radius:6px; display:block; margin-bottom:10px; flex-shrink:0;"></canvas>
-    </div>
-
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex:1; min-height:0; padding:0 1.5cm; padding-bottom:1.5cm; position:relative;">
-      
-      <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
-      
-      <div style="display:flex; flex-direction:column; align-items:center; height:clamp(90px,18vw,130px); justify-content:space-between;">
-        <div style="display:flex; gap:10px; align-items:center; justify-content:center;">
-          
-          <button id="playBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
-            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
-            ON
-          </button>
-          
-          <button id="stopBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
-            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
-            OFF
-          </button>
-          
-          <button id="muteBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
-            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
-            MUTE
-          </button>
-          
-          <div id="volKnob" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative; display:flex; align-items:center; justify-content:center; user-select:none; touch-action:none;">
-            <div id="volIndicator" style="position:absolute; top:5px; left:50%; width:3px; height:11px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a; transform-origin:50% 24px; transform:translateX(-50%) rotate(0deg);"></div>
-            VOL
-          </div>
-          
-        </div>
-        <!-- Usunięto link -->
-      </div>
-      
-      <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
-      
-    </div>
-  </div>
-
-  <!-- 14 przycisków w dwóch rzędach po 7, w miejscu linku -->
-  <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
-    <button style="width:60px;">Przyc1</button>
-    <button style="width:60px;">Przyc2</button>
-    <button style="width:60px;">Przyc3</button>
-    <button style="width:60px;">Przyc4</button>
-    <button style="width:60px;">Przyc5</button>
-    <button style="width:60px;">Przyc6</button>
-    <button style="width:60px;">Przyc7</button>
-    <button style="width:60px;">Przyc8</button>
-    <button style="width:60px;">Przyc9</button>
-    <button style="width:60px;">Przyc10</button>
-    <button style="width:60px;">Przyc11</button>
-    <button style="width:60px;">Przyc12</button>
-    <button style="width:60px;">Przyc13</button>
-    <button style="width:60px;">Przyc14</button>
-  </div>
+<body>
+<div class="header">
+<h1>Mini Radio PL</h1>
+<p>RMF RMF • Tylko najlepsze stacje</p>
 </div>
-
-<!-- Usunięto link do radia -->
-<!-- Reszta kodu bez zmian, JavaScript bez zmian -->
+<div class="status" id="status">
+<span class="status-text" id="statusText"></span>
+<span class="clock" id="clock">00:00:00</span>
+</div>
+<div class="grid" id="grid"></div>
+<div class="controls" id="playerControls">
+<button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
+<button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
+<button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
+<button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
+<input type="range" id="volume" min="0" max="100" value="80" />
+<button class="ctrl-btn mute" id="muteBtn">MUTE</button>
+</div>
+<audio id="player" crossorigin="anonymous"></audio>
 <script>
-var audio = document.getElementById('audio');
-var canvas = document.getElementById('eq');
-var ctx = canvas.getContext('2d');
-var playBtn = document.getElementById('playBtn');
-var stopBtn = document.getElementById('stopBtn');
-var muteBtn = document.getElementById('muteBtn');
-var volKnob = document.getElementById('volKnob');
-var volIndicator = document.getElementById('volIndicator');
-var needle = document.getElementById('needle');
-var needleLabel = document.getElementById('needleLabel');
-var scale = document.getElementById('scale');
-
-audio.volume = 0.5;
-var audioCtx, analyser, source, dataArray, anim, analyserEnabled = false;
-
-// 1. USTAWIAM KRESKĘ DOPIERO JAK FONTY SIĘ ZAŁADUJĄ
-function setNeedlePosition(){
-  var rect104 = document.getElementById('pos104').getBoundingClientRect();
-  var rect108 = document.getElementById('pos108').getBoundingClientRect();
-  var scaleRect = scale.getBoundingClientRect();
-
-  var start = rect104.left + rect104.width/2 - scaleRect.left;
-  var end = rect108.left + rect108.width/2 - scaleRect.left;
-  var distance = end - start;
-
-  var position = start + (distance * 0.45);
-
-  needle.style.left = position + 'px';
-  needleLabel.style.left = position + 'px';
-  needle.style.display = 'block';
-  needleLabel.style.display = 'block';
+const STATIONS = [
+{ name: 'RMF FM<br>FM', url: 'https://rs201-krk.rmfstream.pl/rmf_fm' },
+{ name: 'RMF FM<br>Maxx', url: 'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+{ name: 'RMF FM<br>80s', url: 'https://rs201-krk.rmfstream.pl/rmf_80s' },
+{ name: 'RMF FM<br>90s', url: 'https://rs201-krk.rmfstream.pl/rmf_90s' },
+{ name: 'RMF FM<br>2000', url: 'https://rs201-krk.rmfstream.pl/rmf_2000' },
+{ name: 'RMF FM<br>Chillout', url: 'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+{ name: 'RMF FM<br>Classic', url: 'https://rs201-krk.rmfstream.pl/rmf_classic' },
+{ name: 'RMF FM<br>Dance', url: 'https://rs201-krk.rmfstream.pl/rmf_dance' },
+{ name: 'RMF FM<br>Gold', url: 'https://rs201-krk.rmfstream.pl/rmf_gold' },
+{ name: 'RMF FM<br>Latino', url: 'https://rs201-krk.rmfstream.pl/rmf_latino' },
+{ name: 'RMF FM<br>Love', url: 'https://rs201-krk.rmfstream.pl/rmf_love' },
+{ name: 'RMF FM<br>Party', url: 'https://rs201-krk.rmfstream.pl/rmf_party' },
+{ name: 'RMF FM<br>Polski Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+{ name: 'RMF FM<br>Rock', url: 'https://rs201-krk.rmfstream.pl/rmf_rock' }
+];
+const player = document.getElementById('player');
+const grid = document.getElementById('grid');
+const status = document.getElementById('status');
+const statusText = document.getElementById('statusText');
+const clock = document.getElementById('clock');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const volume = document.getElementById('volume');
+const muteBtn = document.getElementById('muteBtn');
+let currentIndex = -1;
+let lastVolume = 0.8;
+player.volume = 0.8;
+function updateClock() {
+const now = new Date();
+const h = now.getHours().toString().padStart(2, '0');
+const m = now.getMinutes().toString().padStart(2, '0');
+const s = now.getSeconds().toString().padStart(2, '0');
+clock.textContent = `${h}:${m}:${s}`;
 }
-
-// Fonty i resize
-document.fonts.ready.then(setNeedlePosition);
-window.addEventListener('resize', setNeedlePosition);
-
-// Audio + EQ
-function initAudio() {
-  if(audioCtx) return;
-  try {
-    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-    source = audioCtx.createMediaElementSource(audio);
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 64;
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    analyserEnabled = true;
-  } catch(e) {
-    console.warn('Analyser disabled:', e);
-    analyserEnabled = false;
-  }
-}
-
-playBtn.addEventListener('click', function(){
-  initAudio();
-  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-  audio.play().catch(function(e){ console.error('Play failed:', e); });
-  playBtn.style.boxShadow = '0 0 25px #00ff00, 0 0 45px rgba(0,255,0,0.4)';
-  stopBtn.style.boxShadow = '0 0 15px rgba(255,42,42,0.5)';
+setInterval(updateClock, 1000);
+updateClock();
+STATIONS.forEach((st, i) => {
+const tile = document.createElement('div');
+tile.className = 'tile';
+tile.innerHTML = `<div class="name">${st.name}</div>`;
+tile.onclick = () => playStation(i);
+grid.appendChild(tile);
 });
-
-stopBtn.addEventListener('click', function(){
-  audio.pause();
-  stopBtn.style.boxShadow = '0 0 25px #ff0000, 0 0 45px rgba(255,0,0,0.4)';
-  playBtn.style.boxShadow = '0 0 15px rgba(255,42,42,0.5)';
-  if(anim) cancelAnimationFrame(anim);
-  drawStatic();
+function updateTileActive() {
+document.querySelectorAll('.tile').forEach((t, i) => {
+t.classList.toggle('active', i === currentIndex);
 });
-
-muteBtn.addEventListener('click', function(){
-  audio.muted =!audio.muted;
-  muteBtn.style.boxShadow = audio.muted? '0 0 25px #ffaa00, 0 0 45px rgba(255,170,0,0.4)' : '0 0 15px rgba(255,42,42,0.5)';
+}
+function playStation(index) {
+const st = STATIONS[index];
+player.pause();
+currentIndex = index;
+updateTileActive();
+statusText.textContent = 'Ładowanie: ' + st.name.replace('<br>', ' ');
+status.classList.remove('error');
+player.src = st.url;
+player.play().then(() => {
+statusText.textContent = 'Gra: ' + st.name.replace('<br>', ' ');
+playBtn.classList.add('active');
+[playBtn, stopBtn, prevBtn, nextBtn].forEach(b => b.disabled = false);
+}).catch(err => {
+statusText.textContent = 'Błąd: ' + st.name.replace('<br>', ' ');
+status.classList.add('error');
+currentIndex = -1;
+updateTileActive();
+[playBtn, stopBtn].forEach(b => b.disabled = true);
+playBtn.classList.remove('active');
+console.error(err);
 });
-
-var lastAngle = 0;
-var dragging = false;
-
-function updateVol(angle){
-  angle = Math.max(-135, Math.min(135, angle));
-  lastAngle = angle;
-  volIndicator.style.transform = 'translateX(-50%) rotate(' + angle + 'deg)';
-  var percent = (angle + 135) / 270;
-  audio.volume = percent;
 }
-
-function volMove(e){
-  if(!dragging) return;
-  var rect = volKnob.getBoundingClientRect();
-  var cx = rect.left + rect.width/2;
-  var cy = rect.top + rect.height/2;
-  var x = (e.touches? e.touches[0].clientX : e.clientX) - cx;
-  var y = (e.touches? e.touches[0].clientY : e.clientY) - cy;
-  var angle = Math.atan2(y, x) * 180 / Math.PI + 90;
-
-  if(angle > 180) angle -= 360;
-  if(angle < -180) angle += 360;
-
-  if(lastAngle < -90 && angle > 90) angle = -135;
-  if(lastAngle > 90 && angle < -90) angle = 135;
-
-  updateVol(angle);
+playBtn.onclick = () => {
+if (currentIndex === -1) return;
+if (player.paused) {
+player.play();
+playBtn.classList.add('active');
+statusText.textContent = 'Teraz słuchasz: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
+status.classList.remove('error');
+} else {
+player.pause();
+playBtn.classList.remove('active');
+statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
 }
-
-volKnob.addEventListener('mousedown', function(e){ dragging = true; volMove(e); e.preventDefault(); });
-volKnob.addEventListener('touchstart', function(e){ dragging = true; volMove(e); e.preventDefault(); });
-document.addEventListener('mousemove', volMove);
-document.addEventListener('touchmove', volMove, {passive:false});
-document.addEventListener('mouseup', function(){ dragging = false; });
-document.addEventListener('touchend', function(){ dragging = false; });
-updateVol(0);
-
-function drawStatic(){
-  canvas.width = canvas.offsetWidth;
-  canvas.height = 100;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  var bars = 12, barWidth = canvas.width / bars, ledH = 6, ledGap = 2;
-  for(var i=0; i<bars; i++){
-    for(var j=0; j<10; j++){
-      var y = canvas.height - (j+1) * (ledH + ledGap);
-      ctx.fillStyle = '#1a0000';
-      ctx.fillRect(i*barWidth+2, y, barWidth-4, ledH);
-    }
-  }
+};
+stopBtn.onclick = () => {
+player.pause();
+player.currentTime = 0;
+playBtn.classList.remove('active');
+statusText.textContent = 'Zatrzymane: ' + STATIONS[currentIndex].name.replace('<br>', ' ');
+};
+prevBtn.onclick = () => {
+if (currentIndex > 0) playStation(currentIndex - 1);
+};
+nextBtn.onclick = () => {
+if (currentIndex < STATIONS.length - 1) playStation(currentIndex + 1);
+};
+volume.oninput = (e) => {
+const vol = e.target.value / 100;
+player.volume = vol;
+lastVolume = vol;
+muteBtn.textContent = vol === 0? 'UNMUTE' : 'MUTE';
+};
+muteBtn.onclick = () => {
+if (player.volume > 0) {
+lastVolume = player.volume;
+player.volume = 0;
+volume.value = 0;
+muteBtn.textContent = 'UNMUTE';
+} else {
+player.volume = lastVolume;
+volume.value = lastVolume * 100;
+muteBtn.textContent = 'MUTE';
 }
-
-function draw(){
-  if(!analyserEnabled || audio.paused) {
-    if(anim) cancelAnimationFrame(anim);
-    drawStatic();
-    return;
-  }
-  anim = requestAnimationFrame(draw);
-  canvas.width = canvas.offsetWidth;
-  canvas.height = 100;
-  analyser.getByteFrequencyData(dataArray);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  var bars = 12, barWidth = canvas.width / bars, ledH = 6, ledGap = 2;
-  for(var i=0; i<bars; i++){
-    var value = (dataArray[i*2] || 0) / 255;
-    var leds = Math.floor(value * 10);
-    for(var j=0; j<10; j++){
-      var y = canvas.height - (j+1) * (ledH + ledGap);
-      if(j < leds){
-        var g = ctx.createLinearGradient(0, y+ledH, 0, y);
-        g.addColorStop(0, '#ff0000');
-        g.addColorStop(1, '#ff6666');
-        ctx.fillStyle = g;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = '#ff0000';
-      } else {
-        ctx.fillStyle = '#1a0000';
-        ctx.shadowBlur = 0;
-      }
-      ctx.fillRect(i*barWidth+2, y, barWidth-4, ledH);
-    }
-  }
-  ctx.shadowBlur = 0;
-}
-
-drawStatic();
+};
+player.onerror = () => {
+statusText.textContent = 'Błąd streamu';
+status.classList.add('error');
+currentIndex = -1;
+updateTileActive();
+[playBtn, stopBtn].forEach(b => b.disabled = true);
+playBtn.classList.remove('active');
+};
 </script>
-
 </body>
 </html>
