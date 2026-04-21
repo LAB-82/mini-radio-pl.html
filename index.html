@@ -110,47 +110,46 @@ background-repeat: no-repeat;
 transition: all 0.2s;
 }
 .tile.active::before { opacity: 1; }
-/* ZMIANA: dokładny układ jak na zdjęciu - fala akustyczna */
+/* POPRAWKA: tylko jeden pasek, wyśrodkowany między liniami tekstu */
 .tile::after {
 content: "";
 position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
-width: 80%;
-height: 32px;
-background:
-  linear-gradient(#000, #000) center 4px / 55% 5px no-repeat,
-  linear-gradient(#000, #000) center 14px / 90% 5px no-repeat,
-  linear-gradient(#000, #000) center 24px / 40% 5px no-repeat;
+width: 90%;
+height: 5px;
+background: #000;
 z-index: 0;
 }
 .tile.name {
 font-size: 13.67px;
 font-weight: 700;
-line-height: 1.1;
+line-height: 1.15;
 transition: all 0.2s;
 color: #FFD700;
 text-shadow:
-  0 0 8px #FFD700,
-  0 0 16px #FFD700,
+  0 0 6px #FFD700,
+  0 0 12px #FFD700,
   0 0 24px #FFA500,
-  0 0 32px #FF8C00,
+  0 0 40px #FF8C00,
+  0 0 60px #FF8C00,
   2px 2px 0 #000,
   -2px 2px 0 #000,
   2px -2px 0 #000,
-  -2px -2px 0 #000; /* czarny kontur dla czytelności */
+  -2px -2px 0 #000;
 position: relative;
 z-index: 1;
 padding: 2px 6px;
 }
 .tile.active.name {
-color: #FFD700;
+color: #FFE55C;
 text-shadow:
-  0 0 10px #FFD700,
-  0 0 20px #FFD700,
-  0 0 30px #FFA500,
-  0 0 50px #FF8C00,
+  0 0 8px #FFD700,
+  0 0 16px #FFD700,
+  0 0 32px #FFA500,
+  0 0 60px #FF8C00,
+  0 0 90px #FF8C00,
   2px 2px 0 #000,
   -2px 2px 0 #000,
   2px -2px 0 #000,
@@ -163,10 +162,11 @@ font-weight: 700;
 text-align: center;
 color: #FFD700;
 text-shadow:
-  0 0 10px #FFD700,
-  0 0 20px #FFD700,
-  0 0 40px #FFA500,
-  0 0 80px #FF8C00,
+  0 0 12px #FFD700,
+  0 0 24px #FFD700,
+  0 0 48px #FFA500,
+  0 0 90px #FF8C00,
+  0 0 120px #FF8C00,
   0 2px 0 #000,
   0 4px 8px rgba(0,0,0,0.8);
 -webkit-text-stroke: 2px #000;
@@ -248,7 +248,7 @@ body { overflow: hidden; }
 .big-logo { font-size: 8vh; opacity: 0.8; }
 .tile { min-height: 48px; }
 .tile.name { font-size: 11px; }
-.tile::after { height: 26px; }
+.tile::after { height: 4px; }
 }
 </style>
 </head>
