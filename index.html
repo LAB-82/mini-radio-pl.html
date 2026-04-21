@@ -95,6 +95,7 @@ min-height: 56px;
 .tile:hover { background: #FFD633; }
 .tile:active { transform: scale(0.96); }
 .tile.active { background: #FECB00; border-color: #000; color: #000; }
+/* ZMIANA: ikona głośnika 2x większa 14px -> 28px */
 .tile::before {
 content: "";
 position: absolute;
@@ -109,20 +110,24 @@ background-repeat: no-repeat;
 transition: all 0.2s;
 }
 .tile.active::before { opacity: 1; }
-/* ZMIANA: identyczny układ 3 czarnych pasków jak na zdjęciu */
+/* ZMIANA: paski jako tło nazwy stacji, centralnie, czarne */
 .tile::after {
 content: "";
 position: absolute;
 top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 70%;
-height: 24px;
-background:
-  linear-gradient(#000, #000) 0 2px / 60% 3px no-repeat,
-  linear-gradient(#000, #000) 0 10px / 85% 3px no-repeat,
-  linear-gradient(#000, #000) 0 18px / 45% 3px no-repeat;
-opacity: 0.9;
+left: 10%;
+right: 10%;
+transform: translateY(-50%);
+height: 28px;
+background: repeating-linear-gradient(
+  90deg,
+  #000 0px,
+  #000 8px,
+  #111 8px,
+  #111 10px
+);
+opacity: 0.85;
+border-radius: 4px;
 z-index: 0;
 }
 .tile.name {
@@ -130,12 +135,12 @@ font-size: 13.67px;
 font-weight: 700;
 line-height: 1.1;
 transition: all 0.2s;
-color: #FFD700;
+color: #FFD700; /* złoty */
 text-shadow:
   0 0 8px #FFD700,
   0 0 16px #FFD700,
   0 0 24px #FFA500,
-  0 0 32px #FF8C00;
+  0 0 32px #FF8C00; /* złoty neon */
 position: relative;
 z-index: 1;
 padding: 2px 6px;
@@ -238,7 +243,7 @@ body { overflow: hidden; }
 .big-logo { font-size: 8vh; opacity: 0.35; }
 .tile { min-height: 48px; }
 .tile.name { font-size: 11px; }
-.tile::after { height: 20px; }
+.tile::after { height: 24px; }
 }
 </style>
 </head>
