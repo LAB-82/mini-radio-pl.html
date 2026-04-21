@@ -22,27 +22,22 @@ body {
 
 .header {
   position: relative;
-  text-align: center;
-  flex-shrink: 0;
-  min-height: 54px;
+  background: #FECB00;
+  padding: 12px 14px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  min-height: 70px;
+  overflow: hidden;
 }
 
-.header h1 {
-  font-size: 30px;
-  margin-bottom: 4px;
-  font-weight: 700;
-  display: none;
-}
-
+.header h1,
 .header p {
-  color: #999;
-  font-size: 16.25px;
-  font-weight: 600;
-  position: relative;
-  z-index: 2;
+  display: none;
 }
 
 .header::before {
@@ -50,12 +45,13 @@ body {
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 180px;
-  height: 46px;
+  width: 135px;
+  height: 40px;
   background: url("https://i.discogs.com/DnA_zyepthmbKMSlb7t0fb6af4AKVpGzY54bk1VVvaE/rs:fit/g:sm/q:90/h:250/w:400/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWltYWdlcy9MLTcxNjgzOS0xNDA2MTI5OTkyLTM4MzcuanBlZw.jpeg") center center / contain no-repeat;
-  opacity: 0.22;
+  opacity: 0.32;
   pointer-events: none;
   z-index: 1;
+  filter: drop-shadow(0 0 10px #00BFFF) drop-shadow(0 0 18px #00BFFF);
 }
 
 .status {
