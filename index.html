@@ -19,12 +19,13 @@
 html, body { height: 100%; overflow: hidden; }
 body {
 font-family: 'Montserrat Alternates', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: #E5D3B3; /* ZMIANA: piaskowy kolor tła */
+background: #FFF9C4; /* ZMIANA: jasny żółty */
 color: #000;
 padding: 12px 12px 10px;
 display: flex;
 flex-direction: column;
 gap: 10px;
+position: relative;
 }
 .status {
 position: relative;
@@ -41,6 +42,7 @@ font-weight: 700;
 flex-shrink: 0;
 overflow: hidden;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+z-index: 2;
 }
 .status.error { background: #e22134; color: #fff; border-color: #000; }
 .status-text,.clock { position: relative; z-index: 2; }
@@ -60,12 +62,7 @@ z-index: 1;
 pointer-events: none;
 }
 .status-logo {
-color: #00BFFF;
-font-family: 'Sketchy Times', cursive;
-font-size: 33px;
-font-weight: 700;
-letter-spacing: 1px;
-text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor;
+display: none; /* ZMIANA: ukryty napis RMF FM z górnego paska */
 }
 .grid {
 display: grid;
@@ -74,13 +71,15 @@ grid-auto-rows: 1fr;
 gap: 10px;
 flex: 1;
 min-height: 0;
-overflow-y: auto; /* ZMIANA: przewijanie */
+overflow-y: auto;
+z-index: 2;
+position: relative;
 }
 .tile {
 background: #FECB00;
 border: 2px solid #000;
 border-radius: 16px;
-padding: 7.5px; /* ZMIANA: 50% mniejszy padding 15px -> 7.5px */
+padding: 7.5px;
 text-align: center;
 cursor: pointer;
 transition: all 0.2s;
@@ -91,7 +90,7 @@ user-select: none;
 color: #000;
 position: relative;
 overflow: hidden;
-min-height: 56px; /* ZMIANA: 50% mniejsza wysokość 112px -> 56px */
+min-height: 56px;
 }
 .tile:hover { background: #FFD633; }
 .tile:active { transform: scale(0.96); }
@@ -99,9 +98,9 @@ min-height: 56px; /* ZMIANA: 50% mniejsza wysokość 112px -> 56px */
 .tile::before {
 content: "";
 position: absolute;
-top: 5px; /* ZMIANA: dopasowane do mniejszego kafelka */
+top: 5px;
 right: 5px;
-width: 12px; /* ZMIANA: 50% mniejsze 24px -> 12px */
+width: 12px;
 height: 12px;
 opacity: 0;
 background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -112,7 +111,7 @@ filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0
 }
 .tile.active::before { opacity: 1; }
 .tile.name {
-font-size: 13.67px; /* ZMIANA: 50% mniejszy font 27.34px -> 13.67px */
+font-size: 13.67px;
 font-weight: 700;
 line-height: 1.1;
 transition: all 0.2s;
@@ -120,23 +119,32 @@ color: #000;
 text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
 }
 .tile.active.name { color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF; }
-/* DODANE: duży napis pod kafelkami */
+/* ZMIANA: duży napis RMF FM na pierwszy plan tła */
 .big-logo {
-font-family: 'Sketchy Times', cursive;
-font-size: 12vh; /* 50% strony w pionie */
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+font-family: 'Montserrat Alternates', sans-serif; /* ZMIANA: prosta czcionka */
+font-size: 20vh; /* 50% strony */
+font-weight: 700;
 text-align: center;
-color: #00BFFF;
-text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
-opacity: 0.15;
+color: #FFD700; /* ZMIANA: złoty */
+text-shadow:
+  0 0 10px #FFD700,
+  0 0 20px #FFD700,
+  0 0 40px #FFA500,
+  0 0 80px #FF8C00; /* ZMIANA: złoty neon */
+opacity: 0.25;
 pointer-events: none;
-flex-shrink: 0;
+z-index: 0; /* tło */
 line-height: 1;
-margin: 5px 0;
+white-space: nowrap;
 }
 .controls {
 position: relative;
 background: #FECB00;
-padding: 52px 14px 12px 14px;
+padding: 12px 14px; /* ZMIANA: wyrównany padding, bez 52px na górze */
 border-radius: 16px;
 display: flex;
 gap: 8px;
@@ -144,31 +152,13 @@ align-items: center;
 border: 2px solid #000;
 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 flex-shrink: 0;
+z-index: 2;
 }
 .bottom-badge {
-position: absolute;
-left: 50%;
-top: 8px;
-transform: translateX(-50%);
-width: 140px;
-height: 45px;
-background: #000;
-border: 2px solid #FECB00;
-border-radius: 22px;
-z-index: 1;
-display: flex;
-align-items: center;
-justify-content: center;
-overflow: hidden;
+display: none; /* ZMIANA: ukryty napis RMF-FM z dolnego paska */
 }
 .bottom-text {
-font-family: 'Sketchy Times', cursive;
-font-size: 15px;
-font-weight: 700;
-letter-spacing: 0.5px;
-color: #00BFFF;
-text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 18px currentColor;
-pointer-events: none;
+display: none;
 }
 .ctrl-btn {
 background: transparent;
@@ -194,18 +184,27 @@ text-shadow: 0 0 8px #00BFFF, 0 0 16px #00BFFF, 0 0 24px #00BFFF;
 .ctrl-btn.play { background: transparent; color: #000; min-width: 60px; border-color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF; }
 .ctrl-btn.play:hover { background: #000; color: #FECB00; }
 .ctrl-btn.play.active { background: #FECB00; border-color: #000; color: #000; }
-.ctrl-btn.mute { min-width: 60px; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF; margin-left: auto; }
-input[type="range"] { flex: 1; height: 4px; cursor: pointer; min-width: 60px; accent-color: #000; }
+.ctrl-btn.mute {
+min-width: 60px;
+text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF;
+/* ZMIANA: usunięte margin-left: auto; teraz w jednej linii */
+}
+input[type="range"] {
+flex: 1;
+height: 4px;
+cursor: pointer;
+min-width: 60px;
+accent-color: #000;
+}
 #playBtn { order: 1; } #stopBtn { order: 2; } #prevBtn { order: 3; } #nextBtn { order: 4; } #volume { order: 5; } #muteBtn { order: 6; }
 @media (max-width: 1100px) {.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 850px) {.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } } /* ZMIANA: 3 kolumny zamiast 2 */
+@media (max-width: 850px) {.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 640px) {
-.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } /* ZMIANA: 3 kolumny na telefonie */
-body { overflow: hidden; } /* zapobiega scrollowaniu całej strony */
-.controls { flex-wrap: wrap; justify-content: center; padding-top: 58px; }
-.ctrl-btn.mute { margin-left: 0; }
-.big-logo { font-size: 8vh; } /* mniejszy na mobile */
-.tile { min-height: 48px; } /* jeszcze mniejsze na mobile */
+.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+body { overflow: hidden; }
+.controls { flex-wrap: wrap; justify-content: center; }
+.big-logo { font-size: 12vh; }
+.tile { min-height: 48px; }
 .tile.name { font-size: 11px; }
 }
 </style>
@@ -214,15 +213,15 @@ body { overflow: hidden; } /* zapobiega scrollowaniu całej strony */
 <div class="status" id="status">
 <span class="status-text" id="statusText"></span>
 <div class="status-logo-wrap">
-<div class="status-logo">RMF FM</div>
+<div class="status-logo">RMF FM</div> <!-- ukryty przez CSS -->
 </div>
 <span class="clock" id="clock">00:00:00</span>
 </div>
 <div class="grid" id="grid"></div>
-<div class="big-logo">RMF FM</div> <!-- DODANE: duży napis -->
+<div class="big-logo">RMF FM</div> <!-- ZMIANA: na pierwszym planie tła -->
 <div class="controls" id="playerControls">
 <div class="bottom-badge">
-<div class="bottom-text">RMF-FM</div>
+<div class="bottom-text">RMF-FM</div> <!-- ukryty przez CSS -->
 </div>
 <button class="ctrl-btn play" id="playBtn" disabled>PLAY</button>
 <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
