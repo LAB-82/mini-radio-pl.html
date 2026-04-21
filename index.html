@@ -106,13 +106,17 @@ padding:14px;
 text-align:center;
 box-shadow:
 0 4px 12px rgba(0,0,0,0.4),
-inset 0 0 20px rgba(255,215,0,0.2);
+inset 0 0 40px rgba(255,215,0,0.35);
 }
 
 .logo{
 font-size:10vh;
 font-weight:700;
 color:#FFFACD;
+display:inline-block;
+padding:10px 20px;
+border-radius:12px;
+background:radial-gradient(circle, rgba(255,215,0,0.35), rgba(255,215,0,0));
 text-shadow:
 0 0 10px #FFD700,
 0 0 30px #FFA500,
@@ -158,12 +162,13 @@ opacity:.4;
 cursor:not-allowed;
 }
 
-.ctrl-btn.play.active{
+.ctrl-btn.play.active,
+.ctrl-btn.mute.active{
 background:#FECB00;
 color:#000;
 }
 
-/* SLIDER — TERAZ SPÓJNY */
+/* SLIDER */
 input[type="range"]{
 flex:1;
 height:36px;
@@ -175,14 +180,12 @@ padding:0 6px;
 cursor:pointer;
 }
 
-/* TRACK */
 input[type="range"]::-webkit-slider-runnable-track{
 height:4px;
 background:#FFD700;
 border-radius:2px;
 }
 
-/* THUMB */
 input[type="range"]::-webkit-slider-thumb{
 appearance:none;
 width:14px;
@@ -193,7 +196,6 @@ margin-top:-5px;
 box-shadow:0 0 6px #FFD700;
 }
 
-/* FIREFOX */
 input[type="range"]::-moz-range-track{
 height:4px;
 background:#FFD700;
@@ -206,7 +208,7 @@ border:none;
 border-radius:50%;
 }
 
-/* RESPONSIVE – BEZ ZMIANY UKŁADU */
+/* RESPONSIVE */
 @media (max-width:1100px){
 .grid{grid-template-columns:repeat(4,1fr);}
 }
@@ -242,29 +244,29 @@ border-radius:50%;
 <button class="ctrl-btn" id="stopBtn" disabled>STOP</button>
 <button class="ctrl-btn" id="prevBtn" disabled>PREV</button>
 <button class="ctrl-btn" id="nextBtn" disabled>NEXT</button>
-<input type="range" id="volume" min="0" max="100" value="80">
-<button class="ctrl-btn" id="muteBtn">MUTE</button>
+<input type="range" id="volume" min="0" max="100" value="50">
+<button class="ctrl-btn mute" id="muteBtn">MUTE</button>
 </div>
 
 <audio id="player"></audio>
 
 <script>
 const STATIONS=[
-{ name:'RMF FM', url:'https://rs201-krk.rmfstream.pl/rmf_fm' },
-{ name:'RMF Maxx', url:'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
-{ name:'RMF 80s', url:'https://rs201-krk.rmfstream.pl/rmf_80s' },
-{ name:'RMF 90s', url:'https://rs201-krk.rmfstream.pl/rmf_90s' },
-{ name:'RMF 2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' },
-{ name:'Chillout', url:'https://rs201-krk.rmfstream.pl/rmf_chillout' },
-{ name:'Classic', url:'https://rs201-krk.rmfstream.pl/rmf_classic' },
-{ name:'Dance', url:'https://rs201-krk.rmfstream.pl/rmf_dance' },
-{ name:'Gold', url:'https://rs201-krk.rmfstream.pl/rmf_gold' },
-{ name:'Latino', url:'https://rs201-krk.rmfstream.pl/rmf_latino' },
-{ name:'Love', url:'https://rs201-krk.rmfstream.pl/rmf_love' },
-{ name:'Party', url:'https://rs201-krk.rmfstream.pl/rmf_party' },
-{ name:'Polski Rock', url:'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
-{ name:'Rock', url:'https://rs201-krk.rmfstream.pl/rmf_rock' },
-{ name:'Smooth Jazz', url:'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' }
+{ name:'RMF FM<br>FM', url:'https://rs201-krk.rmfstream.pl/rmf_fm' },
+{ name:'RMF FM<br>Maxx', url:'https://rs7-krk2-cyfronet.rmfstream.pl/RMFMAXXX48' },
+{ name:'RMF FM<br>80s', url:'https://rs201-krk.rmfstream.pl/rmf_80s' },
+{ name:'RMF FM<br>90s', url:'https://rs201-krk.rmfstream.pl/rmf_90s' },
+{ name:'RMF FM<br>2000', url:'https://rs201-krk.rmfstream.pl/rmf_2000' },
+{ name:'RMF FM<br>Chillout', url:'https://rs201-krk.rmfstream.pl/rmf_chillout' },
+{ name:'RMF FM<br>Classic', url:'https://rs201-krk.rmfstream.pl/rmf_classic' },
+{ name:'RMF FM<br>Dance', url:'https://rs201-krk.rmfstream.pl/rmf_dance' },
+{ name:'RMF FM<br>Gold', url:'https://rs201-krk.rmfstream.pl/rmf_gold' },
+{ name:'RMF FM<br>Latino', url:'https://rs201-krk.rmfstream.pl/rmf_latino' },
+{ name:'RMF FM<br>Love', url:'https://rs201-krk.rmfstream.pl/rmf_love' },
+{ name:'RMF FM<br>Party', url:'https://rs201-krk.rmfstream.pl/rmf_party' },
+{ name:'RMF FM<br>Polski Rock', url:'https://rs201-krk.rmfstream.pl/rmf_polski_rock' },
+{ name:'RMF FM<br>Rock', url:'https://rs201-krk.rmfstream.pl/rmf_rock' },
+{ name:'RMF FM<br>Smooth Jazz', url:'https://rs201-krk.rmfstream.pl/rmf_smooth_jazz' }
 ];
 
 const player=document.getElementById('player');
@@ -278,15 +280,13 @@ const volume=document.getElementById('volume');
 const muteBtn=document.getElementById('muteBtn');
 
 let currentIndex=-1;
-let lastVolume=0.8;
-player.volume=0.8;
+let lastVolume=0.5;
+player.volume=0.5;
 
-function updateClock(){
-clock.textContent=new Date().toLocaleTimeString();
-}
-setInterval(updateClock,1000);
-updateClock();
+/* CLOCK */
+setInterval(()=>clock.textContent=new Date().toLocaleTimeString(),1000);
 
+/* GRID */
 STATIONS.forEach((st,i)=>{
 const tile=document.createElement('div');
 tile.className='tile';
@@ -307,16 +307,17 @@ player.pause();
 currentIndex=index;
 updateTileActive();
 
-statusText.textContent='Ładowanie: '+st.name;
+statusText.textContent='Ładowanie: '+st.name.replace('<br>',' ');
 player.src=st.url;
 
 player.play().then(()=>{
-statusText.textContent='Gra: '+st.name;
+statusText.textContent='Gra: '+st.name.replace('<br>',' ');
 playBtn.classList.add('active');
 [playBtn,stopBtn,prevBtn,nextBtn].forEach(b=>b.disabled=false);
 });
 }
 
+/* BUTTONS */
 playBtn.onclick=()=>{
 if(currentIndex===-1)return;
 if(player.paused){
@@ -348,9 +349,11 @@ if(player.volume>0){
 lastVolume=player.volume;
 player.volume=0;
 volume.value=0;
+muteBtn.classList.add('active');
 }else{
 player.volume=lastVolume;
 volume.value=lastVolume*100;
+muteBtn.classList.remove('active');
 }
 };
 </script>
