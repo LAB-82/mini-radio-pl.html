@@ -6,12 +6,17 @@
 <title>Muzyczne Radio PRO</title>
 </head>
 <body style="margin:0; background:#000; height:100vh; overflow:hidden; font-family:Arial,sans-serif; display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box;">
+
 <div style="width:100%; max-width:900px; max-height:calc(100vh - 20px); background:#1a1a1a; border:4px solid #ff2a2a; border-radius:12px; box-shadow:0 0 40px rgba(255,42,0.5); box-sizing:border-box; display:flex; flex-direction:column;">
+
   <div style="background:#0a0a0a; flex:1; margin:8px; border-radius:8px; border:1px solid #333; padding:12px; display:flex; flex-direction:column; box-shadow:inset 0 0 25px #000; overflow:hidden;">
+
     <div style="width:fit-content; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
+
       <div style="color:#ff2a2a; font-size:clamp(28px,6vw,52px); text-align:center; margin-bottom:8px; text-shadow:0 0 10px #ff0000, 0 0 20px #ff0000; font-weight:bold; letter-spacing:3px; flex-shrink:0; white-space:nowrap;">
-        MUZYCZNE RADIO
+        RMF FM
       </div>
+
       <div id="scale" style="width:100%; height:45px; min-height:45px; max-height:45px; background:#1a0505; border:2px solid #ff2a2a; border-radius:4px; margin-bottom:8px; position:relative; flex-shrink:0; box-sizing:border-box;">
         <div style="position:absolute; width:100%; height:100%; background:repeating-linear-gradient(90deg, transparent, transparent 9%, #ff000040 9%, #ff000040 10%);"></div>
         <div style="position:absolute; width:100%; text-align:center; top:50%; transform:translateY(-50%); color:#ff6a3a; font-size:11px; text-shadow:0 0 8px #ff3300; display:flex; justify-content:space-between; padding:0 5%; box-sizing:border-box;">
@@ -20,27 +25,48 @@
         <div id="needle" style="position:absolute; top:0px; width:4px; height:42px; background:#ff2a2a; box-shadow:0 0 12px #ff2a2a; transform:translateX(-50%); display:none;"></div>
         <div id="needleLabel" style="position:absolute; bottom:-2px; transform:translateX(-50%); color:#ff2a2a; font-size:10px; font-weight:bold; text-shadow:0 0 8px red; display:none;">105.8 FM</div>
       </div>
+
       <canvas id="eq" style="width:100%; height:100px; min-height:100px; max-height:100px; background:#000; border:2px solid #ff2a2a; border-radius:6px; display:block; margin-bottom:10px; flex-shrink:0;"></canvas>
+
     </div>
+
     <div style="display:flex; align-items:flex-start; justify-content:space-between; flex:1; min-height:0; padding:0 1.5cm; padding-bottom:1.5cm; position:relative;">
+
       <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
+
       <div style="display:flex; flex-direction:column; align-items:center; height:clamp(90px,18vw,130px); justify-content:space-between;">
         <div style="display:flex; gap:10px; align-items:center; justify-content:center;">
-          <button id="playBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;"> <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div> ON</button>
-          <button id="stopBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;"> <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div> OFF</button>
-          <button id="muteBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;"> <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div> MUTE</button>
-          
+
+          <button id="playBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
+            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
+            ON
+          </button>
+
+          <button id="stopBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
+            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
+            OFF
+          </button>
+
+          <button id="muteBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
+            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
+            MUTE
+          </button>
+
           <div id="volKnob" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative; display:flex; align-items:center; justify-content:center; user-select:none; touch-action:none;">
             <div id="volIndicator" style="position:absolute; top:5px; left:50%; width:3px; height:11px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a; transform-origin:50% 24px; transform:translateX(-50%) rotate(0deg);"></div>
             VOL
           </div>
+
         </div>
         <a href="https://www.muzyczneradio.pl" target="_blank" style="color:#ff2a2a; text-decoration:none; text-shadow:0 0 6px red; font-size:14px;">www.muzyczneradio.pl</a>
       </div>
+
       <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
+
     </div>
+
   </div>
-  <!-- Tu dodajemy 14 przycisków jako wizualne elementy -->
+  <!-- Tu umieszczamy 14 przycisków w dwóch rzędach po 7 -->
   <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
     <button style="width:60px;">Przyc1</button>
     <button style="width:60px;">Przyc2</button>
@@ -58,7 +84,8 @@
     <button style="width:60px;">Przyc14</button>
   </div>
 </div>
-<audio id="audio" crossorigin="anonymous" src="https://stream.rcs.revma.com/gzwc1xcq042vv" preload="none"></audio>
+<!-- Usunięto link do radia -->
+<!-- Zmieniono napis na RMF FM (kolor niebieski) -->
 <script>
 var audio = document.getElementById('audio');
 var canvas = document.getElementById('eq');
