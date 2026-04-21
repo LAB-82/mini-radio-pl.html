@@ -95,31 +95,59 @@ min-height: 56px;
 .tile:hover { background: #FFD633; }
 .tile:active { transform: scale(0.96); }
 .tile.active { background: #FECB00; border-color: #000; color: #000; }
+/* ZMIANA: ikona głośnika zamiast fali */
 .tile::before {
 content: "";
 position: absolute;
 top: 5px;
 right: 5px;
-width: 12px;
-height: 12px;
+width: 14px;
+height: 14px;
 opacity: 0;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='1' fill='%2300BFFF'/%3E%3Cpath d='M12 22c5.523 0 10-4.477 10-10s-4.477-10-10 4.477-10 10 4.477 10 10 10z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 17c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z' stroke='%2300BFFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z'/%3E%3C/svg%3E");
 background-size: contain;
 background-repeat: no-repeat;
 transition: all 0.2s;
-filter: drop-shadow(0 0 8px #00BFFF) drop-shadow(0 0 16px #00BFFF) drop-shadow(0 0 24px #00BFFF);
 }
 .tile.active::before { opacity: 1; }
+/* DODANE: złote paski w kafelkach */
+.tile::after {
+content: "";
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+height: 6px;
+background: repeating-linear-gradient(
+  90deg,
+  #FFD700 0px,
+  #FFD700 8px,
+  #000 8px,
+  #000 10px
+);
+opacity: 0.6;
+}
+.tile.active::after { opacity: 1; }
 .tile.name {
 font-size: 13.67px;
 font-weight: 700;
 line-height: 1.1;
 transition: all 0.2s;
-color: #000;
-text-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF, 0 0 30px #00BFFF;
+color: #FFD700; /* ZMIANA: złoty */
+text-shadow:
+  0 0 8px #FFD700,
+  0 0 16px #FFD700,
+  0 0 24px #FFA500; /* ZMIANA: złoty neon */
 }
-.tile.active.name { color: #000; text-shadow: 0 0 12px #00BFFF, 0 0 24px #00BFFF, 0 0 36px #00BFFF, 0 0 48px #00BFFF; }
-/* ZMIANA: złoty neon RMF FM pod kafelkami - widoczny desktop i mobile */
+.tile.active.name {
+color: #FFD700;
+text-shadow:
+  0 0 10px #FFD700,
+  0 0 20px #FFD700,
+  0 0 30px #FFA500,
+  0 0 40px #FF8C00;
+}
+/* ZMIANA: czarna ramka dla napisu RMF FM */
 .big-logo {
 font-family: 'Montserrat Alternates', sans-serif;
 font-size: 10vh;
@@ -131,6 +159,7 @@ text-shadow:
   0 0 20px #FFD700,
   0 0 40px #FFA500,
   0 0 80px #FF8C00;
+-webkit-text-stroke: 2px #000; /* czarna ramka */
 opacity: 0.4;
 pointer-events: none;
 flex-shrink: 0;
@@ -160,8 +189,8 @@ display: none;
 }
 .ctrl-btn {
 background: transparent;
-border: 2px solid #FFD700; /* ZMIANA: złota ramka */
-color: #666; /* ZMIANA: szary tekst */
+border: 2px solid #FFD700;
+color: #666;
 padding: 0 12px;
 height: 36px;
 border-radius: 8px;
@@ -174,23 +203,23 @@ justify-content: center;
 transition: all 0.2s;
 min-width: 50px;
 font-family: 'Montserrat Alternates', sans-serif;
-text-shadow: none; /* ZMIANA: usunięte podświetlenie */
+text-shadow: none;
 }
 .ctrl-btn:hover { background: #000; color: #FFD700; border-color: #FFD700; }
 .ctrl-btn:active { transform: scale(0.95); }
 .ctrl-btn:disabled { color: #999; border-color: #999; cursor: not-allowed; }
 .ctrl-btn.play {
 background: transparent;
-color: #666; /* ZMIANA: szary tekst */
+color: #666;
 min-width: 60px;
-border: 2px solid #FFD700; /* ZMIANA: złota ramka */
-text-shadow: none; /* ZMIANA: usunięte podświetlenie */
+border: 2px solid #FFD700;
+text-shadow: none;
 }
 .ctrl-btn.play:hover { background: #000; color: #FFD700; }
 .ctrl-btn.play.active { background: #FECB00; border-color: #FFD700; color: #000; }
 .ctrl-btn.mute {
 min-width: 60px;
-text-shadow: none; /* ZMIANA: usunięte podświetlenie */
+text-shadow: none;
 }
 input[type="range"] {
 flex: 1;
@@ -206,7 +235,7 @@ accent-color: #000;
 .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 body { overflow: hidden; }
 .controls { flex-wrap: wrap; justify-content: center; }
-.big-logo { font-size: 8vh; opacity: 0.35; } /* ZMIANA: widoczny na telefonie */
+.big-logo { font-size: 8vh; opacity: 0.35; }
 .tile { min-height: 48px; }
 .tile.name { font-size: 11px; }
 }
