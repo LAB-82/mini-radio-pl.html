@@ -2,215 +2,234 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<title>Radio z 14 stacjami</title>
-<style>
-  body {
-    background-color: #222;
-    color: yellow;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-  #radio {
-    width: 600px;
-    background-color: #333;
-    border: 3px solid yellow;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 20px #000;
-    position: relative;
-  }
-  /* ekran */
-  #display {
-    width: 100%;
-    height: 40px;
-    background-color: black;
-    color: yellow;
-    font-size: 20px;
-    text-align: center;
-    line-height: 40px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-  }
-  /* equalizer */
-  #equalizer {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 60px;
-    margin-bottom: 10px;
-  }
-  .bar {
-    width: 10px;
-    background-color: yellow;
-    height: 20px;
-    animation: move 1s infinite;
-  }
-  @keyframes move {
-    0% { height: 20px; }
-    50% { height: 50px; }
-    100% { height: 20px; }
-  }
-  /* przyciski główne */
-  #controls {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 10px;
-  }
-  #controls button {
-    padding: 8px 12px;
-    background-color: #555;
-    border: 2px solid yellow;
-    color: yellow;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  /* głośnik i regulacja głośności */
-  #speaker {
-    width: 100px;
-    height: 100px;
-    background-color: #555;
-    border-radius: 50%;
-    margin: 10px auto;
-    position: relative;
-  }
-  #speaker:after {
-    content: "";
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60%;
-    height: 20%;
-    background: yellow;
-    border-radius: 10px;
-  }
-  #volume {
-    width: 200px;
-  }
-  /* przyciski stacji */
-  #station-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  #station-buttons button {
-    margin: 4px;
-    padding: 8px 10px;
-    background-color: #555;
-    border: 2px solid yellow;
-    color: yellow;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-  }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Muzyczne Radio PRO</title>
 </head>
-<body>
 
-<div id="radio">
-  <div id="display">FM 103.2</div>
-  <!-- Equalizer -->
-  <div id="equalizer">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
-  <!-- Kontrolki -->
-  <div id="controls">
-    <button id="power">ON</button>
-    <button id="stop">STOP</button>
-    <button id="mute">MUTE</button>
-    <button id="off">OFF</button>
-  </div>
-  <!-- Głośnik -->
-  <div id="speaker"></div>
-  <!-- Regulacja głośności -->
-  <div>
-    <input type="range" id="volume" min="0" max="100" value="50" />
+<body style="margin:0; background:#000; height:100vh; overflow:hidden; font-family:Arial,sans-serif; display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box;">
+
+<div style="width:100%; max-width:900px; max-height:calc(100vh - 20px); background:#1a1a1a; border:4px solid #ff2a2a; border-radius:12px; box-shadow:0 0 40px rgba(255,42,0.5); box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="background:#0a0a0a; flex:1; margin:8px; border-radius:8px; border:1px solid #333; padding:12px; display:flex; flex-direction:column; box-shadow:inset 0 0 25px #000; overflow:hidden;">
+    
+    <!-- Górna część: nazwa, scale, equalizer -->
+    <div style="width:fit-content; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
+      <div style="color:#ff2a2a; font-size:clamp(28px,6vw,52px); text-align:center; margin-bottom:8px; text-shadow:0 0 10px #ff0000, 0 0 20px #ff0000; font-weight:bold; letter-spacing:3px; flex-shrink:0; white-space:nowrap;">
+        MUZYCZNE RADIO
+      </div>
+
+      <!-- Skala radiowa -->
+      <div id="scale" style="width:100%; height:45px; min-height:45px; max-height:45px; background:#1a0505; border:2px solid #ff2a2a; border-radius:4px; margin-bottom:8px; position:relative; flex-shrink:0;">
+        <div style="position:absolute; width:100%; height:100%; background:repeating-linear-gradient(90deg, transparent, transparent 9%, #ff000040 9%, #ff000040 10%);"></div>
+        <div style="position:absolute; width:100%; text-align:center; top:50%; transform:translateY(-50%); color:#ff6a3a; font-size:11px; text-shadow:0 0 8px #ff3300; display:flex; justify-content:space-between; padding:0 5%; box-sizing:border-box;">
+          <span>88</span><span>92</span><span>96</span><span>100</span><span id="pos104">104</span><span id="pos108">108</span>
+        </div>
+        <div id="needle" style="position:absolute; top:0px; width:4px; height:42px; background:#ff2a2a; box-shadow:0 0 12px #ff2a2a; transform:translateX(-50%); display:none;"></div>
+        <div id="needleLabel" style="position:absolute; bottom:-2px; transform:translateX(-50%); color:#ff2a2a; font-size:10px; font-weight:bold; text-shadow:0 0 8px red; display:none;">105.8 FM</div>
+      </div>
+
+      <!-- Equalizer -->
+      <canvas id="eq" style="width:100%; height:100px; min-height:100px; max-height:100px; background:#000; border:2px solid #ff2a2a; border-radius:6px; display:block; margin-bottom:10px; flex-shrink:0;"></canvas>
+    </div>
+
+    <!-- Dolna część: przyciski, głośnik, regulacja -->
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex:1; min-height:0; padding:0 1.5cm; padding-bottom:1.5cm; position:relative;">
+
+      <!-- Głośnik -->
+      <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
+
+      <!-- Przyciski ON/OFF, STOP, MUTE i głośność -->
+      <div style="display:flex; flex-direction:column; align-items:center; height:clamp(90px,18vw,130px); justify-content:space-between;">
+        <div style="display:flex; gap:10px; align-items:center; justify-content:center;">
+          <!-- Przyciski -->
+          <button id="powerBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
+            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
+            ON
+          </button>
+
+          <button id="stopBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
+            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
+            OFF
+          </button>
+
+          <button id="muteBtn" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; color:#ddd; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); font-size:8px; font-weight:bold; position:relative;">
+            <div style="position:absolute; top:5px; left:50%; transform:translateX(-50%); width:3px; height:9px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a;"></div>
+            MUTE
+          </button>
+
+          <!-- Głośność -->
+          <div id="volKnob" style="width:clamp(50px,11vw,65px); height:clamp(50px,11vw,65px); border-radius:50%; background:radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a); border:3px solid #ff2a2a; cursor:pointer; box-shadow:0 0 15px rgba(255,42,42,0.5); display:flex; align-items:center; justify-content:center; user-select:none; touch-action:none;">
+            <div id="volIndicator" style="position:absolute; top:5px; left:50%; width:3px; height:11px; background:#ff2a2a; border-radius:2px; box-shadow:0 0 8px #ff2a2a; transform-origin:50% 24px; transform:translateX(-50%) rotate(0deg);"></div>
+            VOL
+          </div>
+        </div>
+        <a href="https://www.muzyczneradio.pl" target="_blank" style="color:#ff2a2a; text-decoration:none; text-shadow:0 0 6px red; font-size:14px;">www.muzyczneradio.pl</a>
+      </div>
+
+      <!-- Drugi głośnik -->
+      <div style="width:clamp(90px,18vw,130px); height:clamp(90px,18vw,130px); background:radial-gradient(circle, #050505 0%, #111 40%, #050505 70%); border-radius:50%; border:3px solid #ff2a2a; box-shadow:inset 0 0 25px #000, 0 0 15px rgba(255,0,0,0.3); flex-shrink:0;"></div>
+
+    </div>
   </div>
 </div>
 
-<!-- Przyciski stacji -->
-<div id="station-buttons"></div>
+<!-- Odtwarzacz audio -->
+<audio id="audio" crossorigin="anonymous" src="https://stream.rcs.revma.com/gzwc1xcq042vv" preload="none"></audio>
 
 <script>
-  const display = document.getElementById('display');
-  const powerBtn = document.getElementById('power');
-  const stopBtn = document.getElementById('stop');
-  const muteBtn = document.getElementById('mute');
-  const offBtn = document.getElementById('off');
-  const volumeRange = document.getElementById('volume');
+  // Elementy
+  const audio = document.getElementById('audio');
+  const ctxCanvas = document.getElementById('eq');
+  const ctx = ctxCanvas.getContext('2d');
 
-  let isOn = false;
+  const playBtn = document.getElementById('playBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const volumeKnob = document.getElementById('volKnob');
+  const volIndicator = document.getElementById('volIndicator');
+
+  // Inicjalizacja
+  let audioCtx, analyser, source, dataArray, animationId;
+  let isPlaying = false;
   let isMuted = false;
 
-  // Przypisanie stacji
-  const stations = [
-    { name: "Stacja 1", frequency: "FM 103.2" },
-    { name: "Stacja 2", frequency: "FM 99.5" },
-    { name: "Stacja 3", frequency: "FM 105.8" },
-    { name: "Stacja 4", frequency: "FM 88.0" },
-    { name: "Stacja 5", frequency: "FM 97.2" },
-    { name: "Stacja 6", frequency: "FM 101.1" },
-    { name: "Stacja 7", frequency: "FM 107.0" },
-    { name: "Stacja 8", frequency: "FM 102.4" },
-    { name: "Stacja 9", frequency: "FM 94.7" },
-    { name: "Stacja 10", frequency: "FM 90.3" },
-    { name: "Stacja 11", frequency: "FM 98.1" },
-    { name: "Stacja 12", frequency: "FM 104.5" },
-    { name: "Stacja 13", frequency: "FM 96.7" },
-    { name: "Stacja 14", frequency: "FM 100.0" }
-  ];
-
-  // Tworzymy przyciski stacji
-  const btnContainer = document.getElementById('station-buttons');
-  stations.forEach((station, index) => {
-    const btn = document.createElement('button');
-    btn.innerText = station.name;
-    btn.addEventListener('click', () => {
-      if (isOn) {
-        display.innerText = station.frequency;
-      }
-    });
-    btnContainer.appendChild(btn);
-  });
-
-  // Funkcje obsługi przycisków
-  powerBtn.onclick = () => {
-    isOn = true;
-    display.innerText = "FM 103.2";
-  };
-
-  offBtn.onclick = () => {
-    isOn = false;
-    display.innerText = "";
-  };
-
-  muteBtn.onclick = () => {
-    isMuted = !isMuted;
-    if (isMuted) {
-      display.innerText = "MUTE";
-    } else {
-      // przywróć ostatnią stację
-      display.innerText = "FM 103.2";
+  function initAudio(){
+    if(audioCtx) return;
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      source = audioCtx.createMediaElementSource(audio);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+    } catch(e){
+      console.warn("Analyser nie działa:", e);
     }
+  }
+
+  // Przyciski
+  playBtn.onclick = () => {
+    initAudio();
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    audio.play();
+    isPlaying = true;
+    draw();
+    // efekt świetlny
+    playBtn.style.boxShadow = '0 0 25px #00ff00, 0 0 45px rgba(0,255,0,0.4)';
+    stopBtn.style.boxShadow = '0 0 15px rgba(255,42,42,0.5)';
   };
 
   stopBtn.onclick = () => {
-    display.innerText = "";
+    audio.pause();
+    isPlaying = false;
+    cancelAnimationFrame(animationId);
+    drawStatic();
+    // efekt
+    stopBtn.style.boxShadow = '0 0 25px #ff0000, 0 0 45px rgba(255,0,0,0.4)';
+    playBtn.style.boxShadow = '0 0 15px rgba(255,42,42,0.5)';
   };
 
-  volumeRange.oninput = () => {
-    // można dodać funkcję zmiany głośności
-    // na razie to jest tylko wizualne
+  muteBtn.onclick = () => {
+    audio.muted = !audio.muted;
+    isMuted = audio.muted;
+    muteBtn.style.boxShadow = isMuted ? '0 0 25px #ffaa00, 0 0 45px rgba(255,170,0,0.4)' : '0 0 15px rgba(255,42,42,0.5)';
   };
+
+  // Głośność
+  let lastAngle = 0;
+  let dragging = false;
+
+  function updateVolumeRotation(angle) {
+    angle = Math.max(-135, Math.min(135, angle));
+    lastAngle = angle;
+    volIndicator.style.transform = 'translateX(-50%) rotate(' + angle + 'deg)';
+    const volumePercent = (angle + 135) / 270;
+    audio.volume = volumePercent;
+  }
+
+  function volMove(e) {
+    if(!dragging) return;
+    const rect = volumeKnob.getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top + rect.height/2;
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - cx;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - cy;
+    let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
+    if(angle > 180) angle -= 360;
+    if(angle < -180) angle += 360;
+
+    if(lastAngle < -90 && angle > 90) angle = -135;
+    if(lastAngle > 90 && angle < -90) angle = 135;
+
+    updateVolumeRotation(angle);
+  }
+
+  volumeKnob.addEventListener('mousedown', e => { dragging=true; volMove(e); e.preventDefault(); });
+  volumeKnob.addEventListener('touchstart', e => { dragging=true; volMove(e); e.preventDefault(); });
+  document.addEventListener('mousemove', e => { if(dragging) volMove(e); });
+  document.addEventListener('touchmove', e => { if(dragging) volMove(e); }, {passive:false});
+  document.addEventListener('mouseup', () => { dragging=false; });
+  document.addEventListener('touchend', () => { dragging=false; });
+  updateVolumeRotation(0);
+
+  // Rysowanie statycznego equalizera
+  function drawStatic() {
+    ctx.canvas.width = ctxCanvas.offsetWidth;
+    ctx.canvas.height = 100;
+    ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+    const bars=12;
+    const barWidth = ctx.canvas.width / bars;
+    const ledH=6;
+    const ledGap=2;
+    for(let i=0; i<bars; i++){
+      for(let j=0; j<10; j++){
+        const y= ctx.canvas.height - (j+1)*(ledH+ledGap);
+        ctx.fillStyle='#1a0000';
+        ctx.fillRect(i*barWidth+2, y, barWidth-4, ledH);
+      }
+    }
+  }
+
+  // Rysowanie z analizą dźwięku
+  function draw() {
+    if(!analyser || !isPlaying) {
+      cancelAnimationFrame(animationId);
+      drawStatic();
+      return;
+    }
+    animationId = requestAnimationFrame(draw);
+    ctx.canvas.width=ctxCanvas.offsetWidth;
+    ctx.canvas.height=100;
+    analyser.getByteFrequencyData(dataArray);
+    ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+    const bars=12;
+    const barWidth= ctx.canvas.width / bars;
+    const ledH=6;
+    const ledGap=2;
+    for(let i=0; i<bars; i++){
+      let value = (dataArray[i*2]||0)/255;
+      let leds = Math.floor(value * 10);
+      for(let j=0; j<10; j++){
+        const y= ctx.canvas.height - (j+1)*(ledH+ledGap);
+        if(j<leds){
+          const g = ctx.createLinearGradient(0,y+ledH,0,y);
+          g.addColorStop(0,'#ff0000');
+          g.addColorStop(1,'#ff6666');
+          ctx.fillStyle=g;
+          ctx.shadowBlur=8;
+          ctx.shadowColor='#ff0000';
+        } else {
+          ctx.fillStyle='#1a0000';
+          ctx.shadowBlur=0;
+        }
+        ctx.fillRect(i*barWidth+2,y,barWidth-4,ledH);
+      }
+    }
+    ctx.shadowBlur=0;
+  }
+
+  drawStatic();
+
 </script>
-
 </body>
 </html>
